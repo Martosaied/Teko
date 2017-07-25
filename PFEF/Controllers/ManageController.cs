@@ -49,6 +49,11 @@ namespace PFEF.Controllers
                 _userManager = value;
             }
         }
+        [HttpGet]
+        public ActionResult HomeUsuario()
+        {
+            return View();
+        }
 
         //
         // GET: /Manage/Index

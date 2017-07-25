@@ -45,7 +45,7 @@ namespace PFEF
             // Es similar a la opción Recordarme al iniciar sesión.
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
-            // Quitar los comentarios de las siguientes líneas para habilitar el inicio de sesión con proveedores de inicio de sesión de terceros
+            //Quitar los comentarios de las siguientes líneas para habilitar el inicio de sesión con proveedores de inicio de sesión de terceros
             //app.UseMicrosoftAccountAuthentication(
             //    clientId: "",
             //    clientSecret: "");
@@ -55,14 +55,14 @@ namespace PFEF
             //   consumerSecret: "");
 
             //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            //   appId: "1089042254530831",
+            //   appSecret: "0616b506623f049b7d1f3689b62926aa");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "296174976254-6mn3jncuo9786gjh8stlrp0ul4otikub.apps.googleusercontent.com",
+                ClientSecret = "QU2_JXkWPYTENGdkwUnNOMFc"
+            });
         }
     }
 }

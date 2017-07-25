@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<XmlOptionsData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <showToolTips>true</showToolTips>
+  <showHints>true</showHints>
+  <showFramerate>false</showFramerate>
+  <modalToolMenu>true</modalToolMenu>
+  <helpLevel>2</helpLevel>
+  <username>Administrador</username>
+  <invertYData />
+  <invertXData />
+  <invertCamX />
+  <invertCamY />
+  <terrainSpeed>1</terrainSpeed>
+  <uiVolume>1</uiVolume>
+  <foleyVolume>1</foleyVolume>
+  <musicVolume>1</musicVolume>
+  <acceptSentLevels>false</acceptSentLevels>
+  <autoReshareLevels>false</autoReshareLevels>
+  <autoDownloadFavoriteLevels>false</autoDownloadFavoriteLevels>
+  <checkForUpdates>false</checkForUpdates>
+  <checkForUpdatesWasSet>false</checkForUpdatesWasSet>
+  <sendInstrumentation>false</sendInstrumentation>
+  <sendInstrumentationWasSet>false</sendInstrumentationWasSet>
+  <showIntroVideo>false</showIntroVideo>
+  <showURL>false</showURL>
+  <webUserSecret />
+  <persistWebLogin>false</persistWebLogin>
+  <showTutorialDebug>false</showTutorialDebug>
+  <disabledHintIDs />
+  <lastAutoSave>0</lastAutoSave>
+  <langauge>es</langauge>
+  <showMicrobitTiles>false</showMicrobitTiles>
+</XmlOptionsData>

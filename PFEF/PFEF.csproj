@@ -18,7 +18,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44309</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -38,13 +38,16 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>G:\ORT\ProyectoFinal\PFEF\packages\AutoMapper.6.1.0\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -189,22 +192,125 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ContenidosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\UsuariosController.cs" />
+    <Compile Include="Extensions\ClaimsExtensions.cs" />
+    <Compile Include="Extensions\HelpersExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Migrations\201707140137408_asdasd.cs" />
+    <Compile Include="Migrations\201707140137408_asdasd.Designer.cs">
+      <DependentUpon>201707140137408_asdasd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707141050427_RepairFKUsers.cs" />
+    <Compile Include="Migrations\201707141050427_RepairFKUsers.Designer.cs">
+      <DependentUpon>201707141050427_RepairFKUsers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707141123530_ChangesInUsuarios.cs" />
+    <Compile Include="Migrations\201707141123530_ChangesInUsuarios.Designer.cs">
+      <DependentUpon>201707141123530_ChangesInUsuarios.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707141131162_DeleteUserNametblUser.cs" />
+    <Compile Include="Migrations\201707141131162_DeleteUserNametblUser.Designer.cs">
+      <DependentUpon>201707141131162_DeleteUserNametblUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707141138311_NUllableInstActual.cs" />
+    <Compile Include="Migrations\201707141138311_NUllableInstActual.Designer.cs">
+      <DependentUpon>201707141138311_NUllableInstActual.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707141346461_NullableFechaNac.cs" />
+    <Compile Include="Migrations\201707141346461_NullableFechaNac.Designer.cs">
+      <DependentUpon>201707141346461_NullableFechaNac.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707232110256_InteresesRelacional.cs" />
+    <Compile Include="Migrations\201707232110256_InteresesRelacional.Designer.cs">
+      <DependentUpon>201707232110256_InteresesRelacional.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Favoritos.cs" />
+    <Compile Include="Models\Intereses.cs" />
+    <Compile Include="Models\Usuarios.cs" />
+    <Compile Include="Models\ViewModels\AccountViewModels.cs" />
+    <Compile Include="Models\Contenidos.cs" />
+    <Compile Include="Models\Escuelas.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ViewModels\InfoUsuarioViewModel.cs" />
+    <Compile Include="Models\ViewModels\ManageViewModels.cs" />
+    <Compile Include="Models\Materias.cs" />
+    <Compile Include="Models\NivelesEducativos.cs" />
+    <Compile Include="Models\TiposContenidos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Models\ViewModels\ContenidosViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\UI-Flat\css\flat-ui.css" />
+    <Content Include="Content\UI-Flat\css\flat-ui.min.css" />
+    <Content Include="Content\UI-Flat\css\vendor\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Content\UI-Flat\css\vendor\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\UI-Flat\fonts\glyphicons\flat-ui-icons-regular.svg" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-black.svg" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-bold.svg" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-bolditalic.svg" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-italic.svg" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-light.svg" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-regular.svg" />
+    <Content Include="Content\UI-Flat\img\favicon.ico" />
+    <Content Include="Content\UI-Flat\img\icons\png\Book.png" />
+    <Content Include="Content\UI-Flat\img\icons\png\Calendar.png" />
+    <Content Include="Content\UI-Flat\img\icons\png\Chat.png" />
+    <Content Include="Content\UI-Flat\img\icons\png\Clipboard.png" />
+    <Content Include="Content\UI-Flat\img\icons\png\Compas.png" />
+    <Content Include="Content\UI-Flat\img\icons\png\Gift-Box.png" />
+    <Content Include="Content\UI-Flat\img\icons\png\Infinity-Loop.png" />
+    <Content Include="Content\UI-Flat\img\icons\png\Mail.png" />
+    <Content Include="Content\UI-Flat\img\icons\png\Map.png" />
+    <Content Include="Content\UI-Flat\img\icons\png\Pensils.png" />
+    <Content Include="Content\UI-Flat\img\icons\png\Pocket.png" />
+    <Content Include="Content\UI-Flat\img\icons\png\Retina-Ready.png" />
+    <Content Include="Content\UI-Flat\img\icons\png\Toilet-Paper.png" />
+    <Content Include="Content\UI-Flat\img\icons\png\Watches.png" />
+    <Content Include="Content\UI-Flat\img\icons\svg\book.svg" />
+    <Content Include="Content\UI-Flat\img\icons\svg\calendar.svg" />
+    <Content Include="Content\UI-Flat\img\icons\svg\chat.svg" />
+    <Content Include="Content\UI-Flat\img\icons\svg\clipboard.svg" />
+    <Content Include="Content\UI-Flat\img\icons\svg\clocks.svg" />
+    <Content Include="Content\UI-Flat\img\icons\svg\compas.svg" />
+    <Content Include="Content\UI-Flat\img\icons\svg\gift-box.svg" />
+    <Content Include="Content\UI-Flat\img\icons\svg\loop.svg" />
+    <Content Include="Content\UI-Flat\img\icons\svg\mail.svg" />
+    <Content Include="Content\UI-Flat\img\icons\svg\map.svg" />
+    <Content Include="Content\UI-Flat\img\icons\svg\paper-bag.svg" />
+    <Content Include="Content\UI-Flat\img\icons\svg\pencils.svg" />
+    <Content Include="Content\UI-Flat\img\icons\svg\retina.svg" />
+    <Content Include="Content\UI-Flat\img\icons\svg\ribbon.svg" />
+    <Content Include="Content\UI-Flat\img\icons\svg\toilet-paper.svg" />
+    <Content Include="Content\UI-Flat\img\login\icon.png" />
+    <Content Include="Content\UI-Flat\img\login\imac-2x.png" />
+    <Content Include="Content\UI-Flat\img\login\imac.png" />
+    <Content Include="Content\UI-Flat\img\tile\ribbon-2x.png" />
+    <Content Include="Content\UI-Flat\img\tile\ribbon.png" />
+    <Content Include="Content\UI-Flat\js\flat-ui.js" />
+    <Content Include="Content\UI-Flat\js\flat-ui.min.js" />
+    <Content Include="Content\UI-Flat\js\vendor\html5shiv.js" />
+    <Content Include="Content\UI-Flat\js\vendor\jquery.min.js" />
+    <Content Include="Content\UI-Flat\js\vendor\respond.min.js" />
+    <Content Include="Content\UI-Flat\js\vendor\video-js.swf" />
+    <Content Include="Content\UI-Flat\js\vendor\video.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\glyphicons\flat-ui-icons-regular.svg" />
+    <Content Include="fonts\lato\lato-black.svg" />
+    <Content Include="fonts\lato\lato-bold.svg" />
+    <Content Include="fonts\lato\lato-bolditalic.svg" />
+    <Content Include="fonts\lato\lato-italic.svg" />
+    <Content Include="fonts\lato\lato-light.svg" />
+    <Content Include="fonts\lato\lato-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
@@ -212,6 +318,58 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\UI-Flat\css\flat-ui.css.map" />
+    <Content Include="Content\UI-Flat\css\vendor\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\UI-Flat\css\vendor\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\UI-Flat\css\vendor\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\UI-Flat\css\vendor\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\UI-Flat\fonts\glyphicons\flat-ui-icons-regular.eot" />
+    <Content Include="Content\UI-Flat\fonts\glyphicons\flat-ui-icons-regular.ttf" />
+    <Content Include="Content\UI-Flat\fonts\glyphicons\flat-ui-icons-regular.woff" />
+    <Content Include="Content\UI-Flat\fonts\glyphicons\selection.json" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-black.eot" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-black.ttf" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-black.woff" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-bold.eot" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-bold.ttf" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-bold.woff" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-bolditalic.eot" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-bolditalic.ttf" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-bolditalic.woff" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-italic.eot" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-italic.ttf" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-italic.woff" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-light.eot" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-light.ttf" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-light.woff" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-regular.eot" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-regular.ttf" />
+    <Content Include="Content\UI-Flat\fonts\lato\lato-regular.woff" />
+    <Content Include="Content\UI-Flat\js\vendor\jquery.min.map" />
+    <Content Include="fonts\lato\lato-black.eot" />
+    <Content Include="fonts\lato\lato-black.ttf" />
+    <Content Include="fonts\lato\lato-black.woff" />
+    <Content Include="fonts\lato\lato-bold.eot" />
+    <Content Include="fonts\lato\lato-bold.ttf" />
+    <Content Include="fonts\lato\lato-bold.woff" />
+    <Content Include="fonts\lato\lato-bolditalic.eot" />
+    <Content Include="fonts\lato\lato-bolditalic.ttf" />
+    <Content Include="fonts\lato\lato-bolditalic.woff" />
+    <Content Include="fonts\lato\lato-italic.eot" />
+    <Content Include="fonts\lato\lato-italic.ttf" />
+    <Content Include="fonts\lato\lato-italic.woff" />
+    <Content Include="fonts\lato\lato-light.eot" />
+    <Content Include="fonts\lato\lato-light.ttf" />
+    <Content Include="fonts\lato\lato-light.woff" />
+    <Content Include="fonts\lato\lato-regular.eot" />
+    <Content Include="fonts\lato\lato-regular.ttf" />
+    <Content Include="fonts\lato\lato-regular.woff" />
+    <Content Include="fonts\glyphicons\flat-ui-icons-regular.eot" />
+    <Content Include="fonts\glyphicons\flat-ui-icons-regular.ttf" />
+    <Content Include="fonts\glyphicons\flat-ui-icons-regular.woff" />
+    <Content Include="fonts\glyphicons\selection.json" />
+    <None Include="Properties\PublishProfiles\TekoTeko - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\TekoTeko.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -223,7 +381,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -257,9 +417,23 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Contenidos\MuestraCont.cshtml" />
+    <Content Include="Views\Contenidos\SubirContenidos.cshtml" />
+    <Content Include="Views\Contenidos\VerMas.cshtml" />
+    <Content Include="Views\Shared\_Carrousel.cshtml" />
+    <Content Include="Views\Shared\_ContentView.cshtml" />
+    <Content Include="Views\Shared\_Paginador.cshtml" />
+    <Content Include="Views\Usuarios\HomeUsuario.cshtml" />
+    <Content Include="Views\Home\Escuelas.cshtml" />
+    <Content Include="Scripts\typeahead.bundle.js" />
+    <Content Include="Views\Usuarios\LlenarPerfil1.cshtml" />
+    <Content Include="Views\Usuarios\LlenarPerfil.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\ProfilePH\" />
+    <Folder Include="Content\Uploads\" />
+    <Folder Include="OldMigrations\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -275,6 +449,32 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201707140137408_asdasd.resx">
+      <DependentUpon>201707140137408_asdasd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707141050427_RepairFKUsers.resx">
+      <DependentUpon>201707141050427_RepairFKUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707141123530_ChangesInUsuarios.resx">
+      <DependentUpon>201707141123530_ChangesInUsuarios.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707141131162_DeleteUserNametblUser.resx">
+      <DependentUpon>201707141131162_DeleteUserNametblUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707141138311_NUllableInstActual.resx">
+      <DependentUpon>201707141138311_NUllableInstActual.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707141346461_NullableFechaNac.resx">
+      <DependentUpon>201707141346461_NullableFechaNac.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707232110256_InteresesRelacional.resx">
+      <DependentUpon>201707232110256_InteresesRelacional.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -295,6 +495,8 @@
           <DevelopmentServerPort>51075</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:51075/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:51075/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

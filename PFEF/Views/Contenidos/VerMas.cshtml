@@ -1,0 +1,49 @@
+﻿@model PFEF.Models.Contenidos
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/Content/Site.css" type="text/css" />
+</head>
+<body>
+    <div>
+        <div>
+            <h1>@Model.Nombre</h1>
+            <h6><small>Subido el @Model.FechaSubida por @Model.Usuarios.Nombre</small></h6>
+            <p>@Model.Descripcion</p>
+        </div>
+        <hr />
+            <div class="jumbotron row">
+                <h6 class="col-md-4 col-sm-6">Materia: <b>@Model.Materias.Nombre</b></h6>
+                <h6 class="col-md-4 col-sm-6">Tipo : <b>@Model.TiposContenidos.Nombre</b></h6>
+                <h6 class="col-md-4 col-sm-6">Nivel educativo: <b>@Model.NivelesEducativos.Nombre</b></h6>
+                <h6 class="col-md-4 col-sm-6">Profesor: <b>@Model.Profesor</b></h6>
+                <h6 class="col-md-4 col-sm-6">Escuelas: <b>@Model.Escuelas.Nombre</b></h6>
+                <h6 class="col-md-4 col-sm-6">Cursada: <b>Año @Model.Cursada</b></h6>
+            </div>
+        <hr />
+        <div>
+            <iframe src=@ViewBag.URL style="border: none; width:100%; height:780px;"></iframe>
+        </div>
+        <div>    
+            @{
+                if (Request.IsAuthenticated)
+                {
+                    @Html.ActionLink("Descargar!", "Descargar", "Contenidos", new { ID = Model.Id }, new { @class = "btn btn-embossed btn-primary" })
+                }
+                else
+                {
+                    <div class="form-inline">
+                        @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class= "btn btn-embossed btn-primary"})
+                        <p>Necesita estar logueado para poder descargar el contenido</p>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</body>
+</html>

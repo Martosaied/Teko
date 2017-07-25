@@ -1,0 +1,11 @@
+﻿
+@{
+    ViewBag.Title = "Escuelas";
+}
+
+<h2>Materias</h2>
+@using (Html.BeginForm("Escuela", "Home", FormMethod.Post, new { @class = "form-inline navbar-form", role = "search" }))
+{
+    <input type="text" class="form-control" name="escuela" placeholder="bacher mete escuela puto(o eze)" />
+                    <button class="btn" type="submit">Search</button>
+}

@@ -1,0 +1,102 @@
+﻿<style>
+    .carousel-control.left, .carousel-control.right 
+    {
+   background-image:none !important;
+   filter:none !important;
+}
+</style>
+<div id=@ViewBag.Controles class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-target="#@ViewBag.Controles" data-slide-to="0" class="active"></li>
+        <li data-target="#@ViewBag.Controles" data-slide-to="1"></li>
+        <li data-target="#@ViewBag.Controles" data-slide-to="2"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+        <div class="item active">
+            @{ for (int i = 0; i < 3; i++)
+                {
+                    <span class="col-sm-1 col-md-1"></span>
+                    <div class="col-sm-3 col-md-3 row objeto" style="box-shadow: 1px 1px 5px #888888;">
+                        <div>
+                            <h5>@ViewBag.ListaArticulos[i].Nombre</h5>
+                            <h6><small>Subido el  por @ViewBag.ListaArticulos[i].Nombre</small></h6>
+                            <div class="Desc">
+                                <p class="DescT">@ViewBag.ListaArticulos[i].Descripcion</p>
+                            </div>
+                            <p class="divider"></p>
+                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Materias.Nombre</span>,
+                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Escuelas.Nombre</span>,
+                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].NivelesEducativos.Nombre</span>,
+                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Profesor</span>,
+                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].TiposContenidos.Nombre</span>
+                            <a href="@Url.Action("VerMas", "Contenidos", new { cont = ViewBag.ListaArticulos[i].Id }) " class="btn btn-block btn-lg btn-primary">Ver mas</a>
+
+                        </div>
+                        </div>
+                }
+           }
+        </div>
+        <div class="item">
+            @{ for (int i = 3; i < 6; i++)
+                {
+                    <span class="col-sm-1 col-md-1"></span>
+                    <div class="col-sm-3 col-md-3 row objeto" style="box-shadow: 1px 1px 5px #888888;">
+                        <div>
+                            <h5>@ViewBag.ListaArticulos[i].Nombre</h5>
+                            <h6><small>Subido el  por @ViewBag.ListaArticulos[i].Usuarios.Nombre</small></h6>
+                            <div class="Desc">
+                                <p class="DescT">@ViewBag.ListaArticulos[i].Descripcion</p>
+                            </div>
+                            <p class="divider"></p>
+                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Materias.Nombre</span>,
+                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Escuelas.Nombre</span>,
+                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].NivelesEducativos.Nombre</span>,
+                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Profesor</span>,
+                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].TiposContenidos.Nombre</span>
+                            <a href="@Url.Action("VerMas", "Contenidos", new { cont = ViewBag.ListaArticulos[i].Id }) " class="btn btn-block btn-lg btn-primary">Ver mas</a>
+
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="item">
+            @{ for (int i = 6; i < 9; i++)
+                {
+                    <span class="col-sm-1 col-md-1"></span>
+                    <div class="col-sm-3 col-md-3 row objeto" style="box-shadow: 1px 1px 5px #888888;">
+                        <div>
+                            <h5>@ViewBag.ListaArticulos[i].Nombre</h5>
+                            <h6><small>Subido el  por @ViewBag.ListaArticulos[i].Usuarios.Nombre</small></h6>
+                            <div class="Desc">
+                                <p class="DescT">@ViewBag.ListaArticulos[i].Descripcion</p>
+                            </div>
+                            <p class="divider"></p>
+                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Materias.Nombre</span>,
+                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Escuelas.Nombre</span>,
+                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].NivelesEducativos.Nombre</span>,
+                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Profesor</span>,
+                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].TiposContenidos.Nombre</span>
+                            <a href="@Url.Action("VerMas", "Contenidos", new { cont = ViewBag.ListaArticulos[i].Id }) " class="btn btn-block btn-lg btn-primary">Ver mas</a>
+
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <a class="left carousel-control" href="#@ViewBag.Controles" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#@ViewBag.Controles" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+

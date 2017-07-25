@@ -13,15 +13,16 @@ namespace PFEF.Models
         {
             // Tenga en cuenta que el valor de authenticationType debe coincidir con el definido en CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
-            // Agregar aquí notificaciones personalizadas de usuario
+            userIdentity.AddClaim(new Claim("IdUserInfo", this.IdUserInfo.ToString()));
             return userIdentity;
         }
+        public int IdUserInfo { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("DefaultConnection1", throwIfV1Schema: false)
         {
         }
 
@@ -29,5 +30,15 @@ namespace PFEF.Models
         {
             return new ApplicationDbContext();
         }
+
+        public virtual DbSet<Contenidos> Contenidos { get; set; }
+        public virtual DbSet<Usuarios> Usuarios { get; set; }
+        public virtual DbSet<Escuelas> Escuelas { get; set; }
+        public virtual DbSet<Materias> Materias { get; set; }
+        public virtual DbSet<NivelesEducativos> NivelesEducativos { get; set; }
+        public virtual DbSet<TiposContenidos> TiposContenidos { get; set; }
+        public virtual DbSet<InteresesEscuelas> InteresesEscuelas { get; set; }
+        public virtual DbSet<InteresesMaterias> InteresesMaterias { get; set; }
+        public virtual DbSet<InteresesProfesores> InteresesProfesores { get; set; }
     }
 }

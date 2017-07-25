@@ -1,0 +1,125 @@
+﻿@using PFEF.Models.ViewModels;
+@model PerfilViewModel
+@{
+    ViewBag.Title = "Home de usuario";
+}
+
+<h2>Home de usuario</h2>
+<body>
+
+    <div class="container">
+        <div class="row profile">
+            <div class="col-md-3">
+                <div class="profile-sidebar">
+                    <!-- SIDEBAR USERPIC -->
+                    <div class="profile-userpic">
+                        <img src="" class="img-responsive" alt="">
+                    </div>
+                    <!-- END SIDEBAR USERPIC -->
+                    <!-- SIDEBAR USER TITLE -->
+                    <div class="profile-usertitle">
+                        <div class="profile-usertitle-name">
+                            @Model.Nombre
+                        </div>
+                        <div class="profile-usertitle-job">
+                            Estudiante en @Model.InstitucionActual.Nombre
+                        </div>
+                    </div>
+                    <!-- END SIDEBAR USER TITLE -->
+                    <!-- SIDEBAR BUTTONS -->
+                    <div class="profile-userbuttons">
+                        <button type="button" class="btn btn-success btn-sm">Follow</button>
+                        <button type="button" class="btn btn-danger btn-sm">Message</button>
+                    </div>
+                    <!-- END SIDEBAR BUTTONS -->
+                    <!-- SIDEBAR MENU -->
+                    <div class="profile-usermenu">
+                        <ul class="nav">
+                            <li class="active">
+                                <a href="#">
+                                    <i class="glyphicon glyphicon-home"></i>
+                                    Overview
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="glyphicon glyphicon-user"></i>
+                                    Account Settings
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("LlenarPerfil", "Usuarios")">
+                                    <i class="glyphicon glyphicon-user"></i>
+                                    Editar perfil
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" target="_blank">
+                                    <i class="glyphicon glyphicon-ok"></i>
+                                    Tasks
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="glyphicon glyphicon-flag"></i>
+                                    Help
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- END MENU -->
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="profile-content">
+                    Recomendaciones de acuerdo a tu actividad
+                    @{
+                        for (int i = (int)Session["Page"] * 16; i <= ((int)Session["Page"] * 16) + 15; i++)
+                        {
+                            if (i < Model.DictRecomendaciones.Length)
+                            {
+                                <div>
+                                    <span class="sep col-sm-1 col-md-1"></span>
+                                    <a href="@Url.Action("VerMas", "Contenidos", new { cont = Model.DictRecomendaciones[i].Id })" style="text-decoration: none">
+                                        <div class="cont col-sm-3 col-md-3 row objeto">
+                                            <div>
+                                                <h5 class="Tit">@Model.DictRecomendaciones[i].Nombre</h5>
+                                                <h6><small>Subido el @Model.DictRecomendaciones[i].FechaSubida por @Model.DictRecomendaciones[i].Nombre</small></h6>
+                                                <div class="Desc">
+                                                    <p class="DescT">@Model.DictRecomendaciones[i].Descripcion</p>
+                                                </div>
+                                                <p class="divider"></p>
+
+                                                <div class="tags">
+                                                    <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.DictRecomendaciones[i].Materias.Nombre })">
+                                                        <span class="mitag tag label label-info">@Model.DictRecomendaciones[i].Materias.Nombre</span>,
+                                                        <a />
+                                                        <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.DictRecomendaciones[i].Escuelas.Nombre })">
+                                                            <span class="mitag tag label label-info">@Model.DictRecomendaciones[i].Escuelas.Nombre</span>,
+                                                        </a>
+                                                        <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.DictRecomendaciones[i].NivelesEducativos.Nombre })">
+                                                            <span class="mitag tag label label-info">@Model.DictRecomendaciones[i].NivelesEducativos.Nombre</span>,
+                                                        </a>
+                                                        <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.DictRecomendaciones[i].Profesor })">
+                                                            <span class="mitag tag label label-info">@Model.DictRecomendaciones[i].Profesor</span>,
+                                                        </a>
+                                                        <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.DictRecomendaciones[i].TiposContenidos.Nombre })">
+                                                            <span class="mitag tag label label-info">@Model.DictRecomendaciones[i].TiposContenidos.Nombre</span>
+                                                        </a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+
+</body>

@@ -1,0 +1,82 @@
+﻿@model PFEF.ViewModels.SubirViewModel
+@{
+    ViewBag.Title = "Subir contenidos";
+}
+
+<h2>Subir contenidos</h2>
+
+@using (Html.BeginForm("Subir", "Contenidos", FormMethod.Post, new { @class = "form-signin", role = "form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.LabelFor(m => m.Nombre, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Ruta, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBox("file", "", new { type = "file", @class = "form-control", @required = "required" })
+            @Html.ValidationMessageFor(m => m.Ruta, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Descripcion, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(m => m.Descripcion, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Descripcion, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Profesor, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Profesor, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Profesor, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Cursada, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Cursada, new { @class = "form-control" ,@type = "Number", min = "1900", max = "2017" })
+            @Html.ValidationMessageFor(m => m.Cursada, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.EscuelasId, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(x => x.EscuelasId, new SelectList(Model.dropEscuela, "Id", "Nombre"), new { @class = "btn btn-inverse dropdown-toggle", id = "DDEscuelas" })
+            @Html.ValidationMessageFor(m => m.EscuelasId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.MateriasId, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(x => x.MateriasId, new SelectList(Model.dropMateria, "Id", "Nombre"), new { @class = "btn btn-inverse dropdown-toggle" })
+            @Html.ValidationMessageFor(m => m.MateriasId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.TiposContenidosId, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(x => x.TiposContenidosId, new SelectList(Model.dropTipoContenido, "Id", "Nombre"), new { @class = "btn btn-inverse dropdown-toggle" })
+            @Html.ValidationMessageFor(m => m.TiposContenidosId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.NivelesEducativosId, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(x => x.NivelesEducativosId, new SelectList(Model.dropNivelEducativo, "Id", "Nombre"), new { @class = "btn btn-inverse dropdown-toggle" })
+            @Html.ValidationMessageFor(m => m.NivelesEducativosId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Subir</button>
+}
+<script src="https://twitter.github.io/typeahead.js/releases/0.10.4/typeahead.bundle.js"></script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
