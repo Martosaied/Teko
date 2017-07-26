@@ -28,6 +28,7 @@ namespace PFEF.Models
         public Nullable<int> IPop { get; set; }
         public Nullable<int> IDes { get; set; }
         public Nullable<System.DateTime> FechaSubida { get; set; }
+        public double ValoracionPromedio { get; set; }
 
         [ForeignKey("UsuariosId")]
         public virtual Usuarios Usuarios { get; set; }

@@ -229,10 +229,15 @@
     <Compile Include="Migrations\201707232110256_InteresesRelacional.Designer.cs">
       <DependentUpon>201707232110256_InteresesRelacional.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201707262133346_Valoration.cs" />
+    <Compile Include="Migrations\201707262133346_Valoration.Designer.cs">
+      <DependentUpon>201707262133346_Valoration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Favoritos.cs" />
     <Compile Include="Models\Intereses.cs" />
     <Compile Include="Models\Usuarios.cs" />
+    <Compile Include="Models\Valoraciones.cs" />
     <Compile Include="Models\ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\Contenidos.cs" />
     <Compile Include="Models\Escuelas.cs" />
@@ -374,6 +379,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -428,12 +435,12 @@
     <Content Include="Scripts\typeahead.bundle.js" />
     <Content Include="Views\Usuarios\LlenarPerfil1.cshtml" />
     <Content Include="Views\Usuarios\LlenarPerfil.cshtml" />
+    <Content Include="Views\Contenidos\_Valoration.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\ProfilePH\" />
     <Folder Include="Content\Uploads\" />
-    <Folder Include="OldMigrations\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -474,6 +481,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201707232110256_InteresesRelacional.resx">
       <DependentUpon>201707232110256_InteresesRelacional.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707262133346_Valoration.resx">
+      <DependentUpon>201707262133346_Valoration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

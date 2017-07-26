@@ -94,10 +94,10 @@ namespace PFEF.Controllers
             {
                 bool result = UpdateCustomDict(SelectedCont,User.Identity.GetUserInfoId());
             }
-            //vamos bien falta el sistema de si existe sumralo sino crearlo en el diccionario
+            var MappedCont = MapperContDetails(SelectedCont);
             ViewBag.URL = ObtenerURLArchivo(SelectedCont);
             ViewBag.Title = SelectedCont.Nombre;
-            return View(SelectedCont);//porfavor
+            return View(MappedCont);
         }
 
         protected List<string> keywords = new List<string>();
@@ -146,6 +146,31 @@ namespace PFEF.Controllers
              return View("MuestraCont",FVM);
         }
 
+        public PartialViewResult Valoration(int Id, int star,int? Val)
+        {
+            DetailsViewModel MappedCont;
+            using(ApplicationDbContext dbval = new ApplicationDbContext())
+            {
+                if(Val == null) Val = 0;
+                var Cont = dbval.Contenidos.Find(Id);
+                Valoraciones MiVal = new Valoraciones()
+                {
+                    User = new Usuarios()
+                    {
+                        Id = User.Identity.GetUserInfoId().Id
+                    },
+                    Contenido = Cont,             
+                    Valoracion = star                   
+                };
+                dbval.Valoraciones.Add(MiVal);
+                dbval.SaveChanges();
+
+                Cont.ValoracionPromedio = dbval.Valoraciones.Where(x => x.Contenido.Id == Id).Select(x => x.Valoracion).ToList().Average();
+                dbval.SaveChanges();
+                MappedCont = MapperContDetails(Cont);
+            }
+            return PartialView("_Valoration",MappedCont);
+        }
         #region Functions
         protected Contenidos[] _Searcher(string Buscador)
         {
@@ -351,6 +376,16 @@ namespace PFEF.Controllers
 
             return true;
         }
+        protected DetailsViewModel MapperContDetails(Contenidos cont)
+        {
+                var config = new MapperConfiguration(cfg => {
+                    cfg.CreateMap<Contenidos, DetailsViewModel>();
+                });
+                IMapper mapper = config.CreateMapper();
+                var ContMapeado = mapper.Map<Contenidos, DetailsViewModel>(cont);
+                return ContMapeado;
+        }
+
         #endregion
     }
 }

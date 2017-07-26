@@ -82,4 +82,28 @@ namespace PFEF.ViewModels
         //Con esto llenamos los drop en un objeto y mostrar las listas desde un objeto creado sin la necesidad de utilizar viewbags
 
     }
+    public class DetailsViewModel
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Descripcion { get; set; }
+        public string Ruta { get; set; }
+        public string Profesor { get; set; }
+        public int Cursada { get; set; }
+        public int UsuariosId { get; set; }
+        public int IPop { get; set; }
+        public int IDes { get; set; }
+        public DateTime FechaSubida { get; set; }
+        public string ValoracionPromedio
+        {
+            get;set;
+        }
+
+        public virtual Usuarios Usuarios { get; set; }
+        public virtual Escuelas Escuelas { get; set; }
+        public virtual Materias Materias { get; set; }
+        public virtual NivelesEducativos NivelesEducativos { get; set; }
+        public virtual TiposContenidos TiposContenidos { get; set; }
+
+    }
 }
