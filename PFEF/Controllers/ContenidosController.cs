@@ -11,20 +11,22 @@ using System.Reflection;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Data.Entity;
+using System.Threading.Tasks;
 
 namespace PFEF.Controllers
 {
     public class ContenidosController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private MuestraViewModel FVM = new MuestraViewModel();
+
+        private MuestraViewModel _ViewModel = new MuestraViewModel();
         // GET: Contenidos
         public ActionResult VerTodo(string Title)
         {
-            FVM = SwitchTitle(Title,FVM);
-            FVM = CargarDropsFVM(FVM);
+            _ViewModel = SwitchTitle(Title, _ViewModel);
+            _ViewModel.ChargeDrops();
             Session["KeyWords"] = "";
-            return View("MuestraCont",FVM);
+            return View("MuestraCont",_ViewModel);
         }
 
         public ActionResult Descargar(int ID)
@@ -50,7 +52,7 @@ namespace PFEF.Controllers
         public ActionResult Subir()
         {
             SubirViewModel SVM = new SubirViewModel();
-            SVM = CargarDropsSVM(SVM);
+            SVM.ChargeDrops();
             return View("SubirContenidos",SVM);
         }
 
@@ -86,13 +88,13 @@ namespace PFEF.Controllers
         }
 
         [HttpGet]
-        public ActionResult VerMas(int cont)
+        public async Task<ActionResult> VerMas(int cont)
         {
             Contenidos SelectedCont = db.Contenidos.Find(cont);
             UpdateIdes(true, SelectedCont);
             if (Request.IsAuthenticated)
             {
-                bool result = UpdateCustomDict(SelectedCont,User.Identity.GetUserInfoId());
+                bool result = await UpdateRecomendation(SelectedCont,User.Identity.GetUserInfoId());
             }
             var MappedCont = MapperContDetails(SelectedCont);
             ViewBag.URL = ObtenerURLArchivo(SelectedCont);
@@ -105,18 +107,18 @@ namespace PFEF.Controllers
         public ActionResult Buscar(string Buscador)
         {
             Session["Page"] = 0;
-            FVM.ListaAMostrar = _Searcher(Buscador);
-            FVM = CargarDropsFVM(FVM);
+            _ViewModel.ListaAMostrar = _Searcher(Buscador);
+            _ViewModel.ChargeDrops();
             Session["KeyWords"] = Buscador;
             ViewBag.Title = "Resultados: '" + Buscador.Replace(" ", "' '") + "'";
-            return View("MuestraCont",FVM);
+            return View("MuestraCont",_ViewModel);
         }
 
         [HttpPost]
         public ActionResult Buscar(MuestraViewModel FilterParameters)
         {
             Session["Page"] = 0;
-            FilterParameters = CargarDropsFVM(FilterParameters);
+            FilterParameters.ChargeDrops();
             FilterParameters.ListaAMostrar = _Searcher((string)Session["KeyWords"]);
             FilterParameters.ListaAMostrar = _Filter(FilterParameters, FilterParameters.ListaAMostrar);
             Session["Filters"] = FilterParameters;
@@ -128,10 +130,10 @@ namespace PFEF.Controllers
         public ActionResult Tag(string Tag)
         {
             Session["Page"] = 0;
-            FVM.ListaAMostrar = _SearcherByTag(Tag);
-            FVM = CargarDropsFVM(FVM);
+            _ViewModel.ListaAMostrar = _SearcherByTag(Tag);
+            _ViewModel.ChargeDrops();
             ViewBag.Title = "Resultados: '" + Tag + "'";
-            return View("MuestraCont", FVM);
+            return View("MuestraCont", _ViewModel);
         }
 
         public ActionResult PasarPagina(int Pagina, string Title)
@@ -141,9 +143,9 @@ namespace PFEF.Controllers
                 Pagina = 0;
             }
             Session["Page"] = Pagina;
-            FVM = SwitchTitle(Title,FVM);
-            FVM = CargarDropsFVM(FVM);
-             return View("MuestraCont",FVM);
+            _ViewModel = SwitchTitle(Title,_ViewModel);
+            _ViewModel.ChargeDrops();
+             return View("MuestraCont",_ViewModel);
         }
 
         public PartialViewResult Valoration(int Id, int star,int? Val)
@@ -254,13 +256,13 @@ namespace PFEF.Controllers
                .ToArray();
             return Lista;
         }
-        protected MuestraViewModel CargarDropsFVM(MuestraViewModel FVM)
+        /*protected MuestraViewModel CargarDrops_ViewModel(MuestraViewModel _ViewModel)
         {
-            FVM.dropEscuela = db.Escuelas.ToList();
-            FVM.dropMateria = db.Materias.ToList();
-            FVM.dropTipoContenido = db.TiposContenidos.ToList();
-            FVM.dropNivelEducativo = db.NivelesEducativos.ToList();
-            return FVM;
+            _ViewModel.dropEscuela = db.Escuelas.ToList();
+            _ViewModel.dropMateria = db.Materias.ToList();
+            _ViewModel.dropTipoContenido = db.TiposContenidos.ToList();
+            _ViewModel.dropNivelEducativo = db.NivelesEducativos.ToList();
+            return _ViewModel;
         }
         protected SubirViewModel CargarDropsSVM(SubirViewModel SVM)
         {
@@ -270,7 +272,7 @@ namespace PFEF.Controllers
             SVM.dropNivelEducativo = db.NivelesEducativos.ToList();
 
             return SVM;
-        }
+        }*/
         protected void UpdateIdes(bool DesOVis, Contenidos Cont)
         {
             if (DesOVis)
@@ -293,24 +295,24 @@ namespace PFEF.Controllers
             switch (Title)
             {
                 case "Mas recientes":
-                    FVM.ListaAMostrar = db.Contenidos.OrderByDescending(x => x.Id).ToArray();
+                    _ViewModel.ListaAMostrar = db.Contenidos.OrderByDescending(x => x.Id).ToArray();
                     ViewBag.Title = Title;
-                    return FVM;
+                    return _ViewModel;
                 case "Mas populares":
-                    FVM.ListaAMostrar = db.Contenidos.OrderByDescending(x => x.IPop).ToArray();
+                    _ViewModel.ListaAMostrar = db.Contenidos.OrderByDescending(x => x.IPop).ToArray();
                     ViewBag.Title = Title;
-                    return FVM;
+                    return _ViewModel;
                 case "Mas descargados":
-                    FVM.ListaAMostrar = db.Contenidos.OrderByDescending(x => x.IPop).ToArray();
+                    _ViewModel.ListaAMostrar = db.Contenidos.OrderByDescending(x => x.IPop).ToArray();
                     ViewBag.Title = Title;
-                    return FVM;
+                    return _ViewModel;
                 case "Mis subidas":
                     Usuarios User = (Usuarios)Session["User"];
- //                   FVM.ListaAMostrar = db.Contenidos.Where(x => x.UsuariosId == User.Id).ToArray();
+ //                   _ViewModel.ListaAMostrar = db.Contenidos.Where(x => x.UsuariosId == User.Id).ToArray();
                     ViewBag.Title = Title;
-                    return FVM;
+                    return _ViewModel;
                 default:
-                    Parameters = CargarDropsFVM(Parameters);
+                    Parameters.ChargeDrops();
                     Parameters.ListaAMostrar = _Searcher((string)Session["KeyWords"]);
 
                     Parameters.ListaAMostrar = _Filter((MuestraViewModel)Session["Filters"], Parameters.ListaAMostrar);
@@ -318,14 +320,14 @@ namespace PFEF.Controllers
                     return Parameters;
             }
         }
-        protected bool UpdateCustomDict(Contenidos cont, Usuarios User)
+        protected async Task<bool> UpdateRecomendation(Contenidos cont, Usuarios User)
         {
             var result = db.InteresesEscuelas.Where(x => x.IdUsuario.Id == User.Id && x.IdEscuela.Id == cont.Escuelas.Id).FirstOrDefault();    
             if(result != null)
             {
                 db.InteresesEscuelas.Attach(result);
                 result.Contador++;
-                db.SaveChanges();
+                //db.SaveChanges();
             }
             else
             {
@@ -335,7 +337,7 @@ namespace PFEF.Controllers
                 obj.setUser(IUser);
                 obj.Contador = 1;
                 db.InteresesEscuelas.Add(obj);
-                db.SaveChanges();
+                //db.SaveChanges();
             }
 
             var result2 = db.InteresesMaterias.Where(x => x.IdUsuario.Id == User.Id && x.IdMateria.Id == cont.Materias.Id).FirstOrDefault();
@@ -343,7 +345,7 @@ namespace PFEF.Controllers
             {
                 db.InteresesMaterias.Attach(result2);
                 result2.Contador++;
-                db.SaveChanges();
+               // db.SaveChanges();
             }
             else
             {
@@ -353,7 +355,7 @@ namespace PFEF.Controllers
                 obj.setUser(IUser);
                 obj.Contador = 1;
                 db.InteresesMaterias.Add(obj);
-                db.SaveChanges();
+               // db.SaveChanges();
             }
                 
             var result3 = db.InteresesProfesores.Where(x => x.IdUsuario.Id == User.Id && x.Profesor.Contains(cont.Profesor)).FirstOrDefault();

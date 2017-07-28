@@ -7,12 +7,23 @@ using PFEF.Models;
 
 namespace PFEF.ViewModels
 {
-    public class DropsCharger
+    public abstract class DropsCharger
     {
         public List<Escuelas> dropEscuela { get; set; }
         public List<Materias> dropMateria { get; set; }
         public List<TiposContenidos> dropTipoContenido { get; set; }
         public List<NivelesEducativos> dropNivelEducativo { get; set; }
+
+        public void ChargeDrops()
+        {
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                dropEscuela = db.Escuelas.ToList();
+                dropMateria = db.Materias.ToList();
+                dropTipoContenido = db.TiposContenidos.ToList();
+                dropNivelEducativo = db.NivelesEducativos.ToList();
+            }
+        }
     }
     public class DescrgarViewModel
     {

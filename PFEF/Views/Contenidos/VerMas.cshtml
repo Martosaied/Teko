@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="~/Content/Site.css" type="text/css" />
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script type='text/javascript' src='~/Scripts/jquery.unobtrusive-ajax.js'></script>
+    <script type='text/javascript' src='~/Scripts/jquery.unobtrusive-ajax.js'></script>@*Quitar estos dos paquetes y bundearlos*@
     <style>
         div.stars {
             width: 270px;
@@ -80,30 +80,28 @@
                 if (Request.IsAuthenticated)
                 {
                     int Id = Model.Id;
-                    @Html.ActionLink("Descargar!", "Descargar", "Contenidos", new { ID = Id}, new { @class = "btn btn-embossed btn-primary" })
+                    @Html.ActionLink("Descargar!", "Descargar", "Contenidos", new { ID = Id}, new { @class = "btn btn-embossed btn-primary"})
                     using (Ajax.BeginForm("Valoration", "Contenidos", new AjaxOptions
-                    {//GetPatients is name of method in PatientController
-                        InsertionMode = InsertionMode.Replace, //target element(#patientList) will be replaced
+                    {
+                        InsertionMode = InsertionMode.Replace,
                         UpdateTargetId = "Valoration"
                     }))
                     {
                         <div class="stars" id="stars">
                             <input type="hidden" value="@Model.Id" name="Id" />
                             <input type="hidden" value="@Model.ValoracionPromedio" name="Val" />
-                            <input class="star star-5" id="star-5" type="radio" name="star" value="5" />
+                            <input class="star star-5" id="star-5" type="radio" name="star" value="5"  onchange="this.form.submit()" />
                             <label class="star star-5" for="star-5"></label>
-                            <input class="star star-4" id="star-4" type="radio" name="star" value="4" />
+                            <input class="star star-4" id="star-4" type="radio" name="star" value="4"  onchange="this.form.submit()"/>
                             <label class="star star-4" for="star-4"></label>
-                            <input class="star star-3" id="star-3" type="radio" name="star" value="3" />
+                            <input class="star star-3" id="star-3" type="radio" name="star" value="3"   onchange="this.form.submit()"/>
                             <label class="star star-3" for="star-3"></label>
-                            <input class="star star-2" id="star-2" type="radio" name="star" value="2" />
+                            <input class="star star-2" id="star-2" type="radio" name="star" value="2"   onchange="this.form.submit()"/>
                             <label class="star star-2" for="star-2"></label>
-                            <input class="star star-1" id="star-1" type="radio" name="star" value="1" />
+                            <input class="star star-1" id="star-1" type="radio" name="star" value="1" onchange="this.form.submit()" />
                             <label class="star star-1" for="star-1"></label>
                         </div>
-                                <div>
-                                    <button type="submit">Ingresar</button>
-                                </div>
+                        <button type="submit">Aprete</button>
                     }
                     @Html.Partial("_Valoration")
                 }

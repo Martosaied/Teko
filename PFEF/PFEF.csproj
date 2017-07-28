@@ -52,9 +52,13 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NReco.Recommender, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a9abe3bdfd6b1a7f, processorArchitecture=MSIL">
+      <HintPath>..\packages\NReco.Recommender.1.0.1\lib\net40\NReco.Recommender.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -441,6 +445,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\ProfilePH\" />
     <Folder Include="Content\Uploads\" />
+    <Folder Include="Views\CFPrueba\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

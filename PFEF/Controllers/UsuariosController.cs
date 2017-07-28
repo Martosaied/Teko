@@ -40,7 +40,7 @@ namespace PFEF.Controllers
         {
             Usuarios model = User.Identity.GetUserInfoId();
             InfoUsuarioViewModel MappedModel = MapperUserInfo(model);
-            MappedModel.dropEscuela = db.Escuelas.ToList();
+            MappedModel.setDropEsc();
             return View("LlenarPerfil", MappedModel);
         }
 
