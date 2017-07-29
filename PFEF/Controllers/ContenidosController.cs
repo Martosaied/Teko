@@ -12,6 +12,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Data.Entity;
 using System.Threading.Tasks;
+using EntityFramework.Extensions;
 
 namespace PFEF.Controllers
 {
@@ -65,6 +66,7 @@ namespace PFEF.Controllers
                 if (file != null)
                 {
                     Contenidos ContMapeado = HelpersExtensions.MappearContenidos(Cont);
+
                     string archivo = (DateTime.Now.ToString("yyyyMMddHHmmss") + "-" + file.FileName).ToLower();
                     archivo = archivo.Replace(" ", "");     
                     
@@ -76,6 +78,7 @@ namespace PFEF.Controllers
                                             
                     db.Contenidos.Add(ContMapeado);
                     db.SaveChanges();           
+
                     file.SaveAs(Server.MapPath("~/Content/Uploads/" + archivo));
                     return RedirectToAction("Index", "Home");
                 }
@@ -88,13 +91,13 @@ namespace PFEF.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> VerMas(int cont)
+        public ActionResult VerMas(int cont)
         {
             Contenidos SelectedCont = db.Contenidos.Find(cont);
             UpdateIdes(true, SelectedCont);
             if (Request.IsAuthenticated)
             {
-                bool result = await UpdateRecomendation(SelectedCont,User.Identity.GetUserInfoId());
+                bool result = UpdateRecomendation(SelectedCont,User.Identity.GetUserInfoId());
             }
             var MappedCont = MapperContDetails(SelectedCont);
             ViewBag.URL = ObtenerURLArchivo(SelectedCont);
@@ -231,6 +234,7 @@ namespace PFEF.Controllers
             };
             return Buscado.ListaAMostrar;
         }
+
         protected string ObtenerURLArchivo(Contenidos model)
         {
             string URL = model.Ruta.Substring(model.Ruta.Length - 4, 4);
@@ -248,31 +252,15 @@ namespace PFEF.Controllers
         {
             if (Parameters.Profesor == null) Parameters.Profesor = "";
             var Lista = Array
-               .Where(s => s.EscuelasId == Parameters.IdEscuela || Parameters.IdEscuela == 0)
-               .Where(s => s.MateriasId == Parameters.IdMateria || Parameters.IdMateria == 0)
-               .Where(s => s.TiposContenidosId == Parameters.IdTipoContenido || Parameters.IdTipoContenido == 0)
-               .Where(s => s.NivelesEducativosId == Parameters.IdNivelEducativo || Parameters.IdNivelEducativo == 0)
+               .Where(s => s.EscuelasId == Parameters.EscuelasId || Parameters.EscuelasId == 0)
+               .Where(s => s.MateriasId == Parameters.MateriasId || Parameters.MateriasId == 0)
+               .Where(s => s.TiposContenidosId == Parameters.TiposContenidosId|| Parameters.TiposContenidosId== 0)
+               .Where(s => s.NivelesEducativosId == Parameters.NivelesEducativosId || Parameters.NivelesEducativosId == 0)
                .Where(s => s.Profesor.ToLower().Contains(Parameters.Profesor.ToLower()) || Parameters.Profesor == "")
                .ToArray();
             return Lista;
         }
-        /*protected MuestraViewModel CargarDrops_ViewModel(MuestraViewModel _ViewModel)
-        {
-            _ViewModel.dropEscuela = db.Escuelas.ToList();
-            _ViewModel.dropMateria = db.Materias.ToList();
-            _ViewModel.dropTipoContenido = db.TiposContenidos.ToList();
-            _ViewModel.dropNivelEducativo = db.NivelesEducativos.ToList();
-            return _ViewModel;
-        }
-        protected SubirViewModel CargarDropsSVM(SubirViewModel SVM)
-        {
-            SVM.dropEscuela = db.Escuelas.ToList();
-            SVM.dropMateria = db.Materias.ToList();
-            SVM.dropTipoContenido = db.TiposContenidos.ToList();
-            SVM.dropNivelEducativo = db.NivelesEducativos.ToList();
 
-            return SVM;
-        }*/
         protected void UpdateIdes(bool DesOVis, Contenidos Cont)
         {
             if (DesOVis)
@@ -320,10 +308,18 @@ namespace PFEF.Controllers
                     return Parameters;
             }
         }
-        protected async Task<bool> UpdateRecomendation(Contenidos cont, Usuarios User)
+        protected bool UpdateRecomendation(Contenidos cont, Usuarios User)
         {
-            var result = db.InteresesEscuelas.Where(x => x.IdUsuario.Id == User.Id && x.IdEscuela.Id == cont.Escuelas.Id).FirstOrDefault();    
-            if(result != null)
+
+            var FutureQuery = db.InteresesEscuelas.Where(x => x.IdUsuario.Id == User.Id && x.IdEscuela.Id == cont.Escuelas.Id).FutureFirstOrDefault();
+            var FutureQuery2 = db.InteresesMaterias.Where(x => x.IdUsuario.Id == User.Id && x.IdMateria.Id == cont.Materias.Id).FutureFirstOrDefault();
+            var FutureQuery3 = db.InteresesProfesores.Where(x => x.IdUsuario.Id == User.Id && x.Profesor.Contains(cont.Profesor)).FutureFirstOrDefault();
+
+            InteresesEscuelas result = FutureQuery.Value;
+            InteresesMaterias result2 = FutureQuery2.Value;
+            InteresesProfesores result3 = FutureQuery3.Value;
+
+            if (result != null)
             {
                 db.InteresesEscuelas.Attach(result);
                 result.Contador++;
@@ -340,7 +336,6 @@ namespace PFEF.Controllers
                 //db.SaveChanges();
             }
 
-            var result2 = db.InteresesMaterias.Where(x => x.IdUsuario.Id == User.Id && x.IdMateria.Id == cont.Materias.Id).FirstOrDefault();
             if (result2 != null)
             {
                 db.InteresesMaterias.Attach(result2);
@@ -358,7 +353,6 @@ namespace PFEF.Controllers
                // db.SaveChanges();
             }
                 
-            var result3 = db.InteresesProfesores.Where(x => x.IdUsuario.Id == User.Id && x.Profesor.Contains(cont.Profesor)).FirstOrDefault();
             if (result3 != null)
             {
                 db.InteresesProfesores.Attach(result3);

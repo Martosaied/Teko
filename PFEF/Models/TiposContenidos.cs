@@ -11,8 +11,9 @@ namespace PFEF.Models
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class TiposContenidos
+    using PFEF.Extensions;
+
+    public partial class TiposContenidos : BasePropDeContenido
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TiposContenidos()
@@ -20,8 +21,6 @@ namespace PFEF.Models
             this.Contenidos = new HashSet<Contenidos>();
         }
     
-        public int Id { get; set; }
-        public string Nombre { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Contenidos> Contenidos { get; set; }

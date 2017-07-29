@@ -11,17 +11,15 @@ namespace PFEF.Models
 {
     using System;
     using System.Collections.Generic;
+    using PFEF.Extensions;
     
-    public partial class Escuelas
+    public partial class Escuelas : BasePropDeContenido
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Escuelas()
         {
             this.Contenidos = new HashSet<Contenidos>();
         }
-    
-        public int Id { get; set; }
-        public string Nombre { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Contenidos> Contenidos { get; set; }

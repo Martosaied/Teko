@@ -31,7 +31,7 @@
                 <div class="form-group">
                     <h6 class="titfont">Escuela:</h6> 
                     <div>
-                        @Html.DropDownListFor(model => model.IdEscuela, new SelectList(Model.dropEscuela, "Id", "Nombre"), "----------", new { @class = "btn btn-inverse dropdown-toggle" })
+                        @Html.DropDownListFor(model => model.EscuelasId, new SelectList(Model.dropEscuela, "Id", "Nombre"), "----------", new { @class = "btn btn-inverse dropdown-toggle" })
                     </div>
                 </div>
 
@@ -39,20 +39,20 @@
                    <h6 class="titfont">Materia:</h6>
                     <div>
 
-                        @Html.DropDownListFor(model => model.IdMateria, new SelectList(Model.dropMateria, "Id", "Nombre"), "----------", new { @class = "btn btn-inverse dropdown-toggle" })
+                        @Html.DropDownListFor(model => model.MateriasId, new SelectList(Model.dropMateria, "Id", "Nombre"), "----------", new { @class = "btn btn-inverse dropdown-toggle" })
                     </div>
                 </div>
                 <div class="form-group">
                     <h6 class="titfont">Nivel educativo:</h6>
                     <div>
-                        @Html.DropDownListFor(model => model.IdNivelEducativo, new SelectList(Model.dropNivelEducativo, "Id", "Nombre"), "----------", new { @class = "btn btn-inverse dropdown-toggle" })
+                        @Html.DropDownListFor(model => model.NivelesEducativosId, new SelectList(Model.dropNivelEducativo, "Id", "Nombre"), "----------", new { @class = "btn btn-inverse dropdown-toggle" })
                     </div>
                 </div>
 
                 <div class="form-group">
                     <h6 class="titfont">Tipo contenido:</h6>
                     <div>
-                        @Html.DropDownListFor(model => model.IdTipoContenido, new SelectList(Model.dropTipoContenido, "Id", "Nombre"), "----------", new { @class = "btn btn-inverse dropdown-toggle" })
+                        @Html.DropDownListFor(model => model.TiposContenidosId, new SelectList(Model.dropTipoContenido, "Id", "Nombre"), "----------", new { @class = "btn btn-inverse dropdown-toggle" })
                     </div>
                 </div>
 
@@ -76,7 +76,7 @@
             <button class="btn btn-default" onclick="Tarjetas();">Ver como tarjetas</button>
         </div>
         <div id="contenido" class="row" style="margin:1%;">
-            @Html.Partial("_ContentView")
+            @Html.Partial("_ContViewer")
         </div>   
         <div class="col-md-5">
             <div>

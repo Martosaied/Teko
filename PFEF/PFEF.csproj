@@ -48,6 +48,9 @@
     <Reference Include="AutoMapper">
       <HintPath>G:\ORT\ProyectoFinal\PFEF\packages\AutoMapper.6.1.0\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework.Extended, Version=6.0.0.0, Culture=neutral, PublicKeyToken=05b7e29bdd433584, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.Extended.6.1.0.168\lib\net45\EntityFramework.Extended.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -201,6 +204,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
     <Compile Include="Extensions\ClaimsExtensions.cs" />
+    <Compile Include="Extensions\ClassExtensions.cs" />
     <Compile Include="Extensions\HelpersExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -440,12 +444,13 @@
     <Content Include="Views\Usuarios\LlenarPerfil1.cshtml" />
     <Content Include="Views\Usuarios\LlenarPerfil.cshtml" />
     <Content Include="Views\Contenidos\_Valoration.cshtml" />
+    <Content Include="Views\CFPrueba\NewCardType.cshtml" />
+    <Content Include="Views\Contenidos\_ContViewer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\ProfilePH\" />
     <Folder Include="Content\Uploads\" />
-    <Folder Include="Views\CFPrueba\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

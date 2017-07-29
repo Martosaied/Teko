@@ -53,6 +53,12 @@
             content: '\f006';
             font-family: FontAwesome;
         }
+
+
+
+
+
+ 
     </style>
 </head>
 <body>
@@ -79,6 +85,7 @@
             @{
                 if (Request.IsAuthenticated)
                 {
+                    
                     int Id = Model.Id;
                     @Html.ActionLink("Descargar!", "Descargar", "Contenidos", new { ID = Id}, new { @class = "btn btn-embossed btn-primary"})
                     using (Ajax.BeginForm("Valoration", "Contenidos", new AjaxOptions
@@ -90,18 +97,18 @@
                         <div class="stars" id="stars">
                             <input type="hidden" value="@Model.Id" name="Id" />
                             <input type="hidden" value="@Model.ValoracionPromedio" name="Val" />
-                            <input class="star star-5" id="star-5" type="radio" name="star" value="5"  onchange="this.form.submit()" />
+                            <input class="star star-5" id="star-5" type="radio" name="star" value="5"  qonchange="this.form.submit()" />
                             <label class="star star-5" for="star-5"></label>
-                            <input class="star star-4" id="star-4" type="radio" name="star" value="4"  onchange="this.form.submit()"/>
+                            <input class="star star-4" id="star-4" type="radio" name="star" value="4"  qonchange="this.form.submit()"/>
                             <label class="star star-4" for="star-4"></label>
-                            <input class="star star-3" id="star-3" type="radio" name="star" value="3"   onchange="this.form.submit()"/>
+                            <input class="star star-3" id="star-3" type="radio" name="star" value="3"   qonchange="this.form.submit()"/>
                             <label class="star star-3" for="star-3"></label>
-                            <input class="star star-2" id="star-2" type="radio" name="star" value="2"   onchange="this.form.submit()"/>
+                            <input class="star star-2" id="star-2" type="radio" name="star" value="2"   oqnchange="this.form.submit()"/>
                             <label class="star star-2" for="star-2"></label>
-                            <input class="star star-1" id="star-1" type="radio" name="star" value="1" onchange="this.form.submit()" />
+                            <input class="star star-1" id="star-1" type="radio" name="star" value="1" qonchange="this.form.submit()" />
                             <label class="star star-1" for="star-1"></label>
                         </div>
-                        <button type="submit">Aprete</button>
+                        <button type="submit" class="btn btn-success btn-xs">Valorar</button>
                     }
                     @Html.Partial("_Valoration")
                 }
