@@ -9,7 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='http://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/main.css">
-
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script type='text/javascript' src='~/Scripts/jquery.unobtrusive-ajax.js'></script>
     <style>
         .titfont{
             font-size:18px;
@@ -104,36 +105,23 @@
             </div>
         </div>
     <script>
-       @*$(window).scroll(function () {
+      @*$(window).scroll(function () {
             if ($(window).scrollTop() ==
                 $(document).height() - $(window).height()) {
                 GetData();
             }
         });
         function GetData() {
-            $.ajax({
-                type: 'GET',
-                url: '/Contenidos/GetData',
-                dataType: 'json',
+                       $.ajax({
+                dataType: "html",
                 success: function (data) {
-                    if (data != null) {
-                        for (var i = 0; i < data.length; i++) {
-                            $("#container").append("<h2>" +
-                                data[i].Nombre + "</h2>");
-                        }
-                    }
-                    $('#container').load("/Contenidos/CargarRecomendaciones");
-                },
-                beforeSend: function () {
-                    $("#progress").show();
-                },
-                complete: function () {
-                    $("#progress").hide();
+                    $('#MoreContent').load("@Url.Action("GetMoreCont", "Contenidos")");
                 },
                 error: function () {
-                    alert("Error while retrieving data!");
-                }
-            });
+                    $('#MoreContent').html("<h3>Couldn't do that</h3>");
+                },
+            }
+            );
         }*@
         function PopEsc() {
             var lvlId = $('#NivelesEducativosId').val();
@@ -143,7 +131,7 @@
                 dataType: "JSON",
                 data: { Lvl: lvlId },
                 success: function (Data) {
-                    $("#ddlesc").html(""); // clear before appending new list 
+                    $("#ddlesc").html(""); // clear before appending new list
                     $.each(Data, function (i, city) {
                         $("#ddlesc").append(
                             $('<option></option>').val(city.Id).html(city.Nombre));
