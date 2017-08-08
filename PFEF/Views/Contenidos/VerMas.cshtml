@@ -72,7 +72,7 @@
             <div class="jumbotron row">
                 <h6 class="col-md-4 col-sm-6">Materia: <b>@Model.Materias.Nombre</b></h6>
                 <h6 class="col-md-4 col-sm-6">Tipo : <b>@Model.TiposContenidos.Nombre</b></h6>
-                <h6 class="col-md-4 col-sm-6">Nivel educativo: <b>@Model.NivelesEducativos.Nombre</b></h6>
+                <h6 class="col-md-4 col-sm-6">Nivel educativo: <b>@Model.Escuelas.NivEduEscuela.Nombre</b></h6>
                 <h6 class="col-md-4 col-sm-6">Profesor: <b>@Model.Profesor</b></h6>
                 <h6 class="col-md-4 col-sm-6">Escuelas: <b>@Model.Escuelas.Nombre</b></h6>
                 <h6 class="col-md-4 col-sm-6">Cursada: <b>Año @Model.Cursada</b></h6>
@@ -87,7 +87,7 @@
                 {
                     
                     int Id = Model.Id;
-                    @Html.ActionLink("Descargar!", "Descargar", "Contenidos", new { ID = Id}, new { @class = "btn btn-embossed btn-primary"})
+                    @Html.ActionLink("Descargar!", "Descargar", "Contenidos", new { ID = Id}, new { @class = "btn btn-embossed btn-primary row" })
                     using (Ajax.BeginForm("Valoration", "Contenidos", new AjaxOptions
                     {
                         InsertionMode = InsertionMode.Replace,
@@ -119,8 +119,11 @@
                         <p>Necesita estar logueado para poder descargar el contenido</p>
                     </div>
                 }
+                @Html.Partial("_SingleRecom")
             }
+
         </div>
+
     </div>
 </body>
 </html>

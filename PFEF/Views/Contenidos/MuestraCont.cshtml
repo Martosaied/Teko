@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='http://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/main.css">
+
     <style>
         .titfont{
             font-size:18px;
@@ -20,64 +21,67 @@
     </style>
 </head>
 <body class="containermio">
-    <div class="containermio">
         <h1 class="text-center">@ViewBag.Title</h1>
         <hr />
         <div class="jumbotron">
             @using (Html.BeginForm("Buscar", "Contenidos", FormMethod.Post, new { @class = "form-inline" }))
             {
                 Model.Title = ViewBag.Title;
-                @Html.HiddenFor(x => x.Title)
-                <div class="form-group">
-                    <h6 class="titfont">Escuela:</h6> 
-                    <div>
-                        @Html.DropDownListFor(model => model.EscuelasId, new SelectList(Model.dropEscuela, "Id", "Nombre"), "----------", new { @class = "btn btn-inverse dropdown-toggle" })
-                    </div>
+            @Html.HiddenFor(x => x.Title)
+            <div class="form-group">
+                <h6 class="titfont">Nivel educativo:</h6>
+                <div>
+                    @Html.DropDownListFor(model => model.NivelesEducativosId, new SelectList(Model.dropNivelEducativo, "Id", "Nombre"), "----------", new { @class = "btn btn-inverse dropdown-toggle", @onchange = "PopEsc(this.value);" })
                 </div>
+            </div>
 
-                <div class="form-group">
-                   <h6 class="titfont">Materia:</h6>
-                    <div>
+            <div class="form-group">
+                <h6 class="titfont">Escuela:</h6>
+                <div>
 
-                        @Html.DropDownListFor(model => model.MateriasId, new SelectList(Model.dropMateria, "Id", "Nombre"), "----------", new { @class = "btn btn-inverse dropdown-toggle" })
-                    </div>
+                    @Html.DropDownListFor(model => model.EscuelasId, Enumerable.Empty<SelectListItem>(), "Primero elige nivel", new { @class = "btn btn-inverse dropdown-toggle", id = "ddlesc" ,name = "ddlesc" })
                 </div>
-                <div class="form-group">
-                    <h6 class="titfont">Nivel educativo:</h6>
-                    <div>
-                        @Html.DropDownListFor(model => model.NivelesEducativosId, new SelectList(Model.dropNivelEducativo, "Id", "Nombre"), "----------", new { @class = "btn btn-inverse dropdown-toggle" })
-                    </div>
-                </div>
+            </div>
 
-                <div class="form-group">
-                    <h6 class="titfont">Tipo contenido:</h6>
-                    <div>
-                        @Html.DropDownListFor(model => model.TiposContenidosId, new SelectList(Model.dropTipoContenido, "Id", "Nombre"), "----------", new { @class = "btn btn-inverse dropdown-toggle" })
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <h6 class="titfont">Tipo contenido:</h6>
-                    <div>
-                        @Html.TextBoxFor(model => model.Profesor, new { @class = "btn btn-inverse dropdown-toggle" })
-                    </div>
+
+            <div class="form-group">
+                <h6 class="titfont">Materia:</h6>
+                <div>
+
+                    @Html.DropDownListFor(model => model.MateriasId, new SelectList(Model.dropMateria, "Id", "Nombre"), "----------", new { @class = "btn btn-inverse dropdown-toggle" })
                 </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-1">
-                        <input type="submit" value="Filtrar!" class="btn btn-succes" />
-                    </div>
+            </div>
+
+            <div class="form-group">
+                <h6 class="titfont">Tipo contenido:</h6>
+                <div>
+                    @Html.DropDownListFor(model => model.TiposContenidosId, new SelectList(Model.dropTipoContenido, "Id", "Nombre"), "----------", new { @class = "btn btn-inverse dropdown-toggle" })
                 </div>
+            </div>
+
+            <div class="form-group">
+                <h6 class="titfont">Tipo contenido:</h6>
+                <div>
+                    @Html.TextBoxFor(model => model.Profesor, new { @class = "btn btn-inverse dropdown-toggle" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-1">
+                    <input type="submit" value="Filtrar!" class="btn btn-succes" />
+                </div>
+            </div>
             }
-         
+
         </div>
         <hr />
         <div class="col-md-offset-1 row">
             <button class="btn btn-default" onclick="Barras();">Ver como barra</button>
             <button class="btn btn-default" onclick="Tarjetas();">Ver como tarjetas</button>
         </div>
-        <div id="contenido" class="row" style="margin:1%;">
+        <div id="container">
             @Html.Partial("_ContViewer")
-        </div>   
+        </div>
         <div class="col-md-5">
             <div>
                 <ul class="pagination">
@@ -99,10 +103,54 @@
                 </ul>
             </div>
         </div>
-
-
-    </div>
     <script>
+       @*$(window).scroll(function () {
+            if ($(window).scrollTop() ==
+                $(document).height() - $(window).height()) {
+                GetData();
+            }
+        });
+        function GetData() {
+            $.ajax({
+                type: 'GET',
+                url: '/Contenidos/GetData',
+                dataType: 'json',
+                success: function (data) {
+                    if (data != null) {
+                        for (var i = 0; i < data.length; i++) {
+                            $("#container").append("<h2>" +
+                                data[i].Nombre + "</h2>");
+                        }
+                    }
+                    $('#container').load("/Contenidos/CargarRecomendaciones");
+                },
+                beforeSend: function () {
+                    $("#progress").show();
+                },
+                complete: function () {
+                    $("#progress").hide();
+                },
+                error: function () {
+                    alert("Error while retrieving data!");
+                }
+            });
+        }*@
+        function PopEsc() {
+            var lvlId = $('#NivelesEducativosId').val();
+            $.ajax({
+                url: '/Contenidos/PopuladorEsc',
+                type: "GET",
+                dataType: "JSON",
+                data: { Lvl: lvlId },
+                success: function (Data) {
+                    $("#ddlesc").html(""); // clear before appending new list 
+                    $.each(Data, function (i, city) {
+                        $("#ddlesc").append(
+                            $('<option></option>').val(city.Id).html(city.Nombre));
+                    });
+                }
+            });
+        }
         function Barras() {
             $(".cont").removeClass("col-sm-3");
             $(".cont").removeClass("col-md-3");

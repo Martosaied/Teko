@@ -23,7 +23,6 @@ namespace PFEF.Models
         public int UsuariosId { get; set; }
         public Nullable<int> EscuelasId { get; set; }
         public Nullable<int> MateriasId { get; set; }
-        public Nullable<int> NivelesEducativosId { get; set; }
         public Nullable<int> TiposContenidosId { get; set; }
         public Nullable<int> IPop { get; set; }
         public Nullable<int> IDes { get; set; }
@@ -34,7 +33,6 @@ namespace PFEF.Models
         public virtual Usuarios Usuarios { get; set; }
         public virtual Escuelas Escuelas { get; set; }
         public virtual Materias Materias { get; set; }
-        public virtual NivelesEducativos NivelesEducativos { get; set; }
         public virtual TiposContenidos TiposContenidos { get; set; }
     }
 }

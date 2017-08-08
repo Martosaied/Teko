@@ -98,8 +98,9 @@ namespace PFEF.ViewModels
         public virtual Usuarios Usuarios { get; set; }
         public virtual Escuelas Escuelas { get; set; }
         public virtual Materias Materias { get; set; }
-        public virtual NivelesEducativos NivelesEducativos { get; set; }
         public virtual TiposContenidos TiposContenidos { get; set; }
+
+        public Contenidos[] Recomendaciones { get; set; }
 
     }
 }

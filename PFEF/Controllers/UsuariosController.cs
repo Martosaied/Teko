@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using PFEF.Models;
 using PFEF.Models.ViewModels;
 using PFEF.Extensions;
 using AutoMapper;
-using Newtonsoft.Json;
+using EntityFramework.Extensions;
+using PFEF.Models.DataAccess;
 
 namespace PFEF.Controllers
 {
@@ -23,8 +23,8 @@ namespace PFEF.Controllers
             {
                 Usuarios IUser = User.Identity.GetUserInfoId();
                 PerfilViewModel model = MapperPerfilInfo(IUser);
-                string[] lastvs = ObtenerIntereses(IUser.Id);
-                model.DictRecomendaciones = ObtenerRec(lastvs);
+                var lastvs = ContenidosDA.Recomendaciones.ObtenerIntereses(IUser.Id);
+                model.DictRecomendaciones = ContenidosDA.Recomendaciones.ObtenerRec(lastvs);
                 return View("HomeUsuario",model);
             }
             else
@@ -42,6 +42,15 @@ namespace PFEF.Controllers
             InfoUsuarioViewModel MappedModel = MapperUserInfo(model);
             MappedModel.setDropEsc();
             return View("LlenarPerfil", MappedModel);
+        }
+
+        public PartialViewResult CargarRecomendaciones()
+        {
+            Usuarios IUser = User.Identity.GetUserInfoId();
+            PerfilViewModel model = MapperPerfilInfo(IUser);
+            var lastvs = ContenidosDA.Recomendaciones.ObtenerIntereses(IUser.Id);
+            model.DictRecomendaciones = ContenidosDA.Recomendaciones.ObtenerRec(lastvs);
+            return PartialView("_Recommendation", model);
         }
 
         [HttpPost]
@@ -83,60 +92,6 @@ namespace PFEF.Controllers
             IMapper mapper = config.CreateMapper();
             var MappedModel = mapper.Map<InfoUsuarioViewModel, Usuarios>(model);
             return MappedModel;
-        }
-        protected string[] ObtenerIntereses(int Id)
-        {
-            string[] Intereses = new string[3];
-            var IUser = User.Identity.GetUserInfoId();
-
-            Intereses[1] = db.InteresesEscuelas.Where(x => x.Contador == db.InteresesEscuelas.Max(s => s.Contador) && x.IdUsuario.Id == IUser.Id).Select(x => x.IdEscuela.Id).FirstOrDefault().ToString();
-            Intereses[0] = db.InteresesMaterias.Where(x => x.Contador == db.InteresesMaterias.Max(s => s.Contador) && x.IdUsuario.Id == IUser.Id).Select(x => x.IdMateria.Id).FirstOrDefault().ToString();
-            Intereses[2] = db.InteresesProfesores.Where(x => x.Contador == db.InteresesProfesores.Max(s => s.Contador) && x.IdUsuario.Id == IUser.Id).Select(x => x.Profesor).FirstOrDefault();
-            /*var deserializedDict = JsonConvert.DeserializeObject<Dictionary<string, int>>(IUser.InteresesMaterias);
-            var ordered = deserializedDict.OrderByDescending(x => x.Value);
-            Intereses[0] = ordered.Select(w => w.Key).First();
-
-            deserializedDict = JsonConvert.DeserializeObject<Dictionary<string, int>>(IUser.InteresesEscuelas);
-            ordered = deserializedDict.OrderByDescending(x => x.Value);
-            Intereses[1] = ordered.Select(w => w.Key).First();
-
-            deserializedDict = JsonConvert.DeserializeObject<Dictionary<string, int>>(IUser.InteresesProfesores);
-            ordered = deserializedDict.OrderByDescending(x => x.Value);
-            Intereses[2] = ordered.Select(w => w.Key).First();*/
-
-            return Intereses;
-        }
-        protected Contenidos[] ObtenerRec(string[] Intereses)
-        {
-            int mat = Convert.ToInt32(Intereses[0]);
-            var esc = Convert.ToInt32(Intereses[1]);
-            var prf = Intereses[2];
-
-            var query = db.Contenidos.Where(x => x.Materias.Id == mat
-                                     || x.Escuelas.Id == esc
-                                     || x.Profesor.Contains(prf))
-                                     .ToArray();
-
-            var ListaCoincideTodo = query.Where(x => x.Materias.Id == mat)
-                                         .Where(x => x.Escuelas.Id == esc)
-                                         .Where(x => x.Profesor.Contains(prf))
-                                         .ToArray();
-
-            var ListaCoincideParcial = query.Where(x => x.Escuelas.Id == esc
-                                            && x.Materias.Id == mat
-                                            || x.Materias.Id == mat
-                                            && x.Profesor.Contains(prf)
-                                            || x.Escuelas.Id == esc
-                                            && x.Profesor.Contains(prf)).ToArray();
-
-            var ListaCoincideUna = query.Where(x => x.Materias.Id == mat
-                                           || x.Escuelas.Id == esc
-                                           || x.Profesor.Contains(prf)).ToArray();
-
-            var ListaTodo = ListaCoincideTodo.Union(ListaCoincideParcial.Union(ListaCoincideUna)).ToArray();
-            return ListaTodo;
-
-            //Esto esta todo mal pero funciona(mal optimizado y trae cosas innecesiaras, ADEMAS DE QUE HACE DEMASIADAS LLAMADAS AL SERVIDOR)
         }
         #endregion
     }

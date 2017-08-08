@@ -159,7 +159,7 @@
     {
         if (i < Model.ListaAMostrar.Length)
         {
-            <div class="caca col-md-4">
+            <div class="caca col-md-4" sonclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model.ListaAMostrar[i].Id })'">
                 <div class="card-flipper effect__hover" data-id="1">
                     <div class="card__front">
                         <div class="card card-01">
@@ -171,7 +171,7 @@
                         </div>
                     </div>
 
-                    <div class="card__back">
+                    <div class="card__back" onclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model.ListaAMostrar[i].Id })'">
                         <div class="card card-01">
                             <div class="card-block text-center">
                                 <h4 class="card-title">Subido el @Model.ListaAMostrar[i].FechaSubida por @Model.ListaAMostrar[i].Usuarios.Nombre</h4>
@@ -182,8 +182,8 @@
                                             <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.ListaAMostrar[i].Escuelas.Nombre })">
                                                 <span class="mitag tag label label-info">@Model.ListaAMostrar[i].Escuelas.Nombre</span>,
                                             </a>
-                                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.ListaAMostrar[i].NivelesEducativos.Nombre })">
-                                                <span class="mitag tag label label-info">@Model.ListaAMostrar[i].NivelesEducativos.Nombre</span>,
+                                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.ListaAMostrar[i].Escuelas.NivEduEscuela.Nombre })">
+                                                <span class="mitag tag label label-info">@Model.ListaAMostrar[i].Escuelas.NivEduEscuela.Nombre</span>,
                                             </a>
                                             <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.ListaAMostrar[i].Profesor })">
                                                 <span class="mitag tag label label-info">@Model.ListaAMostrar[i].Profesor</span>,
@@ -191,7 +191,11 @@
                                             <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.ListaAMostrar[i].TiposContenidos.Nombre })">
                                                 <span class="mitag tag label label-info">@Model.ListaAMostrar[i].TiposContenidos.Nombre</span>
                                             </a>
+                                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.ListaAMostrar[i].Cursada })">
+                                                <span class="mitag tag label label-info">Año @Model.ListaAMostrar[i].Cursada</span>
+                                            </a>
                                 </span>
+                                
                             </div>
                         </div>
                     </div>

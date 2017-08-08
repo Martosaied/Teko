@@ -38,7 +38,7 @@ namespace PFEF.Models.ViewModels
     }
     public class PerfilViewModel : BaseUserViewModel
     {
-        public Contenidos[] DictRecomendaciones { get; set; }
+        public Dictionary<string, Contenidos[]> DictRecomendaciones { get; set; }
         
         
 

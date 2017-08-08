@@ -7,12 +7,8 @@ using PFEF.ViewModels;
 using PFEF.Models;
 using PFEF.Extensions;
 using AutoMapper;
-using System.Reflection;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System.Data.Entity;
-using System.Threading.Tasks;
 using EntityFramework.Extensions;
+using PFEF.Models.DataAccess;
 
 namespace PFEF.Controllers
 {
@@ -25,18 +21,23 @@ namespace PFEF.Controllers
         public ActionResult VerTodo(string Title)
         {
             _ViewModel = SwitchTitle(Title, _ViewModel);
+            GuardarIds(_ViewModel.ListaAMostrar);
             _ViewModel.ChargeDrops();
-            Session["KeyWords"] = "";
             return View("MuestraCont",_ViewModel);
         }
 
+        public JsonResult PopuladorEsc(int Lvl)
+        {
+            var Esc = db.Escuelas.Where(x=>x.NivEduEscuela.Id == Lvl).Select(c => new { Id = c.Id, Nombre = c.Nombre }).ToList();
+            return Json(Esc, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult Descargar(int ID)
         {
             Contenidos selected = db.Contenidos.Find(ID);
             if (Request.IsAuthenticated)
             {
                 ViewBag.Error = "";
-                UpdateIdes(false, selected);
+                ContenidosDA.UpdateIdes(false, selected);
                 string contentType = System.Net.Mime.MediaTypeNames.Application.Pdf;
                 return new FilePathResult("~/Content/Uploads/" + selected.Ruta, contentType)
                 {
@@ -94,25 +95,25 @@ namespace PFEF.Controllers
         public ActionResult VerMas(int cont)
         {
             Contenidos SelectedCont = db.Contenidos.Find(cont);
-            UpdateIdes(true, SelectedCont);
+            ContenidosDA.UpdateIdes(true, SelectedCont);
             if (Request.IsAuthenticated)
             {
-                bool result = UpdateRecomendation(SelectedCont,User.Identity.GetUserInfoId());
+                bool result = ContenidosDA.Recomendaciones.UpdateRecomendation(SelectedCont,User.Identity.GetUserInfoId());
             }
             var MappedCont = MapperContDetails(SelectedCont);
+            MappedCont.Recomendaciones = ContenidosDA.Recomendaciones.ObtenerRec(SelectedCont);
             ViewBag.URL = ObtenerURLArchivo(SelectedCont);
             ViewBag.Title = SelectedCont.Nombre;
             return View(MappedCont);
         }
 
-        protected List<string> keywords = new List<string>();
         [HttpGet]
         public ActionResult Buscar(string Buscador)
         {
             Session["Page"] = 0;
-            _ViewModel.ListaAMostrar = _Searcher(Buscador);
+            _ViewModel.ListaAMostrar = ContenidosDA._Searcher(Buscador);
+            GuardarIds(_ViewModel.ListaAMostrar);
             _ViewModel.ChargeDrops();
-            Session["KeyWords"] = Buscador;
             ViewBag.Title = "Resultados: '" + Buscador.Replace(" ", "' '") + "'";
             return View("MuestraCont",_ViewModel);
         }
@@ -122,10 +123,9 @@ namespace PFEF.Controllers
         {
             Session["Page"] = 0;
             FilterParameters.ChargeDrops();
-            FilterParameters.ListaAMostrar = _Searcher((string)Session["KeyWords"]);
-            FilterParameters.ListaAMostrar = _Filter(FilterParameters, FilterParameters.ListaAMostrar);
-            Session["Filters"] = FilterParameters;
-            string Buscador = (string)Session["KeyWords"];
+            var Lista = ObtenerIds();
+            FilterParameters.ListaAMostrar = ContenidosDA._Filter(FilterParameters, Lista);
+            GuardarIds(FilterParameters.ListaAMostrar);
             ViewBag.Title = FilterParameters.Title;
             return View("MuestraCont",FilterParameters);
         }
@@ -133,7 +133,8 @@ namespace PFEF.Controllers
         public ActionResult Tag(string Tag)
         {
             Session["Page"] = 0;
-            _ViewModel.ListaAMostrar = _SearcherByTag(Tag);
+            _ViewModel.ListaAMostrar = ContenidosDA._SearcherByTag(Tag);
+            GuardarIds(_ViewModel.ListaAMostrar);
             _ViewModel.ChargeDrops();
             ViewBag.Title = "Resultados: '" + Tag + "'";
             return View("MuestraCont", _ViewModel);
@@ -146,7 +147,7 @@ namespace PFEF.Controllers
                 Pagina = 0;
             }
             Session["Page"] = Pagina;
-            _ViewModel = SwitchTitle(Title,_ViewModel);
+            _ViewModel.ListaAMostrar = ObtenerIds();
             _ViewModel.ChargeDrops();
              return View("MuestraCont",_ViewModel);
         }
@@ -171,70 +172,13 @@ namespace PFEF.Controllers
                 dbval.SaveChanges();
 
                 Cont.ValoracionPromedio = dbval.Valoraciones.Where(x => x.Contenido.Id == Id).Select(x => x.Valoracion).ToList().Average();
+                Cont.ValoracionPromedio = Math.Round(Cont.ValoracionPromedio, 1);
                 dbval.SaveChanges();
                 MappedCont = MapperContDetails(Cont);
             }
             return PartialView("_Valoration",MappedCont);
         }
         #region Functions
-        protected Contenidos[] _Searcher(string Buscador)
-        {
-            MuestraViewModel Buscado = new MuestraViewModel();
-            if (Buscador == "")
-            {
-                Buscado.ListaAMostrar = db.Contenidos.OrderByDescending(x=> x.Id).ToArray();
-                return Buscado.ListaAMostrar;
-            }
-            else
-            {
-                 string[] keywords = Buscador.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-                this.keywords = keywords.ToList();
-                int flag = 1;
-                foreach (string item in keywords)
-                {
-                    if (flag == 1)
-                    {
-                        Buscado.ListaAMostrar = db.Contenidos.Where(s => s.Nombre.Contains(item) ||
-                        s.Descripcion.Contains(item) || s.Profesor.Contains(item) ||
-                        s.Cursada.ToString().Contains(item) || s.Usuarios.Nombre.Contains(item) ||
-                        s.Escuelas.Nombre.Contains(item) ||
-                        s.NivelesEducativos.Nombre.Contains(item) ||
-                        s.TiposContenidos.Nombre.Contains(item) ||
-                        s.Materias.Nombre.Contains(item)
-                        ).ToArray();                
-                        flag = 0;
-                    }
-                    else
-                    {
-                        Buscado.ListaAMostrar = Buscado.ListaAMostrar.Where(s => s.Nombre.ToLower().Contains(item.ToLower()) ||
-                        s.Descripcion.ToLower().Contains(item.ToLower()) || s.Profesor.ToLower().Contains(item.ToLower()) ||
-                        s.Cursada.ToString().ToLower().Contains(item.ToLower()) || s.Usuarios.Nombre.ToLower().Contains(item.ToLower()) ||
-                        s.Escuelas.Nombre.ToLower().Contains(item.ToLower()) ||
-                        s.NivelesEducativos.Nombre.ToLower().Contains(item.ToLower()) ||
-                        s.TiposContenidos.Nombre.ToLower().Contains(item.ToLower()) ||
-                        s.Materias.Nombre.ToLower().Contains(item.ToLower())).ToArray();
-                    }
-                }
-                return Buscado.ListaAMostrar;
-            }
-        }
-        protected Contenidos[] _SearcherByTag(string Buscador)
-        {
-            MuestraViewModel Buscado = new MuestraViewModel()
-            {
-                ListaAMostrar = db.Contenidos.Where(s => s.Nombre.Contains(Buscador) ||
-                            s.Descripcion.Contains(Buscador) || s.Profesor.Contains(Buscador) ||
-                            s.Cursada.ToString().Contains(Buscador) || s.Usuarios.Nombre.Contains(Buscador) ||
-                            s.Escuelas.Nombre.Contains(Buscador) ||
-                            s.NivelesEducativos.Nombre.Contains(Buscador) ||
-                            s.TiposContenidos.Nombre.Contains(Buscador) ||
-                            s.Materias.Nombre.Contains(Buscador)
-                        ).ToArray()
-            };
-            return Buscado.ListaAMostrar;
-        }
-
         protected string ObtenerURLArchivo(Contenidos model)
         {
             string URL = model.Ruta.Substring(model.Ruta.Length - 4, 4);
@@ -247,36 +191,6 @@ namespace PFEF.Controllers
                 URL = "https://view.officeapps.live.com/op/embed.aspx?src=https://tekoteko.azurewebsites.net/Content/Uploads/" + model.Ruta;
             }
             return URL;
-        }
-        protected Contenidos[] _Filter(MuestraViewModel Parameters, Contenidos[] Array)
-        {
-            if (Parameters.Profesor == null) Parameters.Profesor = "";
-            var Lista = Array
-               .Where(s => s.EscuelasId == Parameters.EscuelasId || Parameters.EscuelasId == 0)
-               .Where(s => s.MateriasId == Parameters.MateriasId || Parameters.MateriasId == 0)
-               .Where(s => s.TiposContenidosId == Parameters.TiposContenidosId|| Parameters.TiposContenidosId== 0)
-               .Where(s => s.NivelesEducativosId == Parameters.NivelesEducativosId || Parameters.NivelesEducativosId == 0)
-               .Where(s => s.Profesor.ToLower().Contains(Parameters.Profesor.ToLower()) || Parameters.Profesor == "")
-               .ToArray();
-            return Lista;
-        }
-
-        protected void UpdateIdes(bool DesOVis, Contenidos Cont)
-        {
-            if (DesOVis)
-            {
-                Cont.IPop++;
-                db.Contenidos.Attach(Cont);
-                db.Entry(Cont).Property(x => x.IPop).IsModified = true;
-                db.SaveChanges();
-            }
-            else
-            {
-                Cont.IDes++;
-                db.Contenidos.Attach(Cont);
-                db.Entry(Cont).Property(x => x.IDes).IsModified = true;
-                db.SaveChanges();
-            }
         }
         protected MuestraViewModel SwitchTitle(string Title, MuestraViewModel Parameters)
         {
@@ -301,76 +215,11 @@ namespace PFEF.Controllers
                     return _ViewModel;
                 default:
                     Parameters.ChargeDrops();
-                    Parameters.ListaAMostrar = _Searcher((string)Session["KeyWords"]);
-
-                    Parameters.ListaAMostrar = _Filter((MuestraViewModel)Session["Filters"], Parameters.ListaAMostrar);
+                    Parameters.ListaAMostrar = ContenidosDA._Searcher((string)Session["KeyWords"]);
+                    Parameters.ListaAMostrar = ContenidosDA._Filter((MuestraViewModel)Session["Filters"], Parameters.ListaAMostrar);
                     ViewBag.Title = Title;
                     return Parameters;
             }
-        }
-        protected bool UpdateRecomendation(Contenidos cont, Usuarios User)
-        {
-
-            var FutureQuery = db.InteresesEscuelas.Where(x => x.IdUsuario.Id == User.Id && x.IdEscuela.Id == cont.Escuelas.Id).FutureFirstOrDefault();
-            var FutureQuery2 = db.InteresesMaterias.Where(x => x.IdUsuario.Id == User.Id && x.IdMateria.Id == cont.Materias.Id).FutureFirstOrDefault();
-            var FutureQuery3 = db.InteresesProfesores.Where(x => x.IdUsuario.Id == User.Id && x.Profesor.Contains(cont.Profesor)).FutureFirstOrDefault();
-
-            InteresesEscuelas result = FutureQuery.Value;
-            InteresesMaterias result2 = FutureQuery2.Value;
-            InteresesProfesores result3 = FutureQuery3.Value;
-
-            if (result != null)
-            {
-                db.InteresesEscuelas.Attach(result);
-                result.Contador++;
-                //db.SaveChanges();
-            }
-            else
-            {
-                InteresesEscuelas obj = new InteresesEscuelas();
-                var IUser = db.Usuarios.Find(User.Id);
-                obj.setEscuela(cont.Escuelas);
-                obj.setUser(IUser);
-                obj.Contador = 1;
-                db.InteresesEscuelas.Add(obj);
-                //db.SaveChanges();
-            }
-
-            if (result2 != null)
-            {
-                db.InteresesMaterias.Attach(result2);
-                result2.Contador++;
-               // db.SaveChanges();
-            }
-            else
-            {
-                InteresesMaterias obj = new InteresesMaterias();
-                var IUser = db.Usuarios.Find(User.Id);
-                obj.setMateria(cont.Materias);
-                obj.setUser(IUser);
-                obj.Contador = 1;
-                db.InteresesMaterias.Add(obj);
-               // db.SaveChanges();
-            }
-                
-            if (result3 != null)
-            {
-                db.InteresesProfesores.Attach(result3);
-                result3.Contador++;
-                db.SaveChanges();
-            }
-            else
-            {
-                InteresesProfesores obj = new InteresesProfesores();
-                var IUser = db.Usuarios.Find(User.Id);
-                obj.Profesor = cont.Profesor;
-                obj.setUser(IUser);
-                obj.Contador = 1;
-                db.InteresesProfesores.Add(obj);
-                db.SaveChanges();
-            }
-
-            return true;
         }
         protected DetailsViewModel MapperContDetails(Contenidos cont)
         {
@@ -380,6 +229,21 @@ namespace PFEF.Controllers
                 IMapper mapper = config.CreateMapper();
                 var ContMapeado = mapper.Map<Contenidos, DetailsViewModel>(cont);
                 return ContMapeado;
+        }
+        protected void GuardarIds(Contenidos[] Ids)
+        {
+            var result = Ids.Select(x => x.Id).ToArray();
+            Session["ListIds"] = result;
+        }
+        protected Contenidos[] ObtenerIds()
+        {
+            int[] ids = (int[])Session["ListIds"];
+            Contenidos[] ListaLlena;
+            using (ApplicationDbContext ListDb = new ApplicationDbContext())
+            {
+                ListaLlena = db.Contenidos.Where(x => ids.Contains(x.Id)).ToArray();
+            }
+            return ListaLlena;
         }
 
         #endregion

@@ -31,11 +31,11 @@
         <div class="container body-content">
             @RenderBody()
             <hr />
-            <footer>
-                <p>&copy; @DateTime.Now.Year - ProjecTeko</p>
-            </footer>
+            
         </div>
-
+        <footer>
+            <p>&copy; @DateTime.Now.Year - ProjecTeko</p>
+        </footer>
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")
         @RenderSection("scripts", required: false)
