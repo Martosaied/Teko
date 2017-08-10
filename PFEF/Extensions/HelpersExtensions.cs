@@ -22,6 +22,22 @@ namespace PFEF.Extensions
                 return Task.FromResult(intIdt);
             }
         }
+        public static Task<int> CreateInfoUser(string idU)
+        {
+
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                Usuarios Info = new Usuarios();
+                db.Usuarios.Add(Info);
+
+                var result = db.Users.Find(idU);
+                result.IdUserInfo = db.Usuarios.Max(u => u.Id);
+
+                db.SaveChanges();
+                var intIdt = 1;
+                return Task.FromResult(intIdt);
+            }
+        }
         public static Contenidos MappearContenidos(SubirViewModel ViewModel)
         {
             var config = new MapperConfiguration(cfg => {
@@ -30,6 +46,32 @@ namespace PFEF.Extensions
             IMapper mapper = config.CreateMapper();
             var ContMapeado = mapper.Map<SubirViewModel, Contenidos>(ViewModel);
             return ContMapeado;
+        }
+        public static string BudgetFileSelect(string URL)
+        {
+            string ADevolver = "fa fa-file-o";
+            URL = URL.Substring(URL.Length - 4, 4);
+            switch (URL)
+            {
+                case "docx":
+                case ".doc":
+                    ADevolver = "fa fa-file-word-o";
+                    break;
+                case ".xls":
+                case "xlsx":
+                    ADevolver = "fa fa-file-excel-o";
+                    break;
+                case ".ppt":
+                case "pptx":
+                    ADevolver = "fa fa-file-powerpoint-o";
+                    break;
+                case ".pdf":
+                    ADevolver = "fa fa-file-pdf-o";
+                    break;
+                default:
+                    break;
+            }
+            return ADevolver;
         }
 
     }

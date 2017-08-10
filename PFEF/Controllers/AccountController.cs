@@ -370,14 +370,15 @@ namespace PFEF.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                int intIdt = await HelpersExtensions.CreateInfoUser();
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email ,IdUserInfo = intIdt};
+                
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
                     if (result.Succeeded)
                     {
+                        int intIdt = await HelpersExtensions.CreateInfoUser(user.Id);
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                         return RedirectToLocal(returnUrl);
                     }

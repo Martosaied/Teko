@@ -3,9 +3,117 @@
 @{
     ViewBag.Title = "Home de usuario";
 }
-@*<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script type='text/javascript' src='~/Scripts/jquery.unobtrusive-ajax.js'></script>Quitar estos dos paquetes y bundearlos*@
+<style>
 
+    body {
+        background: #F1F3FA;
+    }
+
+    /* Profile container */
+    .profile {
+        margin: 20px 0;
+    }
+
+    /* Profile sidebar */
+    .profile-sidebar {
+        padding: 20px 0 10px 0;
+        background: #fff;
+    }
+
+    .profile-userpic img {
+        float: none;
+        margin: 0 auto;
+        width: 50%;
+        height: 50%;
+        -webkit-border-radius: 50% !important;
+        -moz-border-radius: 50% !important;
+        border-radius: 50% !important;
+    }
+
+    .profile-usertitle {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .profile-usertitle-name {
+        color: #5a7391;
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 7px;
+    }
+
+    .profile-usertitle-job {
+        text-transform: uppercase;
+        color: #5b9bd1;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .profile-userbuttons {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+        .profile-userbuttons .btn {
+            text-transform: uppercase;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 15px;
+            margin-right: 5px;
+        }
+
+            .profile-userbuttons .btn:last-child {
+                margin-right: 0px;
+            }
+
+    .profile-usermenu {
+        margin-top: 30px;
+    }
+
+        .profile-usermenu ul li {
+            border-bottom: 1px solid #f0f4f7;
+        }
+
+            .profile-usermenu ul li:last-child {
+                border-bottom: none;
+            }
+
+            .profile-usermenu ul li a {
+                color: #93a3b5;
+                font-size: 14px;
+                font-weight: 400;
+            }
+
+                .profile-usermenu ul li a i {
+                    margin-right: 8px;
+                    font-size: 14px;
+                }
+
+                .profile-usermenu ul li a:hover {
+                    background-color: #fafcfd;
+                    color: #5b9bd1;
+                }
+
+            .profile-usermenu ul li.active {
+                border-bottom: none;
+            }
+
+                .profile-usermenu ul li.active a {
+                    color: #5b9bd1;
+                    background-color: #f6f9fb;
+                    border-left: 2px solid #5b9bd1;
+                    margin-left: -2px;
+                }
+
+    /* Profile Content */
+    .profile-content {
+        padding: 20px;
+        background: #fff;
+        min-height: 460px;
+    }
+
+</style>
 <body>
     <div class="container">
         <div class="row profile">
@@ -28,7 +136,7 @@
                     <!-- END SIDEBAR USER TITLE -->
                     <!-- SIDEBAR BUTTONS -->
                     <div class="profile-userbuttons">
-                        <a href="@Url.Action("AbrirSubidas","Contenidos")" class="btn btn-success btn-sm">Ver subidas</a>
+                        <a href="@Url.Action("VerTodo","Contenidos",new { Title = "Mis subidas"})" class="btn btn-success btn-sm">Ver subidas</a>
                     </div>
                     <!-- END SIDEBAR BUTTONS -->
                     <!-- SIDEBAR MENU -->
@@ -58,13 +166,139 @@
                 </div>
             </div>
             <div class="col-md-9">
-                <div class="profile-content">
-                    @Html.Partial("_Recommendation")
+                <div id="Recomendaciones"class="profile-content">
+                    <div class="loader">
+                        <div class="pile small"></div>
+                        <div class="pile middle"></div>
+                        <div class="pile big"></div>
+                        <div class="loader-text">Cargando...</div>
+                    </div>
+                    <div class="loader-back"></div>
                 </div>
             </div>
         </div>
     </div>
     <br>
     <br>
+    @Scripts.Render("~/bundles/jquery")
+    <script>
+        $(document).ready(function () {
 
+            $.ajax({
+                dataType: "html",
+                success: function (data) {
+                    $('#Recomendaciones').load("@Url.Action("GetRecomendaciones","Usuarios")");
+                },
+                error: function () {
+                    $('#Recomendaciones').html("<h3>Couldn't do that</h3>");
+                },
+                beforeSend: function () {
+                    $('.loader').show();
+                },
+                complete: function () {
+                    $('.loader').hide();
+                },
+            }
+            );
+        });
+    </script>
+    <style>
+        div.loader {
+  background-color: transparent;
+  height: auto;
+  min-height: 40px;
+  /* vertical-align:bottom; */
+  position: absolute;
+  top: 48%;
+  left: 48%;
+  z-index: 10000;
+  margin-top: 20%;
+}
+            div.loader .pile {
+                transform: skew(-45deg);
+                transform-origin: 100% 100%;
+                background-color: #34495e;
+                width: 15px;
+                border-radius: 1px;
+                display: inline-block;
+                /*position:relative;
+    bottom:0;
+    left:auto;
+    vertical-align:bottom;*/
+            }
+div.loader .pile.small {
+  animation: pile1 0.3s 0.4s ease 1 forwards, fadein2 1s 1s linear infinite;
+}
+div.loader .pile.middle {
+  /*height:25px;
+      background-color:#F6CA6B;*/
+  animation: pile2 0.4s 0.2s ease 1 forwards, fadein2 1s 1.2s linear infinite;
+}
+div.loader .pile.big {
+  /*height:40px;
+      background-color:#F3AE02;*/
+  animation: pile3 0.5s ease 1 forwards, fadein2 1s 1.4s linear infinite;
+}
+            div.loader .loader-text {
+                color: #34495e;
+                opacity: 0;
+                animation: fadein 0.3s 0.6s ease 1 forwards;
+            }
+.loader-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  box-shadow: inset 0 0 75px 0 rgba(0, 0, 0, 0.4);
+}
+@@keyframes pile1 {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 13px;
+    background-color: #FCEFD5;
+  }
+}
+@@keyframes pile2 {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 25px;
+    background-color: #F6CA6B;
+  }
+}
+@@keyframes pile3 {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 40px;
+    background-color: #F3AE02;
+  }
+}
+@@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@@keyframes fadein2 {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+    </style>
 </body>

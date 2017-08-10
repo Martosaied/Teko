@@ -23,15 +23,15 @@ namespace PFEF.Controllers
             MuestraViewModel MVM = new MuestraViewModel();
             Session["Page"] = 0;
             Session["Filters"] = MVM;
-            if (Request.IsAuthenticated)
+             if (Request.IsAuthenticated && User.Identity.GetUserInfoId().Nombre != null)
             {
-                int? id = User.Identity.GetUserInfoId().InstitucionActualId;
-                ViewBag.ListaArticulosInst = db.Contenidos.Where(x => x.EscuelasId == id).OrderByDescending(x => x.Id).Take(9).ToList().ToArray();
-                //no probado
+                var id = User.Identity.GetUserInfoId().InstitucionActual.Id;
+                ViewBag.ListaArticulosEsc = db.Contenidos.Where(x => x.EscuelasId == id).OrderByDescending(x => x.Id).Take(9).ToArray();
             }
-            ViewBag.ListaArticulos = db.Contenidos.OrderByDescending(x => x.Id).Take(9).ToList().ToArray();
-            ViewBag.ListaArticulosPop = db.Contenidos.OrderByDescending(x => x.IPop).Take(9).ToList().ToArray();
-            ViewBag.ListaArticulosDes = db.Contenidos.OrderByDescending(x => x.IDes).Take(9).ToList().ToArray();
+            ViewBag.ListaArticulos = db.Contenidos.OrderByDescending(x => x.Id).Take(9).ToArray();
+            ViewBag.ListaArticulosPop = db.Contenidos.OrderByDescending(x => x.IPop).Take(9).ToArray();
+            ViewBag.ListaArticulosDes = db.Contenidos.OrderByDescending(x => x.IDes).Take(9).ToArray();
+            ViewBag.ListaArticulosVal = db.Contenidos.OrderByDescending(x => x.ValoracionPromedio).ToArray();
             return View();
 
         }

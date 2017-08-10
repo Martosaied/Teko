@@ -34,5 +34,7 @@ namespace PFEF.Models
         public virtual Escuelas Escuelas { get; set; }
         public virtual Materias Materias { get; set; }
         public virtual TiposContenidos TiposContenidos { get; set; }
+
+        [NotMapped]public string Badget { get; set; }
     }
 }

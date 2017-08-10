@@ -5,6 +5,9 @@
     .btnmio{
         margin-bottom:10px;
     }
+    .title {
+        display: inline-block;
+    }
 </style>
 <div class="jumbotron">
     <h1>Teko</h1>
@@ -36,8 +39,8 @@
 <hr />
 <div>
     <div>
-        <h2 class="text-center">Subidos recientemente</h2>
-        <a href="@Url.Action("VerTodo", "Contenidos",new { Title="Mas recientes"})" type="button" class="btnmio btn btn-default col-md-offset-5" id="tarj">Ver todo</a>
+            <h2 class="text-center title">Subidos recientemente</h2>
+            <a href="@Url.Action("VerTodo", "Contenidos",new { Title="Mas recientes"})" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
         @{
             ViewBag.Controles = "MasRec";
         }
@@ -47,8 +50,8 @@
     </div>
     <hr style="color: #0056b2; margin-top:20px; margin-bottom:20px;" />
     <div>
-        <h2 class="text-center">Mas populares</h2>
-        <a href="@Url.Action("VerTodo", "Contenidos",new { Title="Mas populares"})" type="button" class="btnmio btn btn-default col-md-offset-5" id="tarj">Ver todo</a>
+        <h2 class="text-center title">Mas populares</h2>
+        <a href="@Url.Action("VerTodo", "Contenidos",new { Title="Mas populares"})" type="button" class="btnmio btn btn-default id="tarj">Ver todo</a>
         @{
             ViewBag.ListaArticulos = ViewBag.ListaArticulosPop;
             ViewBag.Controles = "MasPop";
@@ -59,8 +62,8 @@
     </div>
     <hr style="color: #0056b2; margin-top:20px; margin-bottom:20px;" />
     <div>
-        <h2 class="text-center">Mas descargados</h2>
-        <a href="@Url.Action("VerTodo", "Contenidos",new { Title="Mas descargados"})" type="button" class="btnmio btn btn-default col-md-offset-5" id="tarj">Ver todo</a>
+        <h2 class="text-center title" >Mas descargados</h2>
+        <a href="@Url.Action("VerTodo", "Contenidos",new { Title="Mas descargados"})" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
         @{
             ViewBag.ListaArticulos = ViewBag.ListaArticulosDes;
             ViewBag.Controles = "MasDes";
@@ -69,4 +72,33 @@
             @Html.Partial("_Carrousel")
         </div>
     </div>
+    <hr style="color: #0056b2; margin-top:20px; margin-bottom:20px;" />
+    <div>
+        <h2 class="text-center title">Mas valorados</h2>
+        <a href="@Url.Action("VerTodo", "Contenidos",new { Title="Mas valorados"})" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
+        @{
+            ViewBag.ListaArticulos = ViewBag.ListaArticulosVal;
+            ViewBag.Controles = "MasVal";
+        }
+        <div class="row" style="margin:1%;">
+            @Html.Partial("_Carrousel")
+        </div>
+    </div>
+    @{ if (Request.IsAuthenticated && User.Identity.GetUserInfoId().InstitucionActual != null && ViewBag.ListaArticulosEsc.Length >= 9)
+        {
+            <hr style="color: #0056b2; margin-top:20px; margin-bottom:20px;" />
+            <div>
+                <h2 class="text-center title">Contenidos de @User.Identity.GetUserInfoId().InstitucionActual.Nombre</h2>
+                <a href="@Url.Action("VerTodo", "Contenidos",new { Title="Escuela"})" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
+                @{
+                    ViewBag.ListaArticulos = ViewBag.ListaArticulosEsc;
+                    ViewBag.Controles = "MasEsc";
+                }
+                <div class="row" style="margin:1%;">
+                    @Html.Partial("_Carrousel")
+                </div>
+            </div>
+          }
+       }
+    
 </div>

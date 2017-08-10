@@ -194,6 +194,7 @@ namespace PFEF.Controllers
         }
         protected MuestraViewModel SwitchTitle(string Title, MuestraViewModel Parameters)
         {
+            
             switch (Title)
             {
                 case "Mas recientes":
@@ -208,9 +209,17 @@ namespace PFEF.Controllers
                     _ViewModel.ListaAMostrar = db.Contenidos.OrderByDescending(x => x.IPop).ToArray();
                     ViewBag.Title = Title;
                     return _ViewModel;
+                case "Mas valorados":
+                    _ViewModel.ListaAMostrar = db.Contenidos.OrderByDescending(x => x.ValoracionPromedio).ToArray();
+                    ViewBag.Title = Title;
+                    return _ViewModel;
+                case "Escuela":
+                    int id = User.Identity.GetUserInfoId().InstitucionActual.Id;
+                    _ViewModel.ListaAMostrar = db.Contenidos.Where(x => x.Escuelas.Id == id).ToArray();
+                    ViewBag.Title = Title;
+                    return _ViewModel;
                 case "Mis subidas":
-                    Usuarios User = (Usuarios)Session["User"];
- //                   _ViewModel.ListaAMostrar = db.Contenidos.Where(x => x.UsuariosId == User.Id).ToArray();
+                    _ViewModel.ListaAMostrar = User.Identity.GetUserInfoId().Contenidos.ToArray();
                     ViewBag.Title = Title;
                     return _ViewModel;
                 default:

@@ -44,7 +44,7 @@ namespace PFEF.Controllers
             return View("LlenarPerfil", MappedModel);
         }
 
-        public PartialViewResult CargarRecomendaciones()
+        public PartialViewResult GetRecomendaciones()
         {
             Usuarios IUser = User.Identity.GetUserInfoId();
             PerfilViewModel model = MapperPerfilInfo(IUser);

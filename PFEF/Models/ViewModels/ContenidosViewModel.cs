@@ -74,7 +74,6 @@ namespace PFEF.ViewModels
         public string Title { get; set; }
         public Contenidos[] ListaAMostrar { get; set; }
 
-
         //Con esto llenamos los drop en un objeto y mostrar las listas desde un objeto creado sin la necesidad de utilizar viewbags
 
     }

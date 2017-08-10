@@ -7,10 +7,7 @@
     <title>@ViewBag.Title</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='http://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="css/main.css">
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script type='text/javascript' src='~/Scripts/jquery.unobtrusive-ajax.js'></script>
+    <link href='//fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
     <style>
         .titfont{
             font-size:18px;
@@ -76,14 +73,9 @@
 
         </div>
         <hr />
-        <div class="col-md-offset-1 row">
-            <button class="btn btn-default" onclick="Barras();">Ver como barra</button>
-            <button class="btn btn-default" onclick="Tarjetas();">Ver como tarjetas</button>
-        </div>
         <div id="container">
             @Html.Partial("_ContViewer")
         </div>
-        <div class="col-md-5">
             <div>
                 <ul class="pagination">
                     <li class="previous">
@@ -103,7 +95,6 @@
                     </li>
                 </ul>
             </div>
-        </div>
     <script>
       @*$(window).scroll(function () {
             if ($(window).scrollTop() ==
