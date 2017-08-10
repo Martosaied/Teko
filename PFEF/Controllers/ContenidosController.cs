@@ -29,6 +29,8 @@ namespace PFEF.Controllers
         public JsonResult PopuladorEsc(int Lvl)
         {
             var Esc = db.Escuelas.Where(x=>x.NivEduEscuela.Id == Lvl).Select(c => new { Id = c.Id, Nombre = c.Nombre }).ToList();
+            Esc.Add(new { Id = 0, Nombre = "----------" });
+            Esc = Esc.OrderBy(x => x.Id).ToList();
             return Json(Esc, JsonRequestBehavior.AllowGet);
         }
         public ActionResult Descargar(int ID)
@@ -119,15 +121,13 @@ namespace PFEF.Controllers
         }
 
         [HttpPost]
-        public ActionResult Buscar(MuestraViewModel FilterParameters)
+        public PartialViewResult Buscar(MuestraViewModel FilterParameters)
         {
             Session["Page"] = 0;
-            FilterParameters.ChargeDrops();
             var Lista = ObtenerIds();
             FilterParameters.ListaAMostrar = ContenidosDA._Filter(FilterParameters, Lista);
-            GuardarIds(FilterParameters.ListaAMostrar);
             ViewBag.Title = FilterParameters.Title;
-            return View("MuestraCont",FilterParameters);
+            return PartialView("_ContViewer",FilterParameters);
         }
 
         public ActionResult Tag(string Tag)
@@ -177,6 +177,32 @@ namespace PFEF.Controllers
                 MappedCont = MapperContDetails(Cont);
             }
             return PartialView("_Valoration",MappedCont);
+        }
+
+        public PartialViewResult Ordenar(int Ordenar)
+        {
+            Session["Page"] = 0;
+            var List = ObtenerIds();
+            switch (Ordenar)
+            {
+                case 1:
+                    _ViewModel.ListaAMostrar = List.OrderByDescending(x => x.ValoracionPromedio).ToArray();
+                    break;
+                case 2:
+                    _ViewModel.ListaAMostrar = List.OrderByDescending(x => x.IPop).ToArray();
+                    break;
+                case 3:
+                    _ViewModel.ListaAMostrar = List.OrderByDescending(x => x.IDes).ToArray();
+                    break;
+                case 4:
+                    _ViewModel.ListaAMostrar = List.OrderByDescending(x => x.FechaSubida).ToArray();
+                    break;
+                default:
+                    _ViewModel.ListaAMostrar = List;
+                    break;
+            }
+            GuardarIds(_ViewModel.ListaAMostrar);
+            return PartialView("_ContViewer", _ViewModel);
         }
         #region Functions
         protected string ObtenerURLArchivo(Contenidos model)
@@ -241,17 +267,18 @@ namespace PFEF.Controllers
         }
         protected void GuardarIds(Contenidos[] Ids)
         {
-            var result = Ids.Select(x => x.Id).ToArray();
-            Session["ListIds"] = result;
+            Session["ListIds"] = Ids;
         }
         protected Contenidos[] ObtenerIds()
         {
-            int[] ids = (int[])Session["ListIds"];
+            /*int[] ids = (int[])Session["ListIds"];
             Contenidos[] ListaLlena;
             using (ApplicationDbContext ListDb = new ApplicationDbContext())
             {
                 ListaLlena = db.Contenidos.Where(x => ids.Contains(x.Id)).ToArray();
             }
+            return ListaLlena;*/
+            Contenidos[] ListaLlena = (Contenidos[])Session["ListIds"];
             return ListaLlena;
         }
 

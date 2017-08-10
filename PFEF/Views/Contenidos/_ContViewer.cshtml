@@ -3,7 +3,7 @@
 <link href='~/Content/FlipperCard.css' rel='stylesheet' type='text/css'>
 @{
 
-    for (int i = (int)Session["Page"] * 16; i <= ((int)Session["Page"] * 16) + 15; i++)
+    for (int i = (int)Session["Page"] * 15; i <= ((int)Session["Page"] * 15) + 14; i++)
     {
         if (i < Model.ListaAMostrar.Length)
         {
@@ -15,7 +15,15 @@
                                 @{var Badget = HelpersExtensions.BudgetFileSelect(Model.ListaAMostrar[i].Ruta); }
                                 <span class="badge-box"><i class="@Badget"></i></span>
                                 <h4 class="card-title">@Model.ListaAMostrar[i].Nombre</h4>
-                                <p class="card-text">@Model.ListaAMostrar[i].Descripcion</p>
+                                @{ if (@Model.ListaAMostrar[i].Descripcion.Length > 110)
+                                    {
+                                        <p class="card-text">@Model.ListaAMostrar[i].Descripcion.Substring(0, 110)...</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="card-text">@Model.ListaAMostrar[i].Descripcion</p>
+                                    }
+                                }
                             </div>
                         </div>
                     </div>

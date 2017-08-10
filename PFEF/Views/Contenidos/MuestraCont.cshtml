@@ -22,9 +22,13 @@
         <h1 class="text-center">@ViewBag.Title</h1>
         <hr />
         <div class="jumbotron">
-            @using (Html.BeginForm("Buscar", "Contenidos", FormMethod.Post, new { @class = "form-inline" }))
-            {
-                Model.Title = ViewBag.Title;
+           @using (Ajax.BeginForm("Buscar", "Contenidos", new AjaxOptions
+           {
+               InsertionMode = InsertionMode.Replace,
+               UpdateTargetId = "container"
+           }))
+           {
+              Model.Title = ViewBag.Title;
             @Html.HiddenFor(x => x.Title)
             <div class="form-group">
                 <h6 class="titfont">Nivel educativo:</h6>
@@ -73,15 +77,34 @@
 
         </div>
         <hr />
+    <div>
+        @using (Ajax.BeginForm("Ordenar", "Contenidos", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "container"
+
+        }))
+        {     
+            @Html.DropDownList("Ordenar", new List<SelectListItem>
+
+                 {
+                    new SelectListItem{ Text="Valoracion", Value = "1" },
+                    new SelectListItem{ Text="Popularidad", Value = "2" },
+                    new SelectListItem{ Text="Descargas", Value = "3" },
+                    new SelectListItem{ Text="Recientes", Value = "4" }
+                 }
+                , "Ordenar por", new { onchange = "$(this.form).submit();", @class= "btn btn-inverse dropdown-toggle" })
+        }
+    </div>
         <div id="container">
             @Html.Partial("_ContViewer")
         </div>
             <div>
                 <ul class="pagination">
                     <li class="previous">
-                        <a id="prev" href="@Url.Action("PasarPagina", "Contenidos", new { Pagina = (int)Session["Page"] - 1, Title = ViewBag.Title })" class="fui-arrow-left"></a>
+                        <a id="prev" href="@Url.Action("PasarPagina", "Contenidos", new { Pagina = (int)Session["Page"] - 1  ,Title = ViewBag.Title})" class="fui-arrow-left"></a>
                     </li>
-                    @{ for (int i = 0; i <= Model.ListaAMostrar.Length / 16; i++)
+                    @{ for (int i = 0; i <= Model.ListaAMostrar.Length / 15; i++)
                         {
                             <li>
                                 @{ int j = i + 1;}
