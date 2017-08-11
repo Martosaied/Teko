@@ -9,12 +9,13 @@ using PFEF.Extensions;
 using AutoMapper;
 using EntityFramework.Extensions;
 using PFEF.Models.DataAccess;
+using Microsoft.AspNet.Identity;
 
 namespace PFEF.Controllers
 {
     public class ContenidosController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        public ApplicationDbContext db = new ApplicationDbContext();
 
         private MuestraViewModel _ViewModel = new MuestraViewModel();
         // GET: Contenidos
@@ -74,7 +75,7 @@ namespace PFEF.Controllers
                     archivo = archivo.Replace(" ", "");     
                     
                     ContMapeado.Ruta = archivo;
-                    ContMapeado.UsuariosId = User.Identity.GetUserInfoId().Id;
+                    ContMapeado.UsuariosId = HelpersExtensions.ObtenerUser(User.Identity.GetUserId()).Id;
                     ContMapeado.FechaSubida = DateTime.Now;
                     ContMapeado.IDes = 0;
                     ContMapeado.IPop = 0;
@@ -100,7 +101,7 @@ namespace PFEF.Controllers
             ContenidosDA.UpdateIdes(true, SelectedCont);
             if (Request.IsAuthenticated)
             {
-                bool result = ContenidosDA.Recomendaciones.UpdateRecomendation(SelectedCont,User.Identity.GetUserInfoId());
+                bool result = ContenidosDA.Recomendaciones.UpdateRecomendation(SelectedCont,HelpersExtensions.ObtenerUser(User.Identity.GetUserId()));
             }
             var MappedCont = MapperContDetails(SelectedCont);
             MappedCont.Recomendaciones = ContenidosDA.Recomendaciones.ObtenerRec(SelectedCont);
@@ -163,7 +164,7 @@ namespace PFEF.Controllers
                 {
                     User = new Usuarios()
                     {
-                        Id = User.Identity.GetUserInfoId().Id
+                        Id = HelpersExtensions.ObtenerUser(User.Identity.GetUserId()).Id
                     },
                     Contenido = Cont,             
                     Valoracion = star                   
@@ -240,12 +241,12 @@ namespace PFEF.Controllers
                     ViewBag.Title = Title;
                     return _ViewModel;
                 case "Escuela":
-                    int id = User.Identity.GetUserInfoId().InstitucionActual.Id;
+                    int id = HelpersExtensions.ObtenerUser(User.Identity.GetUserId()).InstitucionActual.Id;
                     _ViewModel.ListaAMostrar = db.Contenidos.Where(x => x.Escuelas.Id == id).ToArray();
                     ViewBag.Title = Title;
                     return _ViewModel;
                 case "Mis subidas":
-                    _ViewModel.ListaAMostrar = User.Identity.GetUserInfoId().Contenidos.ToArray();
+                    _ViewModel.ListaAMostrar = HelpersExtensions.ObtenerUser(User.Identity.GetUserId()).Contenidos.ToArray();
                     ViewBag.Title = Title;
                     return _ViewModel;
                 default:

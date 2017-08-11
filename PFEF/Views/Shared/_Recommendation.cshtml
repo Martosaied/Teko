@@ -7,10 +7,11 @@
             {
                 if (item.Value.Length > 0)
                 {
-                <h4>Porque visitaste @item.Key</h4>
-                <hr />
-                    for (int i = 0; i <= 2; i++)
-                    {
+                    <div style="margin-bottom: 250px;">
+                        <h4>Porque visitaste @item.Key</h4>
+                        <hr />
+                        @for (int i = 0; i <= 2; i++)
+                        {
                         if (i < Model.DictRecomendaciones[item.Key].Length)
                         {
                         <div class="caca col-md-4" sonclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model.DictRecomendaciones[item.Key][i].Id })'">
@@ -56,10 +57,14 @@
                                 </div>
                             </div>
                         </div>
-                            }
                         }
-                    }
-                }
-            }
-        }
+                        }
+                    </div>
+                                                        }
+                                                    }
+                                                }
+    }
+    
+
+
 </div>

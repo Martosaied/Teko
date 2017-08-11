@@ -84,11 +84,11 @@
             @Html.Partial("_Carrousel")
         </div>
     </div>
-    @{ if (Request.IsAuthenticated && User.Identity.GetUserInfoId().InstitucionActual != null && ViewBag.ListaArticulosEsc.Length >= 9)
+    @{ if (Request.IsAuthenticated && HelpersExtensions.ObtenerUser(User.Identity.GetUserId()).InstitucionActual != null && ViewBag.ListaArticulosEsc.Length >= 9)
         {
             <hr style="color: #0056b2; margin-top:20px; margin-bottom:20px;" />
             <div>
-                <h2 class="text-center title">Contenidos de @User.Identity.GetUserInfoId().InstitucionActual.Nombre</h2>
+                <h2 class="text-center title">Contenidos de @HelpersExtensions.ObtenerUser(User.Identity.GetUserId()).InstitucionActual.Nombre</h2>
                 <a href="@Url.Action("VerTodo", "Contenidos",new { Title="Escuela"})" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
                 @{
                     ViewBag.ListaArticulos = ViewBag.ListaArticulosEsc;

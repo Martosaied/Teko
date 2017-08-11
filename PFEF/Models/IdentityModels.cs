@@ -13,7 +13,7 @@ namespace PFEF.Models
         {
             // Tenga en cuenta que el valor de authenticationType debe coincidir con el definido en CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
-            userIdentity.AddClaim(new Claim("IdUserInfo", this.IdUserInfo.ToString()));
+            userIdentity.AddClaim(new Claim("IdUserInfo", IdUserInfo.ToString()));
             return userIdentity;
         }
         public int IdUserInfo { get; set; }

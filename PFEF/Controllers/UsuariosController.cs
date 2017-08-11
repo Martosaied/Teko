@@ -11,6 +11,7 @@ using PFEF.Extensions;
 using AutoMapper;
 using EntityFramework.Extensions;
 using PFEF.Models.DataAccess;
+using Microsoft.AspNet.Identity;
 
 namespace PFEF.Controllers
 {
@@ -19,9 +20,9 @@ namespace PFEF.Controllers
         ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()
         {
-            if (User.Identity.GetUserInfoId().Nombre != null)
+            if (HelpersExtensions.ObtenerUser(User.Identity.GetUserId()).PerfilCompleto)
             {
-                Usuarios IUser = User.Identity.GetUserInfoId();
+                Usuarios IUser = HelpersExtensions.ObtenerUser(User.Identity.GetUserId());
                 PerfilViewModel model = MapperPerfilInfo(IUser);
                 var lastvs = ContenidosDA.Recomendaciones.ObtenerIntereses(IUser.Id);
                 model.DictRecomendaciones = ContenidosDA.Recomendaciones.ObtenerRec(lastvs);
@@ -29,7 +30,7 @@ namespace PFEF.Controllers
             }
             else
             {
-                Usuarios model = User.Identity.GetUserInfoId();
+                Usuarios model = HelpersExtensions.ObtenerUser(User.Identity.GetUserId());
                 InfoUsuarioViewModel MappedModel = MapperUserInfo(model);
                 MappedModel.dropEscuela = db.Escuelas.ToList();
                 return View("LlenarPerfil", MappedModel);
@@ -38,7 +39,7 @@ namespace PFEF.Controllers
         [HttpGet]
         public ActionResult LlenarPerfil()
         {
-            Usuarios model = User.Identity.GetUserInfoId();
+            Usuarios model = HelpersExtensions.ObtenerUser(User.Identity.GetUserId());
             InfoUsuarioViewModel MappedModel = MapperUserInfo(model);
             MappedModel.setDropEsc();
             return View("LlenarPerfil", MappedModel);
@@ -46,7 +47,7 @@ namespace PFEF.Controllers
 
         public PartialViewResult GetRecomendaciones()
         {
-            Usuarios IUser = User.Identity.GetUserInfoId();
+            Usuarios IUser = HelpersExtensions.ObtenerUser(User.Identity.GetUserId());
             PerfilViewModel model = MapperPerfilInfo(IUser);
             var lastvs = ContenidosDA.Recomendaciones.ObtenerIntereses(IUser.Id);
             model.DictRecomendaciones = ContenidosDA.Recomendaciones.ObtenerRec(lastvs);
@@ -56,11 +57,14 @@ namespace PFEF.Controllers
         [HttpPost]
          public ActionResult LlenarPerfil(InfoUsuarioViewModel model, HttpPostedFileBase file)
         {
+            
                     file.SaveAs(Server.MapPath("~/Content/ProfilePH/" + file.FileName));
                     model.RutaFoto = file.FileName;
                     Usuarios MappedUser = MapperUserInfo(model);
+                    MappedUser.PerfilCompleto = true;
                     db.Entry(MappedUser).State = EntityState.Modified;
                     db.SaveChanges();
+            HelpersExtensions.db.Dispose();
                     return RedirectToAction("Index");
         }
 

@@ -261,6 +261,10 @@
     <Compile Include="Migrations\201708071427142_ChauIntereses.Designer.cs">
       <DependentUpon>201708071427142_ChauIntereses.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708102159529_SacandoCosas.cs" />
+    <Compile Include="Migrations\201708102159529_SacandoCosas.Designer.cs">
+      <DependentUpon>201708102159529_SacandoCosas.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DataAccess\ContenidosDA.cs" />
     <Compile Include="Models\Favoritos.cs" />
@@ -529,6 +533,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708071427142_ChauIntereses.resx">
       <DependentUpon>201708071427142_ChauIntereses.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708102159529_SacandoCosas.resx">
+      <DependentUpon>201708102159529_SacandoCosas.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

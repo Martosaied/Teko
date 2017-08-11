@@ -16,8 +16,8 @@ namespace PFEF.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
+        public ApplicationSignInManager _signInManager;
+        public ApplicationUserManager _userManager;
         ApplicationDbContext db = new ApplicationDbContext();
 
         public AccountController()

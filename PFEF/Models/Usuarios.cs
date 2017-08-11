@@ -28,9 +28,6 @@ namespace PFEF.Models
         public Nullable<DateTime> FechaNacimiento { get; set; }
 
         public Nullable<int> InstitucionActualId { get; set; }
-        public string InteresesMaterias { get;  set; }
-        public string InteresesProfesores { get; set; }
-        public string InteresesEscuelas { get; set; }
 
         public string ContenidosFav { get; set; }
 
@@ -39,7 +36,7 @@ namespace PFEF.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Contenidos> Contenidos { get; set; }
 
-
+        public bool PerfilCompleto { get; set; }
 
     }
 }

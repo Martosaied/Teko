@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNet.Identity;
+using PFEF.Controllers;
 using PFEF.Models;
 using PFEF.ViewModels;
 using System;
@@ -11,11 +13,21 @@ namespace PFEF.Extensions
 {
     public class HelpersExtensions
     {
+        public static ApplicationDbContext db;
+        
+        public static Usuarios ObtenerUser(string Id)
+        {
+            db = new ApplicationDbContext();
+                var AU = db.Users.Where(x => x.Id == Id).FirstOrDefault();
+                Usuarios MiUser = db.Usuarios.Where(x => x.Id == AU.IdUserInfo).FirstOrDefault();
+                return MiUser; 
+        }
         public static Task<int> CreateInfoUser()
         {
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
                 Usuarios Info = new Usuarios();
+                Info.PerfilCompleto = false;
                 db.Usuarios.Add(Info);
                 db.SaveChanges();
                 var intIdt = db.Usuarios.Max(u => u.Id);
@@ -27,7 +39,7 @@ namespace PFEF.Extensions
 
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                Usuarios Info = new Usuarios();
+                Usuarios Info   = new Usuarios();
                 db.Usuarios.Add(Info);
 
                 var result = db.Users.Find(idU);
