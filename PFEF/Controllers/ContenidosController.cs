@@ -209,13 +209,18 @@ namespace PFEF.Controllers
         protected string ObtenerURLArchivo(Contenidos model)
         {
             string URL = model.Ruta.Substring(model.Ruta.Length - 4, 4);
-            if (URL == ".pdf")
+            switch(URL)
             {
-                URL = "https://docs.google.com/viewer?url=https://tekoteko.azurewebsites.net/Content/Uploads/" + model.Ruta + "&embedded=true";
-            }
-            else
-            {
-                URL = "https://view.officeapps.live.com/op/embed.aspx?src=https://tekoteko.azurewebsites.net/Content/Uploads/" + model.Ruta;
+                case ".pdf":                   
+                    URL = "https://docs.google.com/viewer?url=https://tekoteko.azurewebsites.net/Content/Uploads/" + model.Ruta + "&embedded=true";
+                    break;
+                case ".jpg":
+                case ".png":
+                    URL = "https://tekoteko.azurewebsites.net/Content/Uploads/" + model.Ruta;
+                    break;
+                default:
+                    URL = "https://view.officeapps.live.com/op/embed.aspx?src=https://tekoteko.azurewebsites.net/Content/Uploads/" + model.Ruta;
+                    break;
             }
             return URL;
         }

@@ -19,6 +19,7 @@ namespace PFEF.Extensions
         {
             db = new ApplicationDbContext();
                 var AU = db.Users.Where(x => x.Id == Id).FirstOrDefault();
+            if(AU == null) { return null; }
                 Usuarios MiUser = db.Usuarios.Where(x => x.Id == AU.IdUserInfo).FirstOrDefault();
                 return MiUser; 
         }

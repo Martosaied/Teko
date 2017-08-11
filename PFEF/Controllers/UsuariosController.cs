@@ -20,18 +20,17 @@ namespace PFEF.Controllers
         ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()
         {
-            if (HelpersExtensions.ObtenerUser(User.Identity.GetUserId()).PerfilCompleto)
+            var MiUser = HelpersExtensions.ObtenerUser(User.Identity.GetUserId());
+            if (MiUser.PerfilCompleto)
             {
-                Usuarios IUser = HelpersExtensions.ObtenerUser(User.Identity.GetUserId());
-                PerfilViewModel model = MapperPerfilInfo(IUser);
-                var lastvs = ContenidosDA.Recomendaciones.ObtenerIntereses(IUser.Id);
+                PerfilViewModel model = MapperPerfilInfo(MiUser);
+                var lastvs = ContenidosDA.Recomendaciones.ObtenerIntereses(MiUser.Id);
                 model.DictRecomendaciones = ContenidosDA.Recomendaciones.ObtenerRec(lastvs);
                 return View("HomeUsuario",model);
             }
             else
             {
-                Usuarios model = HelpersExtensions.ObtenerUser(User.Identity.GetUserId());
-                InfoUsuarioViewModel MappedModel = MapperUserInfo(model);
+                InfoUsuarioViewModel MappedModel = MapperUserInfo(MiUser);
                 MappedModel.dropEscuela = db.Escuelas.ToList();
                 return View("LlenarPerfil", MappedModel);
             }
@@ -56,14 +55,13 @@ namespace PFEF.Controllers
 
         [HttpPost]
          public ActionResult LlenarPerfil(InfoUsuarioViewModel model, HttpPostedFileBase file)
-        {
-            
-                    file.SaveAs(Server.MapPath("~/Content/ProfilePH/" + file.FileName));
-                    model.RutaFoto = file.FileName;
-                    Usuarios MappedUser = MapperUserInfo(model);
-                    MappedUser.PerfilCompleto = true;
-                    db.Entry(MappedUser).State = EntityState.Modified;
-                    db.SaveChanges();
+        {          
+            file.SaveAs(Server.MapPath("~/Content/ProfilePH/" + file.FileName));
+            model.RutaFoto = file.FileName;
+            Usuarios MappedUser = MapperUserInfo(model);
+            MappedUser.PerfilCompleto = true;
+            db.Entry(MappedUser).State = EntityState.Modified;
+            db.SaveChanges();
             HelpersExtensions.db.Dispose();
                     return RedirectToAction("Index");
         }

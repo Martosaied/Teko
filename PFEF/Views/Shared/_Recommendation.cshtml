@@ -23,14 +23,6 @@
                                             <span class="badge-box"><i class="@Badget"></i></span>
                                             <h4 class="card-title">@Model.DictRecomendaciones[item.Key][i].Nombre</h4>
                                             <p class="card-text">@Model.DictRecomendaciones[item.Key][i].Descripcion</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card__back" onclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model.DictRecomendaciones[item.Key][i].Id })'">
-                                    <div class="card card-01">
-                                        <div class="card-block text-center">
-                                            <h4 class="card-title">Subido el @Model.DictRecomendaciones[item.Key][i].FechaSubida por @Model.DictRecomendaciones[item.Key][i].Usuarios.Nombre</h4>
                                             <span class="social-box">
                                                 <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.DictRecomendaciones[item.Key][i].Materias.Nombre })">
                                                     <span class="mitag tag label label-info">@Model.DictRecomendaciones[item.Key][i].Materias.Nombre</span>,
@@ -51,7 +43,14 @@
                                                         <span class="mitag tag label label-info">Año @Model.DictRecomendaciones[item.Key][i].Cursada</span>
                                                     </a>
                                             </span>
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <div class="card__back" onclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model.DictRecomendaciones[item.Key][i].Id })'">
+                                    <div class="card card-01">
+                                        <div class="card-block text-center">
+                                            <p class="card-title">Subido el @Model.DictRecomendaciones[item.Key][i].FechaSubida por @Model.DictRecomendaciones[item.Key][i].Usuarios.Nombre</p>
                                         </div>
                                     </div>
                                 </div>

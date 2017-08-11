@@ -51,7 +51,9 @@
             font-family: FontAwesome;
         }
 
-
+        .txt{
+            font-size: 0.8em;
+        }
 
 
 
@@ -67,15 +69,16 @@
         </div>
         <hr />
             <div class="jumbotron row">
-                <h6 class="col-md-4 col-sm-6">Materia: <b>@Model.Materias.Nombre</b></h6>
-                <h6 class="col-md-4 col-sm-6">Tipo : <b>@Model.TiposContenidos.Nombre</b></h6>
-                <h6 class="col-md-4 col-sm-6">Nivel educativo: <b>@Model.Escuelas.NivEduEscuela.Nombre</b></h6>
-                <h6 class="col-md-4 col-sm-6">Profesor: <b>@Model.Profesor</b></h6>
-                <h6 class="col-md-4 col-sm-6">Escuelas: <b>@Model.Escuelas.Nombre</b></h6>
-                <h6 class="col-md-4 col-sm-6">Cursada: <b>Año @Model.Cursada</b></h6>
+                <h6 class="col-md-4 col-sm-6 txt">Materia: <b>@Model.Materias.Nombre</b></h6>
+                <h6 class="col-md-4 col-sm-6 txt">Tipo : <b>@Model.TiposContenidos.Nombre</b></h6>
+                <h6 class="col-md-4 col-sm-6 txt">Nivel educativo: <b>@Model.Escuelas.NivEduEscuela.Nombre</b></h6>
+                <h6 class="col-md-4 col-sm-6 txt">Profesor: <b>@Model.Profesor</b></h6>
+                <h6 class="col-md-4 col-sm-6 txt">Escuelas: <b>@Model.Escuelas.Nombre</b></h6>
+                <h6 class="col-md-4 col-sm-6 txt">Cursada: <b>Año @Model.Cursada</b></h6>
             </div>
         <hr />
         <div>
+            
             <iframe src=@ViewBag.URL style="border: none; width:100%; height:780px;"></iframe>
         </div>
         <div>    

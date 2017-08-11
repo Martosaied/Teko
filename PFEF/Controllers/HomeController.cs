@@ -19,14 +19,14 @@ namespace PFEF.Controllers
 
         public ActionResult Index()
         {
+            var MiUser = HelpersExtensions.ObtenerUser(User.Identity.GetUserId());
             MuestraViewModel MVM = new MuestraViewModel();
             Session["Page"] = 0;
              if (Request.IsAuthenticated)
             {
-                if (HelpersExtensions.ObtenerUser(User.Identity.GetUserId()).PerfilCompleto == true)
+                if (MiUser.PerfilCompleto)
                 {
-                    var id = HelpersExtensions.ObtenerUser(User.Identity.GetUserId()).InstitucionActualId;
-                    ViewBag.ListaArticulosEsc = db.Contenidos.Where(x => x.EscuelasId == id).OrderByDescending(x => x.Id).Take(9).ToArray();
+                    ViewBag.ListaArticulosEsc = db.Contenidos.Where(x => x.EscuelasId == MiUser.InstitucionActualId).OrderByDescending(x => x.Id).Take(9).ToArray();
                 }
                 
             }
