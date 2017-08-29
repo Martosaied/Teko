@@ -30,7 +30,7 @@ namespace PFEF.Controllers
         public JsonResult PopuladorEsc(int Lvl)
         {
             var Esc = db.Escuelas.Where(x=>x.NivEduEscuela.Id == Lvl).Select(c => new { Id = c.Id, Nombre = c.Nombre }).ToList();
-            Esc.Add(new { Id = 0, Nombre = "----------" });
+            Esc.Add(new { Id = 0, Nombre = "Otra escuela" });
             Esc = Esc.OrderBy(x => x.Id).ToList();
             return Json(Esc, JsonRequestBehavior.AllowGet);
         }
@@ -63,16 +63,25 @@ namespace PFEF.Controllers
 
 
         [HttpPost]
-        public ActionResult Subir(SubirViewModel Cont, HttpPostedFileBase file)
+        public ActionResult Subir(SubirViewModel Cont, HttpPostedFileBase file, string NuevaEsc, int NivNuevaEsc)
         {
             if (ModelState.IsValid)
             {
                 if (file != null)
-                {
-                    Contenidos ContMapeado = HelpersExtensions.MappearContenidos(Cont);
+                {   
+                    Contenidos ContMapeado = AutoMapperGeneric<SubirViewModel, Contenidos>.ConvertToDBEntity(Cont);
 
                     string archivo = (DateTime.Now.ToString("yyyyMMddHHmmss") + "-" + file.FileName).ToLower();
-                    archivo = archivo.Replace(" ", "");     
+                    archivo = archivo.Replace(" ", "");
+
+                    if (NuevaEsc != null)
+                    {
+                            Escuelas esc = new Escuelas();
+                            esc.Nombre = NuevaEsc;
+                        esc.NivEduEscuela.Id = NivNuevaEsc;
+                            ContMapeado.Escuelas = esc;
+                        
+                    }
                     
                     ContMapeado.Ruta = archivo;
                     ContMapeado.UsuariosId = HelpersExtensions.ObtenerUser(User.Identity.GetUserId()).Id;
@@ -103,7 +112,7 @@ namespace PFEF.Controllers
             {
                 bool result = ContenidosDA.Recomendaciones.UpdateRecomendation(SelectedCont,HelpersExtensions.ObtenerUser(User.Identity.GetUserId()));
             }
-            var MappedCont = MapperContDetails(SelectedCont);
+            var MappedCont = AutoMapperGeneric<Contenidos,DetailsViewModel>.ConvertToDBEntity(SelectedCont);
             MappedCont.Recomendaciones = ContenidosDA.Recomendaciones.ObtenerRec(SelectedCont);
             ViewBag.URL = ObtenerURLArchivo(SelectedCont);
             ViewBag.Title = SelectedCont.Nombre;
@@ -175,7 +184,7 @@ namespace PFEF.Controllers
                 Cont.ValoracionPromedio = dbval.Valoraciones.Where(x => x.Contenido.Id == Id).Select(x => x.Valoracion).ToList().Average();
                 Cont.ValoracionPromedio = Math.Round(Cont.ValoracionPromedio, 1);
                 dbval.SaveChanges();
-                MappedCont = MapperContDetails(Cont);
+                MappedCont = AutoMapperGeneric<Contenidos, DetailsViewModel>.ConvertToDBEntity(Cont);
             }
             return PartialView("_Valoration",MappedCont);
         }
@@ -261,15 +270,6 @@ namespace PFEF.Controllers
                     ViewBag.Title = Title;
                     return Parameters;
             }
-        }
-        protected DetailsViewModel MapperContDetails(Contenidos cont)
-        {
-                var config = new MapperConfiguration(cfg => {
-                    cfg.CreateMap<Contenidos, DetailsViewModel>();
-                });
-                IMapper mapper = config.CreateMapper();
-                var ContMapeado = mapper.Map<Contenidos, DetailsViewModel>(cont);
-                return ContMapeado;
         }
         protected void GuardarIds(Contenidos[] Ids)
         {

@@ -23,14 +23,14 @@ namespace PFEF.Controllers
             var MiUser = HelpersExtensions.ObtenerUser(User.Identity.GetUserId());
             if (MiUser.PerfilCompleto)
             {
-                PerfilViewModel model = MapperPerfilInfo(MiUser);
+                PerfilViewModel model = AutoMapperGeneric<Usuarios, PerfilViewModel>.ConvertToDBEntity(MiUser);
                 var lastvs = ContenidosDA.Recomendaciones.ObtenerIntereses(MiUser.Id);
                 model.DictRecomendaciones = ContenidosDA.Recomendaciones.ObtenerRec(lastvs);
                 return View("HomeUsuario",model);
             }
             else
             {
-                InfoUsuarioViewModel MappedModel = MapperUserInfo(MiUser);
+                InfoUsuarioViewModel MappedModel = AutoMapperGeneric<Usuarios, InfoUsuarioViewModel>.ConvertToDBEntity(MiUser);
                 MappedModel.dropEscuela = db.Escuelas.ToList();
                 return View("LlenarPerfil", MappedModel);
             }
@@ -39,7 +39,7 @@ namespace PFEF.Controllers
         public ActionResult LlenarPerfil()
         {
             Usuarios model = HelpersExtensions.ObtenerUser(User.Identity.GetUserId());
-            InfoUsuarioViewModel MappedModel = MapperUserInfo(model);
+            InfoUsuarioViewModel MappedModel = AutoMapperGeneric<Usuarios, InfoUsuarioViewModel>.ConvertToDBEntity(model);
             MappedModel.setDropEsc();
             return View("LlenarPerfil", MappedModel);
         }
@@ -47,7 +47,7 @@ namespace PFEF.Controllers
         public PartialViewResult GetRecomendaciones()
         {
             Usuarios IUser = HelpersExtensions.ObtenerUser(User.Identity.GetUserId());
-            PerfilViewModel model = MapperPerfilInfo(IUser);
+            PerfilViewModel model = AutoMapperGeneric<Usuarios,PerfilViewModel>.ConvertToDBEntity(IUser);
             var lastvs = ContenidosDA.Recomendaciones.ObtenerIntereses(IUser.Id);
             model.DictRecomendaciones = ContenidosDA.Recomendaciones.ObtenerRec(lastvs);
             return PartialView("_Recommendation", model);
@@ -58,7 +58,7 @@ namespace PFEF.Controllers
         {          
             file.SaveAs(Server.MapPath("~/Content/ProfilePH/" + file.FileName));
             model.RutaFoto = file.FileName;
-            Usuarios MappedUser = MapperUserInfo(model);
+            Usuarios MappedUser = AutoMapperGeneric<InfoUsuarioViewModel,Usuarios>.ConvertToDBEntity(model);
             MappedUser.PerfilCompleto = true;
             db.Entry(MappedUser).State = EntityState.Modified;
             db.SaveChanges();
@@ -66,35 +66,5 @@ namespace PFEF.Controllers
                     return RedirectToAction("Index");
         }
 
-
-        #region Helpers
-        protected InfoUsuarioViewModel MapperUserInfo(Usuarios model)
-        {
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<Usuarios, InfoUsuarioViewModel>();
-            });
-            IMapper mapper = config.CreateMapper();
-            var MappedModel = mapper.Map<Usuarios, InfoUsuarioViewModel>(model);
-            return MappedModel;
-        }
-        protected PerfilViewModel MapperPerfilInfo(Usuarios model)
-        {
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<Usuarios, PerfilViewModel>();
-            });
-            IMapper mapper = config.CreateMapper();
-            var MappedModel = mapper.Map<Usuarios, PerfilViewModel>(model);
-            return MappedModel;
-        }
-        protected Usuarios MapperUserInfo(InfoUsuarioViewModel model)
-        {
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<InfoUsuarioViewModel, Usuarios>();
-            });
-            IMapper mapper = config.CreateMapper();
-            var MappedModel = mapper.Map<InfoUsuarioViewModel, Usuarios>(model);
-            return MappedModel;
-        }
-        #endregion
     }
 }

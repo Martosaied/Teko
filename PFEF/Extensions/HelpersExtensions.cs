@@ -51,15 +51,6 @@ namespace PFEF.Extensions
                 return Task.FromResult(intIdt);
             }
         }
-        public static Contenidos MappearContenidos(SubirViewModel ViewModel)
-        {
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<SubirViewModel, Contenidos>();
-            });
-            IMapper mapper = config.CreateMapper();
-            var ContMapeado = mapper.Map<SubirViewModel, Contenidos>(ViewModel);
-            return ContMapeado;
-        }
         public static string BudgetFileSelect(string URL)
         {
             string ADevolver = "fa fa-file-o";

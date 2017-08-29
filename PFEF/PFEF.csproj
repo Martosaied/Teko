@@ -203,6 +203,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
+    <Compile Include="Extensions\AutoMapperGeneric.cs" />
     <Compile Include="Extensions\ClaimsExtensions.cs" />
     <Compile Include="Extensions\ClassExtensions.cs" />
     <Compile Include="Extensions\HelpersExtensions.cs" />
@@ -561,8 +562,7 @@
           <IISAppRootUrl>http://localhost:51075/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
+          <CustomServerUrl>http://tekoteko.azurewebsites.net/</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>

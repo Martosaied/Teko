@@ -60,7 +60,9 @@
         <div class="form-group">
             @Html.LabelFor(m => m.EscuelasId, new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.EscuelasId, Enumerable.Empty<SelectListItem>(), "Primero elige nivel", new { @class = "btn btn-inverse dropdown-toggle", id = "ddlesc", name = "ddlesc" })
+                @Html.DropDownListFor(model => model.EscuelasId, Enumerable.Empty<SelectListItem>(), "Primero elige nivel", new { @class = "btn btn-inverse dropdown-toggle", id = "ddlesc", name = "ddlesc", @onchange= "ActivarNewEsc(this.value);" })
+                @Html.TextBox("NuevaEsc","Otra escuela", new { @class = "form-control", disabled = "true" })
+                @Html.DropDownList("NivNuevaEsc", new SelectList(Model.dropNivelEducativo, "Id", "Nombre"), new { @class = "btn btn-inverse dropdown-toggle", disabled = "true" })
                 @Html.ValidationMessageFor(m => m.EscuelasId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -100,6 +102,14 @@
                 });
             }
         });
+    }
+    function ActivarNewEsc(){
+        var val = $('#ddlesc').val();
+        alert(val);
+        if (val == "0") {
+            document.getElementById('NuevaEsc').disabled = false;
+            document.getElementById('NivNuevaEsc').disabled = false;
+        }
     }
 </script>
 @section Scripts {
