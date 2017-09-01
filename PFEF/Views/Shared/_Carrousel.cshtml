@@ -27,7 +27,7 @@
                     <div class="card__front">
                         <div class="card card-01">
                             <div class="card-block text-center">
-                                @{var Badget = HelpersExtensions.BudgetFileSelect(ViewBag.ListaArticulos[i].Ruta); }
+                                @{var Badget = HelpersExtensions.BudgetFileSelect(ViewBag.ListaArticulos[i].Id); }
                                 <span class="badge-box"><i class="@Badget"></i></span>
                                 <h4 class="card-title">@ViewBag.ListaArticulos[i].Nombre</h4>
                                 <p class="card-text">@ViewBag.ListaArticulos[i].Descripcion</p>
@@ -76,7 +76,7 @@
                             <div class="card__front">
                                 <div class="card card-01">
                                     <div class="card-block text-center">
-                                        @{var Badget = HelpersExtensions.BudgetFileSelect(ViewBag.ListaArticulos[i].Ruta); }
+                                        @{var Badget = HelpersExtensions.BudgetFileSelect(ViewBag.ListaArticulos[i].Id); }
                                         <span class="badge-box"><i class="@Badget"></i></span>
                                         <h4 class="card-title">@ViewBag.ListaArticulos[i].Nombre</h4>
                                         <p class="card-text">@ViewBag.ListaArticulos[i].Descripcion</p>
@@ -125,7 +125,7 @@
                             <div class="card__front">
                                 <div class="card card-01">
                                     <div class="card-block text-center">
-                                        @{var Badget = HelpersExtensions.BudgetFileSelect(ViewBag.ListaArticulos[i].Ruta); }
+                                        @{var Badget = HelpersExtensions.BudgetFileSelect(ViewBag.ListaArticulos[i].Id); }
                                         <span class="badge-box"><i class="@Badget"></i></span>
                                         <h4 class="card-title">@ViewBag.ListaArticulos[i].Nombre</h4>
                                         <p class="card-text">@ViewBag.ListaArticulos[i].Descripcion</p>

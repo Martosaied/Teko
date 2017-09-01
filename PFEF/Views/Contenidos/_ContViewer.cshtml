@@ -12,7 +12,7 @@
                     <div class="card__front">
                         <div class="card card-01">
                             <div class="card-block text-center">
-                                @{var Badget = HelpersExtensions.BudgetFileSelect(Model.ListaAMostrar[i].Ruta); }
+                                @{var Badget = HelpersExtensions.BudgetFileSelect(Model.ListaAMostrar[i].Id); }
                                 <span class="badge-box"><i class="@Badget"></i></span>
                                 <h4 class="card-title">@Model.ListaAMostrar[i].Nombre</h4>
                                 @{ if (@Model.ListaAMostrar[i].Descripcion.Length > 110)

@@ -51,10 +51,15 @@ namespace PFEF.Extensions
                 return Task.FromResult(intIdt);
             }
         }
-        public static string BudgetFileSelect(string URL)
+        public static string BudgetFileSelect(int IdCont)
         {
             string ADevolver = "fa fa-file-o";
-            URL = URL.Substring(URL.Length - 4, 4);
+            var List = db.Archivos.Where(x => x.IdContenido.Id == IdCont).FirstOrDefault();
+            if(List == null)
+            {
+                return ADevolver;
+            }
+            string URL = List.Ruta.Substring(List.Ruta.Length - 4, 4);
             switch (URL)
             {
                 case "docx":

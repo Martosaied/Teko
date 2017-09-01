@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,6 +51,10 @@
     </Reference>
     <Reference Include="EntityFramework.Extended, Version=6.0.0.0, Culture=neutral, PublicKeyToken=05b7e29bdd433584, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.Extended.6.1.0.168\lib\net45\EntityFramework.Extended.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\42662090\Downloads\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -210,61 +215,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201707140137408_asdasd.cs" />
-    <Compile Include="Migrations\201707140137408_asdasd.Designer.cs">
-      <DependentUpon>201707140137408_asdasd.cs</DependentUpon>
+    <Compile Include="Migrations\201708301342515_Archivo.cs" />
+    <Compile Include="Migrations\201708301342515_Archivo.Designer.cs">
+      <DependentUpon>201708301342515_Archivo.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201707141050427_RepairFKUsers.cs" />
-    <Compile Include="Migrations\201707141050427_RepairFKUsers.Designer.cs">
-      <DependentUpon>201707141050427_RepairFKUsers.cs</DependentUpon>
+    <Compile Include="Migrations\201708301719161_Otra.cs" />
+    <Compile Include="Migrations\201708301719161_Otra.Designer.cs">
+      <DependentUpon>201708301719161_Otra.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201707141123530_ChangesInUsuarios.cs" />
-    <Compile Include="Migrations\201707141123530_ChangesInUsuarios.Designer.cs">
-      <DependentUpon>201707141123530_ChangesInUsuarios.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707141131162_DeleteUserNametblUser.cs" />
-    <Compile Include="Migrations\201707141131162_DeleteUserNametblUser.Designer.cs">
-      <DependentUpon>201707141131162_DeleteUserNametblUser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707141138311_NUllableInstActual.cs" />
-    <Compile Include="Migrations\201707141138311_NUllableInstActual.Designer.cs">
-      <DependentUpon>201707141138311_NUllableInstActual.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707141346461_NullableFechaNac.cs" />
-    <Compile Include="Migrations\201707141346461_NullableFechaNac.Designer.cs">
-      <DependentUpon>201707141346461_NullableFechaNac.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707232110256_InteresesRelacional.cs" />
-    <Compile Include="Migrations\201707232110256_InteresesRelacional.Designer.cs">
-      <DependentUpon>201707232110256_InteresesRelacional.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707262133346_Valoration.cs" />
-    <Compile Include="Migrations\201707262133346_Valoration.Designer.cs">
-      <DependentUpon>201707262133346_Valoration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707290412125_NivelEscuela.cs" />
-    <Compile Include="Migrations\201707290412125_NivelEscuela.Designer.cs">
-      <DependentUpon>201707290412125_NivelEscuela.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708031333273_DateTimeInIntereses.cs" />
-    <Compile Include="Migrations\201708031333273_DateTimeInIntereses.Designer.cs">
-      <DependentUpon>201708031333273_DateTimeInIntereses.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708041430372_Visitas.cs" />
-    <Compile Include="Migrations\201708041430372_Visitas.Designer.cs">
-      <DependentUpon>201708041430372_Visitas.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708061640359_Normalizandoando.cs" />
-    <Compile Include="Migrations\201708061640359_Normalizandoando.Designer.cs">
-      <DependentUpon>201708061640359_Normalizandoando.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708071427142_ChauIntereses.cs" />
-    <Compile Include="Migrations\201708071427142_ChauIntereses.Designer.cs">
-      <DependentUpon>201708071427142_ChauIntereses.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708102159529_SacandoCosas.cs" />
-    <Compile Include="Migrations\201708102159529_SacandoCosas.Designer.cs">
-      <DependentUpon>201708102159529_SacandoCosas.cs</DependentUpon>
+    <Compile Include="Migrations\201708301952068_RutaOut.cs" />
+    <Compile Include="Migrations\201708301952068_RutaOut.Designer.cs">
+      <DependentUpon>201708301952068_RutaOut.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DataAccess\ContenidosDA.cs" />
@@ -352,6 +313,7 @@
     <Content Include="fonts\lato\lato-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Ionic.Zip.dll" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -496,47 +458,14 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201707140137408_asdasd.resx">
-      <DependentUpon>201707140137408_asdasd.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201708301342515_Archivo.resx">
+      <DependentUpon>201708301342515_Archivo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707141050427_RepairFKUsers.resx">
-      <DependentUpon>201707141050427_RepairFKUsers.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201708301719161_Otra.resx">
+      <DependentUpon>201708301719161_Otra.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707141123530_ChangesInUsuarios.resx">
-      <DependentUpon>201707141123530_ChangesInUsuarios.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707141131162_DeleteUserNametblUser.resx">
-      <DependentUpon>201707141131162_DeleteUserNametblUser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707141138311_NUllableInstActual.resx">
-      <DependentUpon>201707141138311_NUllableInstActual.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707141346461_NullableFechaNac.resx">
-      <DependentUpon>201707141346461_NullableFechaNac.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707232110256_InteresesRelacional.resx">
-      <DependentUpon>201707232110256_InteresesRelacional.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707262133346_Valoration.resx">
-      <DependentUpon>201707262133346_Valoration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707290412125_NivelEscuela.resx">
-      <DependentUpon>201707290412125_NivelEscuela.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708031333273_DateTimeInIntereses.resx">
-      <DependentUpon>201708031333273_DateTimeInIntereses.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708041430372_Visitas.resx">
-      <DependentUpon>201708041430372_Visitas.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708061640359_Normalizandoando.resx">
-      <DependentUpon>201708061640359_Normalizandoando.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708071427142_ChauIntereses.resx">
-      <DependentUpon>201708071427142_ChauIntereses.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708102159529_SacandoCosas.resx">
-      <DependentUpon>201708102159529_SacandoCosas.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201708301952068_RutaOut.resx">
+      <DependentUpon>201708301952068_RutaOut.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
