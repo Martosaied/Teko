@@ -11,6 +11,7 @@ namespace PFEF.Service
 {
     public interface IContenidoService
     {
+        Contenidos LastId();
         Contenidos[] _Filter(Contenidos Parameters, Contenidos[] Array);
         Contenidos[] GetContsByTitle(string title);
         Contenidos GetContById(int id);
@@ -146,7 +147,12 @@ namespace PFEF.Service
             return contenidoRepo.GetContenidosByTag(Tag);
         }
 
-        
+        public Contenidos LastId()
+        {
+            return contenidoRepo.LastId();
+        }
+
+
 
         #endregion
 

@@ -228,7 +228,6 @@
       <DependentUpon>201708301952068_RutaOut.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\DataAccess\ContenidosDA.cs" />
     <Compile Include="Models\ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ViewModels\InfoUsuarioViewModel.cs" />

@@ -104,12 +104,8 @@ namespace PFEF.Controllers
 
                     if (Cont.NuevaEsc != null)
                     {
-                        Escuelas esc = new Escuelas
-                        {
-                            Nombre = Cont.NuevaEsc,
-                            NivEduEscuela = db.NivelesEducativos.Where(x => x.Id == Cont.NivNuevaEsc).FirstOrDefault()
-                        };
-                        ContMapeado.Escuelas = esc;     
+                        ContMapeado.Escuelas.Nombre = Cont.NuevaEsc;
+                        ContMapeado.Escuelas.NivEduEscuela.Id = Cont.NivNuevaEsc;   
                     }
 
                     ContMapeado.UsuariosId = HelpersExtensions.ObtenerUser(User.Identity.GetUserId()).Id;
@@ -125,15 +121,15 @@ namespace PFEF.Controllers
                         string fileName = (DateTime.Now.ToString("yyyyMMddHHmmss") + "-" + file.FileName).ToLower();
                         fileName = fileName.Replace(" ", "_");
 
-                        Contenidos.Archivos MiArchivo = new Contenidos.Archivos
+                        Archivos MiArchivo = new Archivos
                         {
-                            IdContenido = db.Contenidos.OrderByDescending(p => p.Id).FirstOrDefault(),
+                            IdContenido = contenidoService.LastId(),
                             Ruta = fileName
                         };
-                        db.Archivos.Add(MiArchivo);
+                        archivoService.Crear(MiArchivo);
                         file.SaveAs(Server.MapPath("~/Content/Uploads/" + fileName));
                     }
-                    db.SaveChanges();
+                    archivoService.SaveArchivo();
                     return RedirectToAction("Index", "Home");
                 }
                 return View("SubirContenidos",Cont);
@@ -289,8 +285,8 @@ namespace PFEF.Controllers
                     return _ViewModel;
                 default:
                     Parameters.ChargeDrops();
-                    Parameters.ListaAMostrar = ContenidosDA._Searcher((string)Session["KeyWords"]);
-                    Parameters.ListaAMostrar = ContenidosDA._Filter((MuestraViewModel)Session["Filters"], Parameters.ListaAMostrar);
+                    Parameters.ListaAMostrar = contenidoService.Search((string)Session["KeyWords"]);
+                    Parameters.ListaAMostrar = contenidoService._Filter((MuestraViewModel)Session["Filters"], Parameters.ListaAMostrar);
                     ViewBag.Title = Title;
                     return Parameters;
             }

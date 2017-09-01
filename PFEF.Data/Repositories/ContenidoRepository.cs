@@ -128,6 +128,10 @@ namespace PFEF.Data.Repositories
                     ).ToArray();
         }
 
+        public Contenidos LastId()
+        {
+            return DbContext.Contenidos.OrderByDescending(p => p.Id).FirstOrDefault();
+        }
     }
 
     public interface IContenidoRepository : IRepository<Contenidos>
@@ -142,7 +146,7 @@ namespace PFEF.Data.Repositories
         Contenidos[] GetContByVal();
         Contenidos[] GetContByEsc(int IdEsc);
         Contenidos[] GetContByUser(int Id);
-
+        Contenidos LastId();
     }
 }
 

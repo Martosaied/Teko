@@ -13,6 +13,8 @@ namespace PFEF.Service
     {
         List<Archivos> GetByContenido(int id);
         List<string> ObtenerURLArchivos(int id);
+        void Crear(Archivos Archivo);
+        void SaveArchivo();
     }
     public class ArchivoService : IArchivoService
     {
@@ -23,6 +25,11 @@ namespace PFEF.Service
         {
             this.archivoRepo = archivoRepo;
             this.unitOfWork = unitOfWork;
+        }
+
+        public void Crear(Archivos Archivo)
+        {
+            archivoRepo.Add(Archivo);
         }
 
         public List<Archivos> GetByContenido(int id)
@@ -53,6 +60,11 @@ namespace PFEF.Service
             }
 
             return Lista;
+        }
+
+        public void SaveArchivo()
+        {
+            unitOfWork.Commit();
         }
     }
 }

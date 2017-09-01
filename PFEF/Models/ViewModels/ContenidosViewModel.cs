@@ -15,6 +15,13 @@ namespace PFEF.ViewModels
 
     public abstract class BaseContentViewModel
     {
+        public BaseContentViewModel()
+        {
+            dropEscuela = db.Escuelas.ToList();
+            dropMateria = db.Materias.ToList();
+            dropTipoContenido = db.TiposContenidos.ToList();
+            dropNivelEducativo = db.NivelesEducativos.ToList();
+        }
         public string Nombre { get; set; }
         public string Profesor { get; set; }
         public string Descripcion { get; set; }
@@ -29,17 +36,6 @@ namespace PFEF.ViewModels
         public List<Materias> dropMateria { get; set; }
         public List<TiposContenidos> dropTipoContenido { get; set; }
         public List<NivelesEducativos> dropNivelEducativo { get; set; }
-
-        public void ChargeDrops()
-        {
-            using (ApplicationDbContext db = new ApplicationDbContext())
-            {
-                dropEscuela = db.Escuelas.ToList();
-                dropMateria = db.Materias.ToList();
-                dropTipoContenido = db.TiposContenidos.ToList();
-                dropNivelEducativo = db.NivelesEducativos.ToList();
-            }
-        }
     }
 
     public class BuscadorViewModel
