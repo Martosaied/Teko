@@ -11,11 +11,10 @@ namespace PFEF.Service
 {
     public interface IContenidoService
     {
-        Contenidos[] GetConts();
         Contenidos[] GetContsByTitle(string title);
         Contenidos GetContById(int id);
         void CreateContenido(Contenidos cont);
-        void SaveGadget();
+        void SaveContenido();
     }
 
     public class ContenidoService : IContenidoService
@@ -23,38 +22,29 @@ namespace PFEF.Service
         private readonly IContenidoRepository contenidoRepo;
         private readonly IUnitOfWork unitOfWork;
 
-        public ContenidoService(IContenidoRepository gadgetsRepository, IUnitOfWork unitOfWork)
+        public ContenidoService(IContenidoRepository contenidoRepository, IUnitOfWork unitOfWork)
         {
-            this.contenidoRepo = gadgetsRepository;
+            this.contenidoRepo = contenidoRepository;
             this.unitOfWork = unitOfWork;
         }
 
         #region IGadgetService Members
 
-        public Contenidos[] GetConts()
-        {
-            var conts = contenidoRepo.GetAll();
-            return conts;
-        }
         public Contenidos[] GetContsByTitle(string Title)
         {
             switch (Title)
             {
                 case "Mas recientes":
                     var result = contenidoRepo.GetContByRecent();
-                    ViewBag.Title = Title;
                     return result;
                 case "Mas populares":
                     var result1 = contenidoRepo.GetContByPop();
-                    ViewBag.Title = Title;
                     return result1;
                 case "Mas descargados":
                     var result2 = contenidoRepo.GetContByDes();
-                    ViewBag.Title = Title;
                     return result2;
                 case "Mas valorados":
                     var result3 = contenidoRepo.GetContByVal();
-                    ViewBag.Title = Title;
                     return result3;
                 default:
                     return contenidoRepo.GetAll().Cast<Contenidos>().ToArray();
@@ -73,7 +63,7 @@ namespace PFEF.Service
             contenidoRepo.Add(cont);
         }
 
-        public void SaveGadget()
+        public void SaveContenido()
         {
             unitOfWork.Commit();
         }

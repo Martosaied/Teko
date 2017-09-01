@@ -12,9 +12,14 @@ namespace PFEF.Data.Repositories
     {
         public ArchivosRepository(IDbFactory dbFactory)
             : base(dbFactory) { }
+
+        public List<Archivos> GetByContenido(int id)
+        {
+            return DbContext.Archivos.Where(x => x.IdContenido.Id == id).ToList();
+        }
     }
     public interface IArchivosRepository : IRepository<Archivos>
     {
-
+        List<Archivos> GetByContenido(int id);
     }
 }

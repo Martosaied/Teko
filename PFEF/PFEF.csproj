@@ -229,19 +229,10 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DataAccess\ContenidosDA.cs" />
-    <Compile Include="Models\Favoritos.cs" />
-    <Compile Include="Models\Usuarios.cs" />
-    <Compile Include="Models\Valoraciones.cs" />
     <Compile Include="Models\ViewModels\AccountViewModels.cs" />
-    <Compile Include="Models\Contenidos.cs" />
-    <Compile Include="Models\Escuelas.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ViewModels\InfoUsuarioViewModel.cs" />
     <Compile Include="Models\ViewModels\ManageViewModels.cs" />
-    <Compile Include="Models\Materias.cs" />
-    <Compile Include="Models\NivelesEducativos.cs" />
-    <Compile Include="Models\TiposContenidos.cs" />
-    <Compile Include="Models\Visitas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Models\ViewModels\ContenidosViewModel.cs" />
@@ -467,6 +458,20 @@
     <EmbeddedResource Include="Migrations\201708301952068_RutaOut.resx">
       <DependentUpon>201708301952068_RutaOut.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PFEF.Data\PFEF.Data.csproj">
+      <Project>{2131d053-a620-4c53-b19f-04aa274cf69b}</Project>
+      <Name>PFEF.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PFEF.Model\PFEF.Model.csproj">
+      <Project>{f92db710-32d6-4e2a-9063-d4a931fe9c20}</Project>
+      <Name>PFEF.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PFEF.Service\PFEF.Service.csproj">
+      <Project>{f6cea52c-aa1f-4ec1-b503-80ccb1c536f3}</Project>
+      <Name>PFEF.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

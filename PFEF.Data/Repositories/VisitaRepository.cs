@@ -12,6 +12,14 @@ namespace PFEF.Data.Repositories
     {
         public VisitaRepository(IDbFactory dbFactory)
             : base(dbFactory) { }
+
+        public List<Visitas> ObtenerIntereses(int Id)
+        {
+            var Dia20Atras = DateTime.UtcNow.AddDays(-20);
+            var UltimasVisitas = DbContext.Visitas.Where(x => x.User.Id == Id && x.LastUpdate > Dia20Atras).OrderByDescending(x => x.Contador).Take(5).ToList();
+
+            return UltimasVisitas;
+        }
         public void UpdateRecomendation(Contenidos cont, Usuarios User)
         {
             var result = DbContext.Visitas.Where(x => x.User.Id == User.Id && x.Contenido.Id == cont.Id).FirstOrDefault();

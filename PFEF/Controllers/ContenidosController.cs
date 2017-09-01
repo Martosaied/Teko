@@ -12,18 +12,22 @@ using PFEF.Models.DataAccess;
 using Microsoft.AspNet.Identity;
 using Ionic.Zip;
 using System.IO;
+using PFEF.Service;
+using PFEF.Model;
 
 namespace PFEF.Controllers
 {
     public class ContenidosController : Controller
     {
-        public ApplicationDbContext db = new ApplicationDbContext();
+        private readonly IContenidoService contenidoService;
+        private readonly IArchivoService archivoService;
+        private readonly IEscuelaService escuelaService;
 
         private MuestraViewModel _ViewModel = new MuestraViewModel();
         // GET: Contenidos
         public ActionResult VerTodo(string Title)
         {
-            _ViewModel = SwitchTitle(Title, _ViewModel);
+            _ViewModel.ListaAMostrar = contenidoService.GetContsByTitle(Title);
             GuardarIds(_ViewModel.ListaAMostrar);
             _ViewModel.ChargeDrops();
             return View("MuestraCont",_ViewModel);
@@ -31,7 +35,7 @@ namespace PFEF.Controllers
 
         public JsonResult PopuladorEsc(int Lvl)
         {
-            var Esc = db.Escuelas.Where(x=>x.NivEduEscuela.Id == Lvl).Select(c => new { Id = c.Id, Nombre = c.Nombre }).ToList();
+            var Esc = escuelaService.GetEscuelasByNivel(Lvl).Select(c => new { Id = c.Id, Nombre = c.Nombre }).ToList();
             Esc.Add(new { Id = -1, Nombre = "----------" });
             Esc.Add(new { Id = 0, Nombre = "Otra escuela" });
             Esc = Esc.OrderBy(x => x.Id).ToList();
@@ -39,7 +43,7 @@ namespace PFEF.Controllers
         }
         public ActionResult Descargar(int ID)
         {
-            var Files = db.Archivos.Where(x => x.IdContenido.Id == ID).ToArray();
+            var Files = archivoService.GetByContenido(ID);
             if (Request.IsAuthenticated)
             {
                 ViewBag.Error = "";
@@ -71,7 +75,8 @@ namespace PFEF.Controllers
             }
             else
             {
-                Contenidos selected = db.Contenidos.Find(ID);
+                Contenidos selected = contenidoService.GetContById(ID);
+                var Mapper = AutoMapperGeneric<Contenidos, DetailsViewModel>.ConvertToDBEntity(selected);
                 ViewBag.Error = "Necesita estar logueado para descargar documentos";
                 return View("VerMas",selected);
             }

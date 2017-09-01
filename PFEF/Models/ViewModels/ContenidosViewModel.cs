@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using PFEF.Models;
+using PFEF.Model;
 
 namespace PFEF.ViewModels
 {
