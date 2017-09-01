@@ -19,7 +19,7 @@
                                 <div class="card__front">
                                     <div class="card card-01">
                                         <div class="card-block text-center">
-                                            @{var Badget = HelpersExtensions.BudgetFileSelect(Model.DictRecomendaciones[item.Key][i].Ruta); }
+                                            @{var Badget = HelpersExtensions.BudgetFileSelect(Model.DictRecomendaciones[item.Key][i].Id); }
                                             <span class="badge-box"><i class="@Badget"></i></span>
                                             <h4 class="card-title">@Model.DictRecomendaciones[item.Key][i].Nombre</h4>
                                             <p class="card-text">@Model.DictRecomendaciones[item.Key][i].Descripcion</p>

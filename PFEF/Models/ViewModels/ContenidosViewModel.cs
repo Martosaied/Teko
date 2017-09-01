@@ -48,7 +48,7 @@ namespace PFEF.ViewModels
     public class SubirViewModel : BaseContentViewModel
     {
         [Required]
-        new public string Nombre { get; set; }
+        public new string Nombre { get; set; }
         [Required]
         new public string Descripcion { get; set; }
         public string Ruta { get; set; }
@@ -66,6 +66,11 @@ namespace PFEF.ViewModels
         new public int NivelesEducativosId { get; set; }
         [Required]
         new public int TiposContenidosId { get; set; }
+
+        public IEnumerable<HttpPostedFileBase> Files { get; set; }
+        public int NivNuevaEsc { get; set; }
+        public string NuevaEsc { get; set; }
+
     }
     public class MuestraViewModel : BaseContentViewModel
     {
@@ -82,7 +87,7 @@ namespace PFEF.ViewModels
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
-        public string Ruta { get; set; }
+        public List<string> Rutas { get; set; }
         public string Profesor { get; set; }
         public int Cursada { get; set; }
         public int UsuariosId { get; set; }

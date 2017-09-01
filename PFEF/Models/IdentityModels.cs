@@ -39,5 +39,6 @@ namespace PFEF.Models
         public virtual DbSet<NivelesEducativos> NivelesEducativos { get; set; }
         public virtual DbSet<TiposContenidos> TiposContenidos { get; set; }
         public virtual DbSet<Visitas> Visitas { get; set; }
+        public virtual DbSet<Contenidos.Archivos> Archivos { get; set; }
     }
 }

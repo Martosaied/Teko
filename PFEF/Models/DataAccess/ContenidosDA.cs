@@ -183,9 +183,9 @@ namespace PFEF.Models.DataAccess
                .ToArray();
             return Lista;
         }
-        public static void UpdateIdes(bool DesOVis, Contenidos Cont)
+        public static void UpdateIdes(bool DesOVis, int Id)
         {
-            Cont = db.Contenidos.Find(Cont.Id);
+            var Cont = db.Contenidos.Find(Id);
             if (DesOVis)
             {
                 Cont.IPop++;

@@ -51,21 +51,5 @@ namespace PFEF.Controllers
 
             return View();
         }
-        [HttpPost]
-        public ActionResult Escuela(string escuela)
-        {
-            TiposContenidos sc = new TiposContenidos()
-            {
-                Nombre = escuela
-            };
-            db.TiposContenidos.Add(sc);
-            db.SaveChanges();
-            return View("Escuelas");
-        }
-        [HttpGet]
-        public ActionResult Escuela()
-        {         
-            return View("Escuelas");
-        }
     }
 }

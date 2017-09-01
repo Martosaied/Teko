@@ -14,7 +14,7 @@
                             <div class="card__front">
                                 <div class="card card-01">
                                     <div class="card-block text-center">
-                                        @{var Badget = HelpersExtensions.BudgetFileSelect(Model.Recomendaciones[i].Ruta); }
+                                        @{var Badget = HelpersExtensions.BudgetFileSelect(Model.Recomendaciones[i].Id); }
                                         <span class="badge-box"><i class="@Badget"></i></span>
                                         <h4 class="card-title">@Model.Recomendaciones[i].Nombre</h4>
                                         <p class="card-text">@Model.Recomendaciones[i].Descripcion</p>

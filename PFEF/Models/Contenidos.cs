@@ -7,17 +7,22 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PFEF.Models
+namespace PFEF.Model
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
     public partial class Contenidos
     {
+        public class Archivos
+        {
+            public int Id { get; set; }
+            public virtual Contenidos IdContenido { get; set; }
+            public string Ruta { get; set; }
+        }
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
-        public string Ruta { get; set; }
         public string Profesor { get; set; }
         public int Cursada { get; set; }
         public int UsuariosId { get; set; }
@@ -34,6 +39,7 @@ namespace PFEF.Models
         public virtual Escuelas Escuelas { get; set; }
         public virtual Materias Materias { get; set; }
         public virtual TiposContenidos TiposContenidos { get; set; }
+
 
     }
 }

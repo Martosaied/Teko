@@ -10,6 +10,8 @@ using AutoMapper;
 using EntityFramework.Extensions;
 using PFEF.Models.DataAccess;
 using Microsoft.AspNet.Identity;
+using Ionic.Zip;
+using System.IO;
 
 namespace PFEF.Controllers
 {
@@ -30,24 +32,46 @@ namespace PFEF.Controllers
         public JsonResult PopuladorEsc(int Lvl)
         {
             var Esc = db.Escuelas.Where(x=>x.NivEduEscuela.Id == Lvl).Select(c => new { Id = c.Id, Nombre = c.Nombre }).ToList();
+            Esc.Add(new { Id = -1, Nombre = "----------" });
             Esc.Add(new { Id = 0, Nombre = "Otra escuela" });
             Esc = Esc.OrderBy(x => x.Id).ToList();
             return Json(Esc, JsonRequestBehavior.AllowGet);
         }
         public ActionResult Descargar(int ID)
         {
-            Contenidos selected = db.Contenidos.Find(ID);
+            var Files = db.Archivos.Where(x => x.IdContenido.Id == ID).ToArray();
             if (Request.IsAuthenticated)
             {
                 ViewBag.Error = "";
-                ContenidosDA.UpdateIdes(false, selected);
-                string contentType = System.Net.Mime.MediaTypeNames.Application.Pdf;
-                return new FilePathResult("~/Content/Uploads/" + selected.Ruta, contentType)
+                ContenidosDA.UpdateIdes(false, ID);
+                if (Files.Count() == 1)
                 {
-                    FileDownloadName = selected.Ruta,
-                };
-            }else
+                    string contentType = System.Net.Mime.MediaTypeNames.Application.Pdf;
+                    return new FilePathResult("~/Content/Uploads/" + Files[0].Ruta, contentType)
+                    {
+                        FileDownloadName = Files[0].Ruta,
+                    };
+                }
+                else
+                {
+                    var outputStream = new MemoryStream();
+
+                    using (var zip = new ZipFile())
+                    {
+                        foreach (var item in Files)
+                        {
+                            zip.AddEntry(item.Ruta, "content");
+                        }
+                        zip.Save(outputStream);
+                    }
+
+                    outputStream.Position = 0;
+                    return File(outputStream, "application/zip", "archivos.zip");
+                }
+            }
+            else
             {
+                Contenidos selected = db.Contenidos.Find(ID);
                 ViewBag.Error = "Necesita estar logueado para descargar documentos";
                 return View("VerMas",selected);
             }
@@ -63,36 +87,46 @@ namespace PFEF.Controllers
 
 
         [HttpPost]
-        public ActionResult Subir(SubirViewModel Cont, HttpPostedFileBase file, string NuevaEsc, int NivNuevaEsc)
+        public ActionResult Subir(SubirViewModel Cont)
         {
             if (ModelState.IsValid)
             {
-                if (file != null)
-                {   
-                    Contenidos ContMapeado = AutoMapperGeneric<SubirViewModel, Contenidos>.ConvertToDBEntity(Cont);
+                if (Cont.Files != null)
+                {
+                    Contenidos ContMapeado = AutoMapperGeneric<SubirViewModel, Contenidos>.ConvertToDBEntity(Cont);                    
 
-                    string archivo = (DateTime.Now.ToString("yyyyMMddHHmmss") + "-" + file.FileName).ToLower();
-                    archivo = archivo.Replace(" ", "");
-
-                    if (NuevaEsc != null)
+                    if (Cont.NuevaEsc != null)
                     {
-                            Escuelas esc = new Escuelas();
-                            esc.Nombre = NuevaEsc;
-                        esc.NivEduEscuela.Id = NivNuevaEsc;
-                            ContMapeado.Escuelas = esc;
-                        
+                        Escuelas esc = new Escuelas
+                        {
+                            Nombre = Cont.NuevaEsc,
+                            NivEduEscuela = db.NivelesEducativos.Where(x => x.Id == Cont.NivNuevaEsc).FirstOrDefault()
+                        };
+                        ContMapeado.Escuelas = esc;     
                     }
-                    
-                    ContMapeado.Ruta = archivo;
+
                     ContMapeado.UsuariosId = HelpersExtensions.ObtenerUser(User.Identity.GetUserId()).Id;
                     ContMapeado.FechaSubida = DateTime.Now;
                     ContMapeado.IDes = 0;
                     ContMapeado.IPop = 0;
                                             
                     db.Contenidos.Add(ContMapeado);
-                    db.SaveChanges();           
+                    db.SaveChanges();
 
-                    file.SaveAs(Server.MapPath("~/Content/Uploads/" + archivo));
+                    foreach (var file in Cont.Files)
+                    {
+                        string fileName = (DateTime.Now.ToString("yyyyMMddHHmmss") + "-" + file.FileName).ToLower();
+                        fileName = fileName.Replace(" ", "_");
+
+                        Contenidos.Archivos MiArchivo = new Contenidos.Archivos
+                        {
+                            IdContenido = db.Contenidos.OrderByDescending(p => p.Id).FirstOrDefault(),
+                            Ruta = fileName
+                        };
+                        db.Archivos.Add(MiArchivo);
+                        file.SaveAs(Server.MapPath("~/Content/Uploads/" + fileName));
+                    }
+                    db.SaveChanges();
                     return RedirectToAction("Index", "Home");
                 }
                 return View("SubirContenidos",Cont);
@@ -107,14 +141,14 @@ namespace PFEF.Controllers
         public ActionResult VerMas(int cont)
         {
             Contenidos SelectedCont = db.Contenidos.Find(cont);
-            ContenidosDA.UpdateIdes(true, SelectedCont);
+            ContenidosDA.UpdateIdes(true, cont);
             if (Request.IsAuthenticated)
             {
                 bool result = ContenidosDA.Recomendaciones.UpdateRecomendation(SelectedCont,HelpersExtensions.ObtenerUser(User.Identity.GetUserId()));
             }
             var MappedCont = AutoMapperGeneric<Contenidos,DetailsViewModel>.ConvertToDBEntity(SelectedCont);
             MappedCont.Recomendaciones = ContenidosDA.Recomendaciones.ObtenerRec(SelectedCont);
-            ViewBag.URL = ObtenerURLArchivo(SelectedCont);
+            MappedCont.Rutas = ObtenerURLArchivo(SelectedCont);
             ViewBag.Title = SelectedCont.Nombre;
             return View(MappedCont);
         }
@@ -215,23 +249,30 @@ namespace PFEF.Controllers
             return PartialView("_ContViewer", _ViewModel);
         }
         #region Functions
-        protected string ObtenerURLArchivo(Contenidos model)
+        protected List<string> ObtenerURLArchivo(Contenidos model)
         {
-            string URL = model.Ruta.Substring(model.Ruta.Length - 4, 4);
-            switch(URL)
+            var Files = db.Archivos.Where(x => x.IdContenido.Id == model.Id).ToList();
+            List<string> Lista = new List<string>();
+            foreach (var file in Files)
             {
-                case ".pdf":                   
-                    URL = "https://docs.google.com/viewer?url=https://tekoteko.azurewebsites.net/Content/Uploads/" + model.Ruta + "&embedded=true";
-                    break;
-                case ".jpg":
-                case ".png":
-                    URL = "https://tekoteko.azurewebsites.net/Content/Uploads/" + model.Ruta;
-                    break;
-                default:
-                    URL = "https://view.officeapps.live.com/op/embed.aspx?src=https://tekoteko.azurewebsites.net/Content/Uploads/" + model.Ruta;
-                    break;
+                string URL = file.Ruta.Substring(file.Ruta.Length - 4, 4);
+                switch (URL)
+                {
+                    case ".pdf":
+                        URL = "https://docs.google.com/viewer?url=https://tekoteko.azurewebsites.net/Content/Uploads/" + file.Ruta + "&embedded=true";
+                        break;
+                    case ".jpg":
+                    case ".png":
+                        URL = "https://tekoteko.azurewebsites.net/Content/Uploads/" + file.Ruta;
+                        break;
+                    default:
+                        URL = "https://view.officeapps.live.com/op/embed.aspx?src=https://tekoteko.azurewebsites.net/Content/Uploads/" + file.Ruta;
+                        break;
+                }
+                Lista.Add(URL);
             }
-            return URL;
+            
+            return Lista;
         }
         protected MuestraViewModel SwitchTitle(string Title, MuestraViewModel Parameters)
         {
@@ -247,7 +288,7 @@ namespace PFEF.Controllers
                     ViewBag.Title = Title;
                     return _ViewModel;
                 case "Mas descargados":
-                    _ViewModel.ListaAMostrar = db.Contenidos.OrderByDescending(x => x.IPop).ToArray();
+                    _ViewModel.ListaAMostrar = db.Contenidos.OrderByDescending(x => x.IDes).ToArray();
                     ViewBag.Title = Title;
                     return _ViewModel;
                 case "Mas valorados":
@@ -277,13 +318,6 @@ namespace PFEF.Controllers
         }
         protected Contenidos[] ObtenerIds()
         {
-            /*int[] ids = (int[])Session["ListIds"];
-            Contenidos[] ListaLlena;
-            using (ApplicationDbContext ListDb = new ApplicationDbContext())
-            {
-                ListaLlena = db.Contenidos.Where(x => ids.Contains(x.Id)).ToArray();
-            }
-            return ListaLlena;*/
             Contenidos[] ListaLlena = (Contenidos[])Session["ListIds"];
             return ListaLlena;
         }

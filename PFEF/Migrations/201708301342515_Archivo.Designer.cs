@@ -7,13 +7,13 @@ namespace PFEF.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class asdasd : IMigrationMetadata
+    public sealed partial class Archivo : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(asdasd));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Archivo));
         
         string IMigrationMetadata.Id
         {
-            get { return "201707140137408_asdasd"; }
+            get { return "201708301342515_Archivo"; }
         }
         
         string IMigrationMetadata.Source
