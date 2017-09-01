@@ -43,6 +43,7 @@
     <Compile Include="ArchivoService.cs" />
     <Compile Include="ContenidoService.cs" />
     <Compile Include="EscuelaService.cs" />
+    <Compile Include="NivelEducativoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VisitaService.cs" />
   </ItemGroup>

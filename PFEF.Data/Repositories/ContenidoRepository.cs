@@ -102,60 +102,10 @@ namespace PFEF.Data.Repositories
             }
 
             return Recomendaciones;
-        }
-
-        public void UpdateIdes(bool DesOVis, int Id)
+        }      
+        public Contenidos[] _Searcher(string item)
         {
-            var Cont = db.Contenidos.Find(Id);
-            if (DesOVis)
-            {
-                Cont.IPop++;
-                db.Contenidos.Attach(Cont);
-                db.Entry(Cont).Property(x => x.IPop).IsModified = true;
-                db.SaveChanges();
-            }
-            else
-            {
-                Cont.IDes++;
-                db.Contenidos.Attach(Cont);
-                db.Entry(Cont).Property(x => x.IDes).IsModified = true;
-                db.SaveChanges();
-            }
-        }
-
-        public Contenidos[] _Filter(MuestraViewModel Parameters, Contenidos[] Array)
-        {
-            if (Parameters.Profesor == null) Parameters.Profesor = "";
-            var Lista = Array
-               .Where(s => s.EscuelasId == Parameters.EscuelasId || Parameters.EscuelasId == 0)
-               .Where(s => s.MateriasId == Parameters.MateriasId || Parameters.MateriasId == 0)
-               .Where(s => s.TiposContenidosId == Parameters.TiposContenidosId || Parameters.TiposContenidosId == 0)
-               .Where(s => s.Escuelas.NivEduEscuela.Id == Parameters.NivelesEducativosId || Parameters.NivelesEducativosId == 0)
-               .Where(s => s.Profesor.ToLower().Contains(Parameters.Profesor.ToLower()) || Parameters.Profesor == "")
-               .ToArray();
-            return Lista;
-        }
-
-        public Contenidos[] _Searcher(string Buscador)
-        {
-            List<string> keywordsL = new List<string>();
-            MuestraViewModel Buscado = new MuestraViewModel();
-            if (Buscador == "")
-            {
-                Buscado.ListaAMostrar = DbContext.Contenidos.OrderByDescending(x => x.Id).ToArray();
-                return Buscado.ListaAMostrar;
-            }
-            else
-            {
-                string[] keywords = Buscador.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-                keywordsL = keywords.ToList();
-                int flag = 1;
-                foreach (string item in keywordsL)
-                {
-                    if (flag == 1)
-                    {
-                        Buscado.ListaAMostrar = DbContext.Contenidos.Where(s => s.Nombre.Contains(item) ||
+            return DbContext.Contenidos.Where(s => s.Nombre.Contains(item) ||
                         s.Descripcion.Contains(item) || s.Profesor.Contains(item) ||
                         s.Cursada.ToString().Contains(item) || s.Usuarios.Nombre.Contains(item) ||
                         s.Escuelas.Nombre.Contains(item) ||
@@ -163,37 +113,19 @@ namespace PFEF.Data.Repositories
                         s.TiposContenidos.Nombre.Contains(item) ||
                         s.Materias.Nombre.Contains(item)
                         ).ToArray();
-                        flag = 0;
-                    }
-                    else
-                    {
-                        Buscado.ListaAMostrar = Buscado.ListaAMostrar.Where(s => s.Nombre.ToLower().Contains(item.ToLower()) ||
-                        s.Descripcion.ToLower().Contains(item.ToLower()) || s.Profesor.ToLower().Contains(item.ToLower()) ||
-                        s.Cursada.ToString().ToLower().Contains(item.ToLower()) || s.Usuarios.Nombre.ToLower().Contains(item.ToLower()) ||
-                        s.Escuelas.Nombre.ToLower().Contains(item.ToLower()) ||
-                        s.Escuelas.NivEduEscuela.Nombre.ToLower().Contains(item.ToLower()) ||
-                        s.TiposContenidos.Nombre.ToLower().Contains(item.ToLower()) ||
-                        s.Materias.Nombre.ToLower().Contains(item.ToLower())).ToArray();
-                    }
-                }
-                return Buscado.ListaAMostrar;
-            }
         }
 
-        public Contenidos[] _SearcherByTag(string Buscador)
+        public Contenidos[] GetContenidosByTag(string Buscador)
         {
-            MuestraViewModel Buscado = new MuestraViewModel()
-            {
-                ListaAMostrar = DbContext.Contenidos.Where(s => s.Nombre.Contains(Buscador) ||
-                            s.Descripcion.Contains(Buscador) || s.Profesor.Contains(Buscador) ||
-                            s.Cursada.ToString().Contains(Buscador) || s.Usuarios.Nombre.Contains(Buscador) ||
-                            s.Escuelas.Nombre.Contains(Buscador) ||
-                            s.Escuelas.NivEduEscuela.Nombre.Contains(Buscador) ||
-                            s.TiposContenidos.Nombre.Contains(Buscador) ||
-                            s.Materias.Nombre.Contains(Buscador)
-                        ).ToArray()
-            };
-            return Buscado.ListaAMostrar;
+
+            return DbContext.Contenidos.Where(s => s.Nombre.Contains(Buscador) ||
+                        s.Descripcion.Contains(Buscador) || s.Profesor.Contains(Buscador) ||
+                        s.Cursada.ToString().Contains(Buscador) || s.Usuarios.Nombre.Contains(Buscador) ||
+                        s.Escuelas.Nombre.Contains(Buscador) ||
+                        s.Escuelas.NivEduEscuela.Nombre.Contains(Buscador) ||
+                        s.TiposContenidos.Nombre.Contains(Buscador) ||
+                        s.Materias.Nombre.Contains(Buscador)
+                    ).ToArray();
         }
 
     }
@@ -202,10 +134,8 @@ namespace PFEF.Data.Repositories
     {
         Dictionary<string, Contenidos[]> ObtenerRecGen(List<Visitas> Visitas);
         Contenidos[] ObtenerRecByCont(Contenidos cont);
-        Contenidos[] _Filter(MuestraViewModel Parameters, Contenidos[] Array);
-        Contenidos[] _SearcherByTag(string Buscador);
+        Contenidos[] GetContenidosByTag(string Tag);
         Contenidos[] _Searcher(string Buscador);
-        void UpdateIdes(bool DesOVis, int Id);
         Contenidos[] GetContByRecent();
         Contenidos[] GetContByPop();
         Contenidos[] GetContByDes();

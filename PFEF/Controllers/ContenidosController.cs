@@ -22,6 +22,8 @@ namespace PFEF.Controllers
         private readonly IContenidoService contenidoService;
         private readonly IArchivoService archivoService;
         private readonly IEscuelaService escuelaService;
+        private readonly IVisitaService visitaService;
+
 
         private MuestraViewModel _ViewModel = new MuestraViewModel();
         // GET: Contenidos
@@ -115,8 +117,8 @@ namespace PFEF.Controllers
                     ContMapeado.IDes = 0;
                     ContMapeado.IPop = 0;
                                             
-                    db.Contenidos.Add(ContMapeado);
-                    db.SaveChanges();
+                    contenidoService.CreateContenido(ContMapeado);
+                    contenidoService.SaveContenido();
 
                     foreach (var file in Cont.Files)
                     {
@@ -145,15 +147,15 @@ namespace PFEF.Controllers
         [HttpGet]
         public ActionResult VerMas(int cont)
         {
-            Contenidos SelectedCont = db.Contenidos.Find(cont);
-            ContenidosDA.UpdateIdes(true, cont);
+            Contenidos SelectedCont = contenidoService.GetContById(cont);
+            contenidoService.UpdatePop(SelectedCont);
             if (Request.IsAuthenticated)
             {
-                bool result = ContenidosDA.Recomendaciones.UpdateRecomendation(SelectedCont,HelpersExtensions.ObtenerUser(User.Identity.GetUserId()));
+               VisitaService.UpdateRecomendation(SelectedCont,HelpersExtensions.ObtenerUser(User.Identity.GetUserId()));
             }
             var MappedCont = AutoMapperGeneric<Contenidos,DetailsViewModel>.ConvertToDBEntity(SelectedCont);
-            MappedCont.Recomendaciones = ContenidosDA.Recomendaciones.ObtenerRec(SelectedCont);
-            MappedCont.Rutas = ObtenerURLArchivo(SelectedCont);
+            MappedCont.Recomendaciones = contenidoService.ObtenerRecByCont(SelectedCont);
+            MappedCont.Rutas = archivoService.ObtenerURLArchivos(SelectedCont.Id);
             ViewBag.Title = SelectedCont.Nombre;
             return View(MappedCont);
         }
@@ -162,7 +164,7 @@ namespace PFEF.Controllers
         public ActionResult Buscar(string Buscador)
         {
             Session["Page"] = 0;
-            _ViewModel.ListaAMostrar = ContenidosDA._Searcher(Buscador);
+            _ViewModel.ListaAMostrar = contenidoService.Search(Buscador);
             GuardarIds(_ViewModel.ListaAMostrar);
             _ViewModel.ChargeDrops();
             ViewBag.Title = "Resultados: '" + Buscador.Replace(" ", "' '") + "'";
@@ -174,7 +176,8 @@ namespace PFEF.Controllers
         {
             Session["Page"] = 0;
             var Lista = ObtenerIds();
-            FilterParameters.ListaAMostrar = ContenidosDA._Filter(FilterParameters, Lista);
+            var Contenido = AutoMapperGeneric<MuestraViewModel, Contenidos>.ConvertToDBEntity(FilterParameters);
+            FilterParameters.ListaAMostrar = contenidoService._Filter(Contenido, Lista);
             ViewBag.Title = FilterParameters.Title;
             return PartialView("_ContViewer",FilterParameters);
         }
@@ -182,7 +185,7 @@ namespace PFEF.Controllers
         public ActionResult Tag(string Tag)
         {
             Session["Page"] = 0;
-            _ViewModel.ListaAMostrar = ContenidosDA._SearcherByTag(Tag);
+            _ViewModel.ListaAMostrar = contenidoService.GetContByTag(Tag);
             GuardarIds(_ViewModel.ListaAMostrar);
             _ViewModel.ChargeDrops();
             ViewBag.Title = "Resultados: '" + Tag + "'";
@@ -254,31 +257,6 @@ namespace PFEF.Controllers
             return PartialView("_ContViewer", _ViewModel);
         }
         #region Functions
-        protected List<string> ObtenerURLArchivo(Contenidos model)
-        {
-            var Files = db.Archivos.Where(x => x.IdContenido.Id == model.Id).ToList();
-            List<string> Lista = new List<string>();
-            foreach (var file in Files)
-            {
-                string URL = file.Ruta.Substring(file.Ruta.Length - 4, 4);
-                switch (URL)
-                {
-                    case ".pdf":
-                        URL = "https://docs.google.com/viewer?url=https://tekoteko.azurewebsites.net/Content/Uploads/" + file.Ruta + "&embedded=true";
-                        break;
-                    case ".jpg":
-                    case ".png":
-                        URL = "https://tekoteko.azurewebsites.net/Content/Uploads/" + file.Ruta;
-                        break;
-                    default:
-                        URL = "https://view.officeapps.live.com/op/embed.aspx?src=https://tekoteko.azurewebsites.net/Content/Uploads/" + file.Ruta;
-                        break;
-                }
-                Lista.Add(URL);
-            }
-            
-            return Lista;
-        }
         protected MuestraViewModel SwitchTitle(string Title, MuestraViewModel Parameters)
         {
             
