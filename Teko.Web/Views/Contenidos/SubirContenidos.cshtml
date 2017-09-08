@@ -1,0 +1,120 @@
+﻿@model Teko.ViewModels.SubirViewModel
+@{
+    ViewBag.Title = "Subir contenidos";
+}
+
+<h2>Subir contenidos</h2>
+
+@using (Html.BeginForm("Subir", "Contenidos", FormMethod.Post, new { @class = "form-signin row", role = "form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-6">
+        <h4>Describa su documento</h4>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Nombre, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Ruta, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(x => x.Files, new { type = "file", @class = "form-control", @required = "required", multiple = "true" })
+                @Html.ValidationMessageFor(m => m.Ruta, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Descripcion, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(m => m.Descripcion, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Descripcion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <hr />
+    <h4>Informacion general</h4>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Profesor, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Profesor, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Profesor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Cursada, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Cursada, new { @class = "form-control", @type = "Number", min = "1900", max = "2017" })
+                @Html.ValidationMessageFor(m => m.Cursada, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.NivelesEducativosId, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.NivelesEducativosId, new SelectList(Model.dropNivelEducativo, "Id", "Nombre"), "----------", new { @class = "btn btn-inverse dropdown-toggle", @onchange = "PopEsc(this.value);" })
+                @Html.ValidationMessageFor(m => m.NivelesEducativosId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.EscuelasId, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.EscuelasId, Enumerable.Empty<SelectListItem>(), "Primero elige nivel", new { @class = "btn btn-inverse dropdown-toggle", id = "ddlesc", name = "ddlesc", @onchange= "ActivarNewEsc(this.value);" })
+                @Html.TextBoxFor(x => x.NuevaEsc,"Otra escuela", new { @class = "form-control", disabled = "true" })
+                @Html.DropDownListFor(x => x.NivNuevaEsc, new SelectList(Model.dropNivelEducativo, "Id", "Nombre"), new { @class = "btn btn-inverse dropdown-toggle", disabled = "true" })
+                @Html.ValidationMessageFor(m => m.EscuelasId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.MateriasId, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(x => x.MateriasId, new SelectList(Model.dropMateria, "Id", "Nombre"), new { @class = "btn btn-inverse dropdown-toggle" })
+                @Html.ValidationMessageFor(m => m.MateriasId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.TiposContenidosId, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(x => x.TiposContenidosId, new SelectList(Model.dropTipoContenido, "Id", "Nombre"), new { @class = "btn btn-inverse dropdown-toggle" })
+                @Html.ValidationMessageFor(m => m.TiposContenidosId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+
+
+    <button class="btn btn-primary" type="submit">Subir</button>
+}
+<script>
+    function PopEsc() {
+        var lvlId = $('#NivelesEducativosId').val();
+        $.ajax({
+            url: '/Contenidos/PopuladorEsc',
+            type: "GET",
+            dataType: "JSON",
+            data: { Lvl: lvlId },
+            success: function (Data) {
+                $("#ddlesc").html(""); // clear before appending new list 
+                $.each(Data, function (i, city) {
+                    $("#ddlesc").append(
+                        $('<option></option>').val(city.Id).html(city.Nombre));
+                });
+            }
+        });
+    }
+    function ActivarNewEsc(){
+        var val = $('#ddlesc').val();
+        if (val == "0") {
+            document.getElementById('NuevaEsc').disabled = false;
+            document.getElementById('NivNuevaEsc').disabled = false;
+        } else {
+            document.getElementById('NuevaEsc').disabled = true;
+            document.getElementById('NuevaEsc').value = "Otra escuela";
+            document.getElementById('NivNuevaEsc').disabled = true;
+        }
+    }
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,68 @@
+﻿<link href='~/Content/FlipperCard.css' rel='stylesheet' type='text/css'>
+<div id="Recomendation">
+    @{
+        if (Model.DictRecomendaciones != null)
+        {
+            foreach (var item in Model.DictRecomendaciones)
+            {
+                if (item.Value.Length > 0)
+                {
+                    <div style="margin-bottom: 250px;">
+                        <h4>Porque visitaste @item.Key</h4>
+                        <hr />
+                        @for (int i = 0; i <= 2; i++)
+                        {
+                        if (i < Model.DictRecomendaciones[item.Key].Length)
+                        {
+                        <div class="caca col-md-4" sonclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model.DictRecomendaciones[item.Key][i].Id })'">
+                            <div class="card-flipper effect__hover" data-id="1">
+                                <div class="card__front">
+                                    <div class="card card-01">
+                                        <div class="card-block text-center">
+                                            <span class="badge-box"><i class="@Model.DictRecomendaciones[item.Key][i].Badget"></i></span>
+                                            <h4 class="card-title">@Model.DictRecomendaciones[item.Key][i].Nombre</h4>
+                                            <p class="card-text">@Model.DictRecomendaciones[item.Key][i].Descripcion</p>
+                                            <span class="social-box">
+                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.DictRecomendaciones[item.Key][i].Materias.Nombre })">
+                                                    <span class="mitag tag label label-info">@Model.DictRecomendaciones[item.Key][i].Materias.Nombre</span>,
+                                                    <a />
+                                                    <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.DictRecomendaciones[item.Key][i].Escuelas.Nombre })">
+                                                        <span class="mitag tag label label-info">@Model.DictRecomendaciones[item.Key][i].Escuelas.Nombre</span>,
+                                                    </a>
+                                                    <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.DictRecomendaciones[item.Key][i].Escuelas.NivEduEscuela.Nombre })">
+                                                        <span class="mitag tag label label-info">@Model.DictRecomendaciones[item.Key][i].Escuelas.NivEduEscuela.Nombre</span>,
+                                                    </a>
+                                                    <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.DictRecomendaciones[item.Key][i].Profesor })">
+                                                        <span class="mitag tag label label-info">@Model.DictRecomendaciones[item.Key][i].Profesor</span>,
+                                                    </a>
+                                                    <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.DictRecomendaciones[item.Key][i].TiposContenidos.Nombre })">
+                                                        <span class="mitag tag label label-info">@Model.DictRecomendaciones[item.Key][i].TiposContenidos.Nombre</span>
+                                                    </a>
+                                                    <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.DictRecomendaciones[item.Key][i].Cursada })">
+                                                        <span class="mitag tag label label-info">Año @Model.DictRecomendaciones[item.Key][i].Cursada</span>
+                                                    </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card__back" onclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model.DictRecomendaciones[item.Key][i].Id })'">
+                                    <div class="card card-01">
+                                        <div class="card-block text-center">
+                                            <p class="card-title">Subido el @Model.DictRecomendaciones[item.Key][i].FechaSubida por @Model.DictRecomendaciones[item.Key][i].Usuarios.Nombre</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                        }
+                    </div>
+                                                        }
+                                                    }
+                                                }
+    }
+    
+
+
+</div>

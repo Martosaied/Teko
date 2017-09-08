@@ -1,0 +1,58 @@
+﻿<link href='~/Content/FlipperCard.css' rel='stylesheet' type='text/css'>
+@model Teko.ViewModels.DetailsViewModel
+@{
+        if (Model.Recomendaciones.Length > 0)
+        {
+            <h4>Parecidos a este articulo</h4>
+            <hr />
+            for (int i = 0; i <= 2; i++)
+            {
+                if (i < Model.Recomendaciones.Length)
+                {
+                    <div class="caca col-md-4" sonclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model.Recomendaciones[i].Id })'">
+                        <div class="card-flipper effect__hover" data-id="1">
+                            <div class="card__front">
+                                <div class="card card-01">
+                                    <div class="card-block text-center">
+                                        <span class="badge-box"><i class="@Model.Badget"></i></span>
+                                        <h4 class="card-title">@Model.Recomendaciones[i].Nombre</h4>
+                                        <p class="card-text">@Model.Recomendaciones[i].Descripcion</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card__back" onclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model.Recomendaciones[i].Id })'">
+                                <div class="card card-01">
+                                    <div class="card-block text-center">
+                                        <h4 class="card-title">Subido el @Model.Recomendaciones[i].FechaSubida por @Model.Recomendaciones[i].Usuarios.Nombre</h4>
+                                        <span class="social-box">
+                                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Recomendaciones[i].Materias.Nombre })">
+                                                <span class="mitag tag label label-info">@Model.Recomendaciones[i].Materias.Nombre</span>,
+                                                <a />
+                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Recomendaciones[i].Escuelas.Nombre })">
+                                                    <span class="mitag tag label label-info">@Model.Recomendaciones[i].Escuelas.Nombre</span>,
+                                                </a>
+                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Recomendaciones[i].Escuelas.NivEduEscuela.Nombre })">
+                                                    <span class="mitag tag label label-info">@Model.Recomendaciones[i].Escuelas.NivEduEscuela.Nombre</span>,
+                                                </a>
+                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Recomendaciones[i].Profesor })">
+                                                    <span class="mitag tag label label-info">@Model.Recomendaciones[i].Profesor</span>,
+                                                </a>
+                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Recomendaciones[i].TiposContenidos.Nombre })">
+                                                    <span class="mitag tag label label-info">@Model.Recomendaciones[i].TiposContenidos.Nombre</span>
+                                                </a>
+                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Recomendaciones[i].Cursada })">
+                                                    <span class="mitag tag label label-info">Año @Model.Recomendaciones[i].Cursada</span>
+                                                </a>
+                                        </span>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        }
+    }
+
