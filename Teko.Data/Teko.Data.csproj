@@ -74,9 +74,14 @@
     <Compile Include="Migrations\201709071230294_Badget.Designer.cs">
       <DependentUpon>201709071230294_Badget.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709081114462_ComentariosEmpezando.cs" />
+    <Compile Include="Migrations\201709081114462_ComentariosEmpezando.Designer.cs">
+      <DependentUpon>201709081114462_ComentariosEmpezando.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ArchivoRepository.cs" />
+    <Compile Include="Repositories\ComentarioRepository.cs" />
     <Compile Include="Repositories\ContenidoRepository.cs" />
     <Compile Include="Repositories\EscuelaRepository.cs" />
     <Compile Include="Repositories\MateriaRepository.cs" />
@@ -105,6 +110,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709071230294_Badget.resx">
       <DependentUpon>201709071230294_Badget.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709081114462_ComentariosEmpezando.resx">
+      <DependentUpon>201709081114462_ComentariosEmpezando.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

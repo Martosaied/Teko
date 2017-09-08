@@ -457,6 +457,7 @@
     <Content Include="Views\Shared\_SingleRecom.cshtml" />
     <Content Include="Views\Usuarios\HomeUsuario.cshtml" />
     <Content Include="Views\Usuarios\LlenarPerfil.cshtml" />
+    <Content Include="Views\Contenidos\_Comentarios.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

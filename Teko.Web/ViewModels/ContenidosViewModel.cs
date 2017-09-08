@@ -5,6 +5,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using Teko.Models;
 using Teko.Model;
+using Teko.Service;
 
 namespace Teko.ViewModels
 {
@@ -15,6 +16,17 @@ namespace Teko.ViewModels
 
     public class BaseContentViewModel
     {
+        protected readonly IMateriaService materiaService;
+        protected readonly INivelEducativoService nivelService;
+        protected readonly ITipoService tipoService;
+        protected readonly IEscuelaService escuelaService;
+        public BaseContentViewModel(IEscuelaService escuelaService, ITipoService tipoService, INivelEducativoService nivelService, IMateriaService materiaService)
+        {
+            this.escuelaService = escuelaService;
+            this.tipoService = tipoService;
+            this.materiaService = materiaService;
+            this.nivelService = nivelService;
+        }
         public string Nombre { get; set; }
         public string Profesor { get; set; }
         public string Descripcion { get; set; }
@@ -25,10 +37,47 @@ namespace Teko.ViewModels
         public int TiposContenidosId { get; set; }
         public int NivelesEducativosId { get; set; }
         public string Badget { get; set; }
-        public List<Escuelas> dropEscuela { get; set; }
-        public List<Materias> dropMateria { get; set; }
-        public List<TiposContenidos> dropTipoContenido { get; set; }
-        public List<NivelesEducativos> dropNivelEducativo { get; set; }
+        public List<Escuelas> dropEscuela
+        {
+            get
+            {
+                return escuelaService.GetAll().ToList();
+            }
+            set
+            {
+                
+            }
+        }
+        public List<Materias> dropMateria
+        {
+            get
+            {
+                return materiaService.GetAll().ToList();
+            }
+            set
+            {
+            }
+        }
+        public List<TiposContenidos> dropTipoContenido
+        {
+            get
+            {
+                return tipoService.GetAll().ToList();
+            }
+            set
+            {
+            }
+        }
+        public List<NivelesEducativos> dropNivelEducativo
+        {
+            get
+            {
+                return nivelService.GetAll().ToList();
+            }
+            set
+            {
+            }
+        }
     }
 
     public class BuscadorViewModel
@@ -37,6 +86,10 @@ namespace Teko.ViewModels
     }
     public class SubirViewModel : BaseContentViewModel
     {
+        public SubirViewModel(IEscuelaService escuelaService, ITipoService tipoService, INivelEducativoService nivelService, IMateriaService materiaService) : base(escuelaService, tipoService, nivelService, materiaService)
+        {
+        }
+
         [Required]
         public new string Nombre { get; set; }
         [Required]
@@ -64,7 +117,10 @@ namespace Teko.ViewModels
     }
     public class MuestraViewModel : BaseContentViewModel
     {
-       
+        public MuestraViewModel(IEscuelaService escuelaService, ITipoService tipoService, INivelEducativoService nivelService, IMateriaService materiaService) : base(escuelaService, tipoService, nivelService, materiaService)
+        {
+        }
+
         public int Pagina { get; set; }
         public string Title { get; set; }
         public Contenidos[] ListaAMostrar { get; set; }
@@ -96,6 +152,28 @@ namespace Teko.ViewModels
         public virtual TiposContenidos TiposContenidos { get; set; }
 
         public Contenidos[] Recomendaciones { get; set; }
+        public FormComentario FormComentario { get; set; }
+    }
+    public class FormComentario
+    {
+        public FormComentario(List<Comentarios> list, int cont)
+        {
+            ListaComentarios = list;
+            ContenidoActualId = cont;
+        }
+        public FormComentario()
+        {
 
+        }
+        public int Id { get; set; }
+        public int ContenidoActualId { get; set; }
+        public Nullable<int> ParentId { get; set; }
+        [Required]
+        public string Texto { get; set; }
+        [Required]
+        public int ContenidoId { get; set; }
+        [Required]
+        public string UsuarioId { get; set; }
+        public List<Comentarios> ListaComentarios { get; set; }
     }
 }

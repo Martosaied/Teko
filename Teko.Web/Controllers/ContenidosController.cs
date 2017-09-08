@@ -25,8 +25,11 @@ namespace Teko.Controllers
         private readonly IValoracionService valoracionService;
         private readonly IMateriaService materiaService;
         private readonly INivelEducativoService nivelService;
+        private readonly IComentarioService comentarioService;
+        private MuestraViewModel _ViewModel;
+        SubirViewModel SVM;
         private readonly ITipoService tipoService;
-        public ContenidosController(IMateriaService materiaService, INivelEducativoService nivelService, ITipoService tipoService, IValoracionService valoracionService, IContenidoService contenidoService, IArchivoService archivoService, IEscuelaService escuelaService, IVisitaService visitaService, IUsuarioService usuarioService)
+        public ContenidosController(IComentarioService comentarioService,IMateriaService materiaService, INivelEducativoService nivelService, ITipoService tipoService, IValoracionService valoracionService, IContenidoService contenidoService, IArchivoService archivoService, IEscuelaService escuelaService, IVisitaService visitaService, IUsuarioService usuarioService)
         {
             this.usuarioService = usuarioService;
             this.contenidoService = contenidoService;
@@ -37,16 +40,19 @@ namespace Teko.Controllers
             this.tipoService = tipoService;
             this.nivelService = nivelService;
             this.materiaService = materiaService;
+            this.comentarioService = comentarioService;
+            _ViewModel = new MuestraViewModel(escuelaService, tipoService, nivelService, materiaService);
+            SVM = new SubirViewModel(escuelaService, tipoService, nivelService, materiaService);
         }
 
-        private MuestraViewModel _ViewModel = new MuestraViewModel();
+
         // GET: Contenidos
         public ActionResult VerTodo(string Title)
         {
             _ViewModel.ListaAMostrar = contenidoService.GetContsByTitle(Title);
             ViewBag.Title = Title;
             GuardarIds(_ViewModel.ListaAMostrar);
-            _ViewModel = ChargeDrops(_ViewModel);
+            //_ViewModel = ChargeDrops(_ViewModel);
             return View("MuestraCont",_ViewModel);
         }
 
@@ -102,8 +108,7 @@ namespace Teko.Controllers
         [HttpGet]
         public ActionResult Subir()
         {
-            SubirViewModel SVM = new SubirViewModel();
-            SVM = ChargeDrops(SVM);
+            //SVM = ChargeDrops(SVM);
             return View("SubirContenidos",SVM);
         }
 
@@ -168,17 +173,24 @@ namespace Teko.Controllers
             var MappedCont = AutoMapperGeneric<Contenidos,DetailsViewModel>.ConvertToDBEntity(SelectedCont);
             MappedCont.Recomendaciones = contenidoService.ObtenerRecByCont(SelectedCont);
             MappedCont.Rutas = archivoService.ObtenerURLArchivos(SelectedCont.Id);
+            MappedCont.FormComentario = new FormComentario(comentarioService.GetByContenidos(SelectedCont.Id), cont);
             ViewBag.Title = SelectedCont.Nombre;
             return View(MappedCont);
         }
-
+        public ActionResult AgregarComentario(FormComentario model)
+        {
+            var MappedComent = AutoMapperGeneric<FormComentario, Comentarios>.ConvertToDBEntity(model);
+            MappedComent.UsuarioId = User.Identity.GetUserId();
+            comentarioService.AgregarComentario(MappedComent);
+            comentarioService.SaveComentario();
+            return RedirectToAction("VerMas",new { cont =  model.ContenidoId });
+        }
         [HttpGet]
         public ActionResult Buscar(string Buscador)
         {
             Session["Page"] = 0;
             _ViewModel.ListaAMostrar = contenidoService.Search(Buscador);
             GuardarIds(_ViewModel.ListaAMostrar);
-            _ViewModel = ChargeDrops(_ViewModel);
             ViewBag.Title = "Resultados: '" + Buscador.Replace(" ", "' '") + "'";
             return View("MuestraCont",_ViewModel);
         }
@@ -199,7 +211,6 @@ namespace Teko.Controllers
             Session["Page"] = 0;
             _ViewModel.ListaAMostrar = contenidoService.GetContByTag(Tag);
             GuardarIds(_ViewModel.ListaAMostrar);
-            _ViewModel = ChargeDrops(_ViewModel);
             ViewBag.Title = "Resultados: '" + Tag + "'";
             return View("MuestraCont", _ViewModel);
         }
@@ -212,7 +223,6 @@ namespace Teko.Controllers
             }
             Session["Page"] = Pagina;
             _ViewModel.ListaAMostrar = ObtenerIds();
-            _ViewModel = ChargeDrops(_ViewModel);
              return View("MuestraCont",_ViewModel);
         }
 
@@ -311,23 +321,6 @@ namespace Teko.Controllers
             Contenidos[] ListaLlena = (Contenidos[])Session["ListIds"];
             return ListaLlena;
         }
-        protected MuestraViewModel ChargeDrops(MuestraViewModel viewmodel)
-        {
-            viewmodel.dropEscuela = escuelaService.GetAll();
-            viewmodel.dropMateria = materiaService.GetAll();
-            viewmodel.dropNivelEducativo = nivelService.GetAll();
-            viewmodel.dropTipoContenido = tipoService.GetAll();
-            return viewmodel;
-        }
-        protected SubirViewModel ChargeDrops(SubirViewModel viewmodel)
-        {
-            viewmodel.dropEscuela = escuelaService.GetAll();
-            viewmodel.dropMateria = materiaService.GetAll();
-            viewmodel.dropNivelEducativo = nivelService.GetAll();
-            viewmodel.dropTipoContenido = tipoService.GetAll();
-            return viewmodel;
-        }
-
         #endregion
     }
 }

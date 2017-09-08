@@ -22,6 +22,7 @@ namespace Teko.Data
         public virtual DbSet<TiposContenidos> TiposContenidos { get; set; }
         public virtual DbSet<Visitas> Visitas { get; set; }
         public virtual DbSet<Archivos> Archivos { get; set; }
+        public virtual DbSet<Comentarios> Comentarios { get; set; }
 
         public virtual void Commit()
         {

@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchivoService.cs" />
+    <Compile Include="ComentarioService.cs" />
     <Compile Include="ContenidoService.cs" />
     <Compile Include="EscuelaService.cs" />
     <Compile Include="MateriaService.cs" />

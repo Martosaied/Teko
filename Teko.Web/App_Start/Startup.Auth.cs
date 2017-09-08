@@ -15,7 +15,6 @@ namespace Teko
 {
     public partial class Startup
     {
-        private readonly IUnitOfWork unitOfWork;
         // For more information on configuring authentication, please visit https://go.microsoft.com/fwlink/?LinkId=301864z
         public Startup()
         {
