@@ -11,8 +11,8 @@ namespace Teko.Service
 {
     public interface IUsuarioService
     {
-        Usuarios GetById(string id);
-        void Modificar(Usuarios mappedUser);
+        Usuarios GetUserById(string id);
+        void UpdateUser(Usuarios mappedUser);
         void SaveUser();
     }
     public class UsuarioService: IUsuarioService
@@ -26,12 +26,12 @@ namespace Teko.Service
             this.unitOfWork = unitOfWork;
         }
 
-        public Usuarios GetById(string id)
+        public Usuarios GetUserById(string id)
         {
-            return usuarioRepository.GetById(id);
+            return usuarioRepository.GetUserById(id);
         }
 
-        public void Modificar(Usuarios mappedUser)
+        public void UpdateUser(Usuarios mappedUser)
         {
             usuarioRepository.Update(mappedUser);
         }

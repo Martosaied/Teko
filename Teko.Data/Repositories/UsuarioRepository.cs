@@ -13,13 +13,13 @@ namespace Teko.Data.Repositories
         public UsuarioRepository(IDbFactory dbFactory)
             : base(dbFactory) { }
 
-        public Usuarios GetById(string id)
+        public Usuarios GetUserById(string id)
         {
             return DbContext.Users.Where(x => x.Id == id).FirstOrDefault();
         }
     }
     public interface IUsuarioRepository : IRepository<Usuarios>
     {
-        Usuarios GetById(string id);
+        Usuarios GetUserById(string id);
     }
 }

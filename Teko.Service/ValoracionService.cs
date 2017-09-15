@@ -11,9 +11,11 @@ namespace Teko.Service
 {
     public interface IValoracionService
     {
-        void Agregar(Valoraciones miVal);
-        void SaveVal();
-        double GetPromVal(int id);
+        void AddValoracion(Valoraciones miVal);
+        void SaveValoracion();
+        double GetPromedioValoracionesByContenidos(int id);
+        Valoraciones GetValoracionByUserAndContenido(int id, string userId);
+        void DeleteValoracion(Valoraciones valoracionVieja);
     }
     public class ValoracionService : IValoracionService
     {
@@ -26,19 +28,30 @@ namespace Teko.Service
             this.unitOfWork = unitOfWork;
         }
 
-        public void Agregar(Valoraciones miVal)
+        public void AddValoracion(Valoraciones miVal)
         {
             valoracionRepository.Add(miVal);
         }
 
-        public void SaveVal()
+        public void SaveValoracion()
         {
             unitOfWork.Commit();
         }
 
-        public double GetPromVal(int id)
+        public double GetPromedioValoracionesByContenidos(int id)
         {
-            return valoracionRepository.GetByCont(id).Average();
+            return valoracionRepository.GetValoracionesByContenido(id).Average();
+        }
+
+        public Valoraciones GetValoracionByUserAndContenido(int id, string userId)
+        {
+            Valoraciones ValoracionDeUser = valoracionRepository.GetValoracionByUserAndContenido(id, userId);
+            return ValoracionDeUser;
+        }
+
+        public void DeleteValoracion(Valoraciones valoracionVieja)
+        {
+            valoracionRepository.Delete(valoracionVieja);
         }
     }
 }

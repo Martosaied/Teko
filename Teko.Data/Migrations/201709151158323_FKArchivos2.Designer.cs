@@ -7,13 +7,13 @@ namespace Teko.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class SeedOnly : IMigrationMetadata
+    public sealed partial class FKArchivos2 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(SeedOnly));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(FKArchivos2));
         
         string IMigrationMetadata.Id
         {
-            get { return "201709071143447_SeedOnly"; }
+            get { return "201709151158323_FKArchivos2"; }
         }
         
         string IMigrationMetadata.Source

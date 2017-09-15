@@ -20,14 +20,14 @@ namespace Teko.Service
             this.unitOfWork = unitOfWork;
         }
 
-        public void AgregarComentario(Comentarios ComentarioAAgregar)
+        public void AddComentario(Comentarios ComentarioAAgregar)
         {
             comentarioRepo.Add(ComentarioAAgregar);
         }
 
         public List<Comentarios> GetByContenidos(int Id)
         {
-            var ListaComentarios = comentarioRepo.GetByContenido(Id);
+            var ListaComentarios = comentarioRepo.GetComentariosByContenido(Id);
             if(ListaComentarios == null)
             {
                 return ListaComentarios = new List<Comentarios>();
@@ -38,6 +38,11 @@ namespace Teko.Service
             }
         }
 
+        public List<Comentarios> GetNotificableComentariosByUser(string UserId)
+        {
+            return comentarioRepo.GetNotificableComentariosByUser(UserId);
+        }
+
         public void SaveComentario()
         {
             unitOfWork.Commit();
@@ -46,7 +51,8 @@ namespace Teko.Service
     public interface IComentarioService
     {
         List<Comentarios> GetByContenidos(int Id);
-        void AgregarComentario(Comentarios ComentarioAAgregar);
+        void AddComentario(Comentarios ComentarioAAgregar);
+        List<Comentarios> GetNotificableComentariosByUser(string UserId);
         void SaveComentario();
     }
 }

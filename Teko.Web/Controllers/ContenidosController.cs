@@ -12,6 +12,7 @@ using Ionic.Zip;
 using System.IO;
 using Teko.Service;
 using Teko.Model;
+using Teko.Web.ViewModels;
 
 namespace Teko.Controllers
 {
@@ -46,13 +47,18 @@ namespace Teko.Controllers
         }
 
 
+        public PartialViewResult Notificaciones()
+        {
+            List<Comentarios> ListaNotificaciones = comentarioService.GetNotificableComentariosByUser(User.Identity.GetUserId());
+            NotificationViewModel viewModel = new NotificationViewModel(ListaNotificaciones);
+            return PartialView("_Notification", viewModel);
+        }
         // GET: Contenidos
         public ActionResult VerTodo(string Title)
         {
             _ViewModel.ListaAMostrar = contenidoService.GetContsByTitle(Title);
             ViewBag.Title = Title;
-            GuardarIds(_ViewModel.ListaAMostrar);
-            //_ViewModel = ChargeDrops(_ViewModel);
+            GuardarContenidosEnSession(_ViewModel.ListaAMostrar);
             return View("MuestraCont",_ViewModel);
         }
 
@@ -64,144 +70,164 @@ namespace Teko.Controllers
             Esc = Esc.OrderBy(x => x.Id).ToList();
             return Json(Esc, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult Descargar(int ID)
+        public ActionResult Descargar(int ContenidoId)
         {
-            var Files = archivoService.GetByContenido(ID);
+            var Files = archivoService.GetArchivosByContenidoId(ContenidoId);
             if (Request.IsAuthenticated)
             {
                 ViewBag.Error = "";
-                contenidoService.UpdateDes(ID);
+                contenidoService.UpdateContenidoDescargas(ContenidoId);
                 if (Files.Count() == 1)
                 {
-                    string contentType = System.Net.Mime.MediaTypeNames.Application.Pdf;
-                    return new FilePathResult("~/Content/Uploads/" + Files[0].Ruta, contentType)
-                    {
-                        FileDownloadName = Files[0].Ruta,
-                    };
+                    FilePathResult ArchivoDescarga = GetArchivoUnicoDescarga(Files);
+                    return ArchivoDescarga;
                 }
                 else
                 {
-                    var outputStream = new MemoryStream();
-
-                    using (var zip = new ZipFile())
-                    {
-                        foreach (var item in Files)
-                        {
-                            zip.AddEntry(item.Ruta, "content");
-                        }
-                        zip.Save(outputStream);
-                    }
-
-                    outputStream.Position = 0;
-                    return File(outputStream, "application/zip", "archivos.zip");
+                    var ArchivoZipDescarga = GetZipDescarga(Files);
+                    return File(ArchivoZipDescarga, "application/zip", "archivos.zip");
                 }
             }
             else
             {
-                Contenidos selected = contenidoService.GetContById(ID);
+                Contenidos selected = contenidoService.GetContenidoById(ContenidoId);
                 var Mapper = AutoMapperGeneric<Contenidos, DetailsViewModel>.ConvertToDBEntity(selected);
                 ViewBag.Error = "Necesita estar logueado para descargar documentos";
                 return View("VerMas",selected);
             }
         }
 
+        #region Metodos de subir
         [HttpGet]
         public ActionResult Subir()
         {
-            //SVM = ChargeDrops(SVM);
-            return View("SubirContenidos",SVM);
+            return View("Subir",SVM);
         }
-
-
         [HttpPost]
-        public ActionResult Subir(SubirViewModel Cont)
+        [ValidateInput(false)]
+        public ActionResult Subir(SubirViewModel Cont, string Contenido)
         {
-            if (ModelState.IsValid)
+            try
             {
-                if (Cont.Files != null)
+                if (ModelState.IsValid)
                 {
-                    Contenidos ContMapeado = AutoMapperGeneric<SubirViewModel, Contenidos>.ConvertToDBEntity(Cont);                    
-
-                    if (Cont.NuevaEsc != null)
+                    if (Cont.Files != null)
                     {
-                        ContMapeado.Escuelas.Nombre = Cont.NuevaEsc;
-                        ContMapeado.Escuelas.NivEduEscuela.Id = Cont.NivNuevaEsc;   
+                        Contenidos ContMapeado = AutoMapperGeneric<SubirViewModel, Contenidos>.ConvertToDBEntity(Cont);
+                        PrepareContenidoForUpload(Cont, ContMapeado);
+                        contenidoService.CreateContenido(ContMapeado);
+                        contenidoService.SaveContenido();
+
+                        UploadFilesDB(Cont.Files);
+                        return RedirectToAction("Index", "Home");
                     }
-
-                    ContMapeado.UsuariosId = User.Identity.GetUserId();
-                    ContMapeado.FechaSubida = DateTime.Now;
-                    ContMapeado.IDes = 0;
-                    ContMapeado.IPop = 0;
-                    ContMapeado.Badget = contenidoService.BudgetSelect(Cont.Files.ToList()[0].FileName);
-                                            
-                    contenidoService.CreateContenido(ContMapeado);
-                    contenidoService.SaveContenido();
-
-                    foreach (var file in Cont.Files)
-                    {
-                        string fileName = (DateTime.Now.ToString("yyyyMMddHHmmss") + "-" + file.FileName).ToLower();
-                        fileName = fileName.Replace(" ", "_");
-
-                        Archivos MiArchivo = new Archivos
-                        {
-                            IdContenido = contenidoService.LastId(),
-                            Ruta = fileName
-                        };
-                        archivoService.Crear(MiArchivo);
-                        file.SaveAs(Server.MapPath("~/Content/Uploads/" + fileName));
-                    }
-                    archivoService.SaveArchivo();
-                    return RedirectToAction("Index", "Home");
                 }
-                return View("SubirContenidos",Cont);
+                Cont.SetServices(escuelaService, tipoService, nivelService, materiaService);
+                return View("Subir", Cont);
             }
-            else
+            catch (Exception e)
             {
-                return View("SubirContenidos",Cont);
+                return View("ErrorPage");
             }
         }
+        private Contenidos PrepareContenidoForUpload(SubirViewModel Cont, Contenidos ContMapeado)
+        {
+            NuevaEscuela(Cont, ContMapeado);
+            ContMapeado.UsuariosId = User.Identity.GetUserId();
+            ContMapeado.FechaSubida = DateTime.Now;
+            ContMapeado.IDes = 0;
+            ContMapeado.IPop = 0;
+            ContMapeado.Badget = contenidoService.SelectBadget(Cont.Files.ToList()[0].FileName);
+            return ContMapeado;
+        }
+        private Contenidos NuevaEscuela(SubirViewModel Cont, Contenidos ContMapeado)
+        {
+            if (Cont.NuevaEsc != null)
+            {
+                ContMapeado.Escuelas = new Escuelas()
+                {
+                    NivEduEscuela_Id = Cont.NivNuevaEsc,
+                    Nombre = Cont.NuevaEsc
+                };
+            }
+            return ContMapeado;
+        }
+        private void UploadFilesDB(IEnumerable<HttpPostedFileBase> Files)
+        {
+            try
+            {
+                foreach (var file in Files)
+                {
+                    string fileName = (DateTime.Now.ToString("yyyyMMddHHmmss") + "-" + file.FileName).ToLower();
+                    fileName = fileName.Replace(" ", "_");
+
+                    Archivos MiArchivo = new Archivos(contenidoService.LastId(), fileName);
+                    archivoService.AddArchivo(MiArchivo);
+                    file.SaveAs(Server.MapPath("~/Content/Uploads/" + fileName));
+                }
+                archivoService.SaveArchivo();
+            }catch(Exception e)
+            {
+                throw e;
+            }
+        }
+        #endregion
 
         [HttpGet]
         public ActionResult VerMas(int cont)
         {
-            Contenidos SelectedCont = contenidoService.GetContById(cont);
-            contenidoService.UpdatePop(cont);
-            if (Request.IsAuthenticated)
-            {
-               visitaService.UpdateRecomendation(SelectedCont,usuarioService.GetById(User.Identity.GetUserId()));
-            }
-            var MappedCont = AutoMapperGeneric<Contenidos,DetailsViewModel>.ConvertToDBEntity(SelectedCont);
-            MappedCont.Recomendaciones = contenidoService.ObtenerRecByCont(SelectedCont);
-            MappedCont.Rutas = archivoService.ObtenerURLArchivos(SelectedCont.Id);
+            Contenidos SelectedCont = contenidoService.GetContenidoById(cont);
+            contenidoService.UpdateContenidoPopularidad(cont);
+            UpdateVisitasIfAuthenticated(SelectedCont.Id);
+            var MappedCont = AutoMapperGeneric<Contenidos, DetailsViewModel>.ConvertToDBEntity(SelectedCont);
+            MappedCont.Recomendaciones = contenidoService.GetRecomendacionesByContenido(SelectedCont);
+            var ListaArchivos = archivoService.GetArchivosByContenidoId(cont);
+            MappedCont.Rutas = archivoService.GetURLToShowDocument(ListaArchivos);
             MappedCont.FormComentario = new FormComentario(comentarioService.GetByContenidos(SelectedCont.Id), cont);
             ViewBag.Title = SelectedCont.Nombre;
             return View(MappedCont);
         }
+        private void UpdateVisitasIfAuthenticated(int IdContenido)
+        {
+            if (Request.IsAuthenticated)
+            {
+                string CurrentUserId = User.Identity.GetUserId();
+                visitaService.UpdateVisitasByUser(IdContenido, CurrentUserId);
+            }
+        }
+
         public ActionResult AgregarComentario(FormComentario model)
         {
             var MappedComent = AutoMapperGeneric<FormComentario, Comentarios>.ConvertToDBEntity(model);
             MappedComent.UsuarioId = User.Identity.GetUserId();
-            comentarioService.AgregarComentario(MappedComent);
+            comentarioService.AddComentario(MappedComent);
             comentarioService.SaveComentario();
             return RedirectToAction("VerMas",new { cont =  model.ContenidoId });
         }
         [HttpGet]
         public ActionResult Buscar(string Buscador)
         {
-            Session["Page"] = 0;
-            _ViewModel.ListaAMostrar = contenidoService.Search(Buscador);
-            GuardarIds(_ViewModel.ListaAMostrar);
-            ViewBag.Title = "Resultados: '" + Buscador.Replace(" ", "' '") + "'";
-            return View("MuestraCont",_ViewModel);
+            try
+            {
+                Session["Page"] = 0;
+                _ViewModel.ListaAMostrar = contenidoService.GetContenidosByKeywords(Buscador);
+                GuardarContenidosEnSession(_ViewModel.ListaAMostrar);
+                ViewBag.Title = "Resultados: '" + Buscador.Replace(" ", "' '") + "'";
+                return View("MuestraCont", _ViewModel);
+            }
+            catch (Exception e)
+            {
+                return View("ErrorPage");
+            }
         }
 
         [HttpPost]
         public PartialViewResult Buscar(MuestraViewModel FilterParameters)
         {
             Session["Page"] = 0;
-            var Lista = ObtenerIds();
+            var Lista = ObtenerContenidosDesdeSession();
             var Contenido = AutoMapperGeneric<MuestraViewModel, Contenidos>.ConvertToDBEntity(FilterParameters);
-            FilterParameters.ListaAMostrar = contenidoService._Filter(Contenido, Lista);
+            FilterParameters.ListaAMostrar = contenidoService.FiltrarContenidos(Contenido, Lista);
             ViewBag.Title = FilterParameters.Title;
             return PartialView("_ContViewer",FilterParameters);
         }
@@ -209,8 +235,8 @@ namespace Teko.Controllers
         public ActionResult Tag(string Tag)
         {
             Session["Page"] = 0;
-            _ViewModel.ListaAMostrar = contenidoService.GetContByTag(Tag);
-            GuardarIds(_ViewModel.ListaAMostrar);
+            _ViewModel.ListaAMostrar = contenidoService.GetContenidosByTag(Tag);
+            GuardarContenidosEnSession(_ViewModel.ListaAMostrar);
             ViewBag.Title = "Resultados: '" + Tag + "'";
             return View("MuestraCont", _ViewModel);
         }
@@ -222,36 +248,41 @@ namespace Teko.Controllers
                 Pagina = 0;
             }
             Session["Page"] = Pagina;
-            _ViewModel.ListaAMostrar = ObtenerIds();
+            _ViewModel.ListaAMostrar = ObtenerContenidosDesdeSession();
              return View("MuestraCont",_ViewModel);
         }
 
-        public PartialViewResult Valoration(int Id, int star,int? Val)
+        public PartialViewResult Valoration(int ContenidoId, int star,int? Val)
         {
-            DetailsViewModel MappedCont;
-                if(Val == null) Val = 0;
-                var Cont = contenidoService.GetContById(Id);
-                Valoraciones MiVal = new Valoraciones()
-                {
+            if (Val == null) Val = 0;
+            var Cont = contenidoService.GetContenidoById(ContenidoId);
+            string UserId = User.Identity.GetUserId();
+            Valoraciones NuevaValoracion = new Valoraciones(UserId, ContenidoId, star);
+            DeletePreviousValoraciones(ContenidoId, UserId);
+            valoracionService.AddValoracion(NuevaValoracion);
+            valoracionService.SaveValoracion();
 
-                    User_Id = User.Identity.GetUserId(),
-                    Contenido = Cont,             
-                    Valoracion = star                   
-                };
-                valoracionService.Agregar(MiVal);
-                valoracionService.SaveVal();
+            Cont.ValoracionPromedio = valoracionService.GetPromedioValoracionesByContenidos(ContenidoId);
+            Cont.ValoracionPromedio = Math.Round(Cont.ValoracionPromedio, 1);
+            valoracionService.SaveValoracion();
+            DetailsViewModel MappedCont = AutoMapperGeneric<Contenidos, DetailsViewModel>.ConvertToDBEntity(Cont);
+            return PartialView("_Valoration", MappedCont);
+        }
 
-            Cont.ValoracionPromedio = valoracionService.GetPromVal(Id);
-                Cont.ValoracionPromedio = Math.Round(Cont.ValoracionPromedio, 1);
-                valoracionService.SaveVal();
-                MappedCont = AutoMapperGeneric<Contenidos, DetailsViewModel>.ConvertToDBEntity(Cont);
-            return PartialView("_Valoration",MappedCont);
+        private void DeletePreviousValoraciones(int Id, string UserId)
+        {
+            Valoraciones ValoracionVieja = valoracionService.GetValoracionByUserAndContenido(Id, UserId);
+            if (ValoracionVieja != null)
+            {
+                valoracionService.DeleteValoracion(ValoracionVieja);
+
+            }
         }
 
         public PartialViewResult Ordenar(int Ordenar)
         {
             Session["Page"] = 0;
-            var List = ObtenerIds();
+            var List = ObtenerContenidosDesdeSession();
             switch (Ordenar)
             {
                 case 1:
@@ -270,53 +301,77 @@ namespace Teko.Controllers
                     _ViewModel.ListaAMostrar = List;
                     break;
             }
-            GuardarIds(_ViewModel.ListaAMostrar);
+            GuardarContenidosEnSession(_ViewModel.ListaAMostrar);
             return PartialView("_ContViewer", _ViewModel);
         }
         #region Functions
+        private MemoryStream GetZipDescarga(List<Archivos> Files)
+        {
+            var outputStream = new MemoryStream();
+
+            using (var zip = new ZipFile())
+            {
+                foreach (var item in Files)
+                {
+                    zip.AddEntry(item.Ruta, "content");
+                }
+                zip.Save(outputStream);
+            }
+
+            outputStream.Position = 0;
+            return outputStream;
+        }
+        private FilePathResult GetArchivoUnicoDescarga(List<Archivos> Files)
+        {
+            string contentType = System.Net.Mime.MediaTypeNames.Application.Pdf;
+             return new FilePathResult("~/Content/Uploads/" + Files[0].Ruta, contentType)
+             {
+                 FileDownloadName = Files[0].Ruta,
+             };
+        }
         protected MuestraViewModel SwitchTitle(string Title, MuestraViewModel Parameters)
         {
             
             switch (Title)
             {
                 case "Mas recientes":
-                    _ViewModel.ListaAMostrar = contenidoService.GetByRec();
+                    _ViewModel.ListaAMostrar = contenidoService.GetContenidosOrderRecent();
                     ViewBag.Title = Title;
                     return _ViewModel;
                 case "Mas populares":
-                    _ViewModel.ListaAMostrar = contenidoService.GetByPop();
+                    _ViewModel.ListaAMostrar = contenidoService.GetContenidosOrderPopular();
                     ViewBag.Title = Title;
                     return _ViewModel;
                 case "Mas descargados":
-                    _ViewModel.ListaAMostrar = contenidoService.GetByDes();
+                    _ViewModel.ListaAMostrar = contenidoService.GetContenidosOrderDescargas();
                     ViewBag.Title = Title;
                     return _ViewModel;
                 case "Mas valorados":
-                    _ViewModel.ListaAMostrar = contenidoService.GetByVal();
+                    _ViewModel.ListaAMostrar = contenidoService.GetContenidosOrderValoracion();
                     ViewBag.Title = Title;
                     return _ViewModel;
                 case "Escuela":
-                    int id = usuarioService.GetById(User.Identity.GetUserId()).InstitucionActual.Id;
-                    _ViewModel.ListaAMostrar = contenidoService.GetByEsc(id);
+                    int id = usuarioService.GetUserById(User.Identity.GetUserId()).InstitucionActual.Id;
+                    _ViewModel.ListaAMostrar = contenidoService.GetContenidosByEscuela(id);
                     ViewBag.Title = Title;
                     return _ViewModel;
                 case "Mis subidas":
-                    _ViewModel.ListaAMostrar = usuarioService.GetById(User.Identity.GetUserId()).Contenidos.ToArray();
+                    _ViewModel.ListaAMostrar = usuarioService.GetUserById(User.Identity.GetUserId()).Contenidos.ToArray();
                     ViewBag.Title = Title;
                     return _ViewModel;
                 default:
-                    Parameters.ListaAMostrar = contenidoService.Search((string)Session["KeyWords"]);
+                    Parameters.ListaAMostrar = contenidoService.GetContenidosByKeywords((string)Session["KeyWords"]);
                     var Filtro = AutoMapperGeneric<MuestraViewModel, Contenidos>.ConvertToDBEntity((MuestraViewModel)Session["Filters"]);
-                    Parameters.ListaAMostrar = contenidoService._Filter(Filtro, Parameters.ListaAMostrar);
+                    Parameters.ListaAMostrar = contenidoService.FiltrarContenidos(Filtro, Parameters.ListaAMostrar);
                     ViewBag.Title = Title;
                     return Parameters;
             }
         }
-        protected void GuardarIds(Contenidos[] Ids)
+        protected void GuardarContenidosEnSession(Contenidos[] Ids)
         {
             Session["ListIds"] = Ids;
         }
-        protected Contenidos[] ObtenerIds()
+        protected Contenidos[] ObtenerContenidosDesdeSession()
         {
             Contenidos[] ListaLlena = (Contenidos[])Session["ListIds"];
             return ListaLlena;

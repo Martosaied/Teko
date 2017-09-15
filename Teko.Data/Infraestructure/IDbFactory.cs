@@ -8,6 +8,6 @@ namespace Teko.Data.Infrastructure
 {
     public interface IDbFactory : IDisposable
     {
-        DbEntities Init();
+        DbEntities CrearContexto();
     }
 }

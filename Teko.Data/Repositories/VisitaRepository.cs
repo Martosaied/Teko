@@ -13,16 +13,16 @@ namespace Teko.Data.Repositories
         public VisitaRepository(IDbFactory dbFactory)
             : base(dbFactory) { }
 
-        public List<Visitas> ObtenerIntereses(string Id)
+        public List<Visitas> GetVisitasByUserId(string Id)
         {
             var Dia20Atras = DateTime.UtcNow.AddDays(-20);
             var UltimasVisitas = DbContext.Visitas.Where(x => x.User.Id == Id && x.LastUpdate > Dia20Atras).OrderByDescending(x => x.Contador).Take(5).ToList();
 
             return UltimasVisitas;
         }
-        public void UpdateRecomendation(Contenidos cont, Usuarios User)
+        public void UpdateVisitasByUser(int ContenidoId, string UserId)
         {
-            var result = DbContext.Visitas.Where(x => x.User.Id == User.Id && x.Contenido.Id == cont.Id).FirstOrDefault();
+            var result = DbContext.Visitas.Where(x => x.User.Id == UserId && x.Contenido.Id == ContenidoId).FirstOrDefault();
 
             if (result != null)
             {
@@ -41,8 +41,8 @@ namespace Teko.Data.Repositories
             else
             {
                 Visitas obj = new Visitas();
-                var IUser = DbContext.Users.Find(User.Id);
-                var ICont = DbContext.Contenidos.Find(cont.Id);
+                var IUser = DbContext.Users.Find(UserId);
+                var ICont = DbContext.Contenidos.Find(ContenidoId);
                 obj.setCont(ICont);
                 obj.setUser(IUser);
                 obj.Contador = 1;
@@ -54,7 +54,7 @@ namespace Teko.Data.Repositories
     }
     public interface IVisitaRepository : IRepository<Visitas>
     {
-        void UpdateRecomendation(Contenidos cont, Usuarios User);
-        List<Visitas> ObtenerIntereses(string Id);
+        void UpdateVisitasByUser(int ContenidoId, string UserId);
+        List<Visitas> GetVisitasByUserId(string Id);
     }
 }

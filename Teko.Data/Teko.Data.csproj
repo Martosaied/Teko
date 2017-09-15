@@ -66,10 +66,6 @@
     <Compile Include="Migrations\201709060247102_Refactor.Designer.cs">
       <DependentUpon>201709060247102_Refactor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201709071143447_SeedOnly.cs" />
-    <Compile Include="Migrations\201709071143447_SeedOnly.Designer.cs">
-      <DependentUpon>201709071143447_SeedOnly.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201709071230294_Badget.cs" />
     <Compile Include="Migrations\201709071230294_Badget.Designer.cs">
       <DependentUpon>201709071230294_Badget.cs</DependentUpon>
@@ -77,6 +73,26 @@
     <Compile Include="Migrations\201709081114462_ComentariosEmpezando.cs" />
     <Compile Include="Migrations\201709081114462_ComentariosEmpezando.Designer.cs">
       <DependentUpon>201709081114462_ComentariosEmpezando.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709102201465_IsNotificable.cs" />
+    <Compile Include="Migrations\201709102201465_IsNotificable.Designer.cs">
+      <DependentUpon>201709102201465_IsNotificable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709131958420_FKEscuela.cs" />
+    <Compile Include="Migrations\201709131958420_FKEscuela.Designer.cs">
+      <DependentUpon>201709131958420_FKEscuela.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709151110538_Add-Migration FKArchivops.cs" />
+    <Compile Include="Migrations\201709151110538_Add-Migration FKArchivops.Designer.cs">
+      <DependentUpon>201709151110538_Add-Migration FKArchivops.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709151158323_FKArchivos2.cs" />
+    <Compile Include="Migrations\201709151158323_FKArchivos2.Designer.cs">
+      <DependentUpon>201709151158323_FKArchivos2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709151204201_SeedOnly.cs" />
+    <Compile Include="Migrations\201709151204201_SeedOnly.Designer.cs">
+      <DependentUpon>201709151204201_SeedOnly.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -98,21 +114,33 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="Repositories\App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201709060247102_Refactor.resx">
       <DependentUpon>201709060247102_Refactor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709071143447_SeedOnly.resx">
-      <DependentUpon>201709071143447_SeedOnly.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709071230294_Badget.resx">
       <DependentUpon>201709071230294_Badget.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709081114462_ComentariosEmpezando.resx">
       <DependentUpon>201709081114462_ComentariosEmpezando.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709102201465_IsNotificable.resx">
+      <DependentUpon>201709102201465_IsNotificable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709131958420_FKEscuela.resx">
+      <DependentUpon>201709131958420_FKEscuela.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709151110538_Add-Migration FKArchivops.resx">
+      <DependentUpon>201709151110538_Add-Migration FKArchivops.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709151158323_FKArchivos2.resx">
+      <DependentUpon>201709151158323_FKArchivos2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709151204201_SeedOnly.resx">
+      <DependentUpon>201709151204201_SeedOnly.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

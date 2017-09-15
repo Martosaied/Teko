@@ -10,7 +10,7 @@ namespace Teko.Data.Infrastructure
     {
         DbEntities dbContext;
 
-        public DbEntities Init()
+        public DbEntities CrearContexto()
         {
             return dbContext ?? (dbContext = new DbEntities());
         }

@@ -22,7 +22,7 @@ namespace Teko.Data.Infrastructure
 
         protected DbEntities DbContext
         {
-            get { return dataContext ?? (dataContext = DbFactory.Init()); }
+            get { return dataContext ?? (dataContext = DbFactory.CrearContexto()); }
         }
         #endregion
 

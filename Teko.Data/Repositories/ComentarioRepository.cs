@@ -13,13 +13,19 @@ namespace Teko.Data.Repositories
         public ComentarioRepository(IDbFactory dbFactory)
             : base(dbFactory) { }
 
-        public List<Comentarios> GetByContenido(int Id)
+        public List<Comentarios> GetComentariosByContenido(int Id)
         {
             return DbContext.Comentarios.Where(x => x.ContenidoId == Id).Where(x => x.ParentId == null).ToList();
+        }
+
+        public List<Comentarios> GetNotificableComentariosByUser(string UserId)
+        {
+            return DbContext.Comentarios.Where(x => x.Contenido.UsuariosId == UserId && x.IsNotificable == true).OrderByDescending(x => x.Id).ToList();
         }
     }
     public interface IComentarioRepository : IRepository<Comentarios>
     {
-        List<Comentarios> GetByContenido(int Id);
+        List<Comentarios> GetComentariosByContenido(int Id);
+        List<Comentarios> GetNotificableComentariosByUser(string UserId);
     }
 }

@@ -13,13 +13,13 @@ namespace Teko.Data.Repositories
         public ArchivosRepository(IDbFactory dbFactory)
             : base(dbFactory) { }
 
-        public List<Archivos> GetByContenido(int id)
+        public List<Archivos> GetArchivosByContenido(int id)
         {
-            return DbContext.Archivos.Where(x => x.IdContenido.Id == id).ToList();
+            return DbContext.Archivos.Where(x => x.IdContenido == id).ToList();
         }
     }
     public interface IArchivosRepository : IRepository<Archivos>
     {
-        List<Archivos> GetByContenido(int id);
+        List<Archivos> GetArchivosByContenido(int id);
     }
 }

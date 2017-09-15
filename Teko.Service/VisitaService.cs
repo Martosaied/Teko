@@ -11,8 +11,8 @@ namespace Teko.Service
 {
     public interface IVisitaService
     {
-        List<Visitas> ObtenerIntereses(string id);
-        void UpdateRecomendation(Contenidos cont, Usuarios User);
+        List<Visitas> GetVisitasByUser (string id);
+        void UpdateVisitasByUser(int ContenidoId, string UserId);
     }
     public class VisitaService : IVisitaService
     {
@@ -25,14 +25,14 @@ namespace Teko.Service
             this.unitOfWork = unitOfWork;
         }
 
-        public List<Visitas> ObtenerIntereses(string id)
+        public List<Visitas> GetVisitasByUser(string id)
         {
-            return visitaRepo.ObtenerIntereses(id);
+            return visitaRepo.GetVisitasByUserId(id);
         }
 
-        public void UpdateRecomendation(Contenidos cont, Usuarios User)
+        public void UpdateVisitasByUser(int ContenidoId, string UserId)
         {
-            visitaRepo.UpdateRecomendation(cont, User);
+            visitaRepo.UpdateVisitasByUser(ContenidoId, UserId);
         }
     }
 }

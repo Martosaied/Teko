@@ -19,37 +19,37 @@ namespace Teko.Data.Repositories
             var result = DbContext.Contenidos.ToArray();
             return result;
         }
-        public Contenidos[] GetContByDes()
+        public Contenidos[] GetContenidosOrderDescargas()
         {
             return DbContext.Contenidos.OrderByDescending(x => x.IDes).ToArray();
         }
 
-        public Contenidos[] GetContByEsc(int id)
+        public Contenidos[] GetContenidosByEscuela(int id)
         {
             return DbContext.Contenidos.Where(x => x.Escuelas.Id == id).ToArray();
         }
 
-        public Contenidos[] GetContByPop()
+        public Contenidos[] GetContenidosOrderPopular()
         {
             return DbContext.Contenidos.OrderByDescending(x => x.IPop).ToArray();
         }
 
-        public Contenidos[] GetContByRecent()
+        public Contenidos[] GetContenidosOrderRecent()
         {
             return DbContext.Contenidos.OrderByDescending(x => x.Id).ToArray();
         }
 
-        public Contenidos[] GetContByUser(string id)
+        public Contenidos[] GetContenidoByUserId(string id)
         {
             return DbContext.Contenidos.Where(x => x.Usuarios.Id == id).ToArray();
         }
 
-        public Contenidos[] GetContByVal()
+        public Contenidos[] GetContenidosOrderValoracion()
         {
             return DbContext.Contenidos.OrderByDescending(x => x.ValoracionPromedio).ToArray();
         }
 
-        public Contenidos[] ObtenerRecByCont(Contenidos cont)
+        public Contenidos[] GetRecomendacionesByContenido(Contenidos cont)
         {
             var result = DbContext.Contenidos.Where(x => x.Materias.Id == cont.MateriasId
                                          || x.Escuelas.Id == cont.EscuelasId
@@ -72,7 +72,7 @@ namespace Teko.Data.Repositories
 
             return Recomendaciones;
         }
-        public Dictionary<string, Contenidos[]> ObtenerRecGen(List<Visitas> Visitas)
+        public Dictionary<string, Contenidos[]> GetRecomendacionesByVisitas(List<Visitas> Visitas)
         {
             Dictionary<string, Contenidos[]> Recomendaciones = new Dictionary<string, Contenidos[]>();
             int i = 0;
@@ -103,7 +103,7 @@ namespace Teko.Data.Repositories
 
             return Recomendaciones;
         }      
-        public Contenidos[] _Searcher(string item)
+        public Contenidos[] GetContenidosByKeywords(string item)
         {
             return DbContext.Contenidos.Where(s => s.Nombre.Contains(item) ||
                         s.Descripcion.Contains(item) || s.Profesor.Contains(item) ||
@@ -128,25 +128,25 @@ namespace Teko.Data.Repositories
                     ).ToArray();
         }
 
-        public Contenidos LastId()
+        public int LastId()
         {
-            return DbContext.Contenidos.OrderByDescending(p => p.Id).FirstOrDefault();
+            return DbContext.Contenidos.OrderByDescending(p => p.Id).Select(x => x.Id).FirstOrDefault();
         }
     }
 
     public interface IContenidoRepository : IRepository<Contenidos>
     {
-        Dictionary<string, Contenidos[]> ObtenerRecGen(List<Visitas> Visitas);
-        Contenidos[] ObtenerRecByCont(Contenidos cont);
+        Dictionary<string, Contenidos[]> GetRecomendacionesByVisitas(List<Visitas> Visitas);
+        Contenidos[] GetRecomendacionesByContenido(Contenidos cont);
         Contenidos[] GetContenidosByTag(string Tag);
-        Contenidos[] _Searcher(string Buscador);
-        Contenidos[] GetContByRecent();
-        Contenidos[] GetContByPop();
-        Contenidos[] GetContByDes();
-        Contenidos[] GetContByVal();
-        Contenidos[] GetContByEsc(int IdEsc);
-        Contenidos[] GetContByUser(string Id);
-        Contenidos LastId();
+        Contenidos[] GetContenidosByKeywords(string Buscador);
+        Contenidos[] GetContenidosOrderRecent();
+        Contenidos[] GetContenidosOrderPopular();
+        Contenidos[] GetContenidosOrderDescargas();
+        Contenidos[] GetContenidosOrderValoracion();
+        Contenidos[] GetContenidosByEscuela(int IdEsc);
+        Contenidos[] GetContenidoByUserId(string Id);
+        int LastId();
     }
 }
 

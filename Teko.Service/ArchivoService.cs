@@ -11,9 +11,9 @@ namespace Teko.Service
 {
     public interface IArchivoService
     {
-        List<Archivos> GetByContenido(int id);
-        List<string> ObtenerURLArchivos(int id);
-        void Crear(Archivos Archivo);
+        List<Archivos> GetArchivosByContenidoId(int id);
+        List<string> GetURLToShowDocument(List<Archivos> ListaArchivos);
+        void AddArchivo(Archivos Archivo);
         void SaveArchivo();
     }
     public class ArchivoService : IArchivoService
@@ -27,20 +27,19 @@ namespace Teko.Service
             this.unitOfWork = unitOfWork;
         }
 
-        public void Crear(Archivos Archivo)
+        public void AddArchivo(Archivos Archivo)
         {
             archivoRepo.Add(Archivo);
         }
 
-        public List<Archivos> GetByContenido(int id)
+        public List<Archivos> GetArchivosByContenidoId(int id)
         {
-            return archivoRepo.GetByContenido(id);
+            return archivoRepo.GetArchivosByContenido(id);
         }
-        public List<string> ObtenerURLArchivos(int id)
+        public List<string> GetURLToShowDocument(List<Archivos> ListaArchivos)
         {
-            var Files = archivoRepo.GetByContenido(id);
             List<string> Lista = new List<string>();
-            foreach (var file in Files)
+            foreach (var file in ListaArchivos)
             {
                 string URL = file.Ruta.Substring(file.Ruta.Length - 4, 4);
                 switch (URL)

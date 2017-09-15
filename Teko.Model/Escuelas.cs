@@ -11,6 +11,7 @@ namespace Teko.Model
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public partial class Escuelas : BasePropDeContenido
     {
@@ -19,7 +20,7 @@ namespace Teko.Model
         {
             this.Contenidos = new HashSet<Contenidos>();
         }
-
+        [ForeignKey("NivEduEscuela")] public int NivEduEscuela_Id { get; set; }
         public virtual NivelesEducativos NivEduEscuela { get;set;}
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

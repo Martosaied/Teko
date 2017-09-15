@@ -18,7 +18,7 @@ namespace Teko.Data.Infrastructure
 
         public DbEntities DbContext
         {
-            get { return dbContext ?? (dbContext = dbFactory.Init()); }
+            get { return dbContext ?? (dbContext = dbFactory.CrearContexto()); }
         }
 
         public void Commit()
@@ -28,7 +28,7 @@ namespace Teko.Data.Infrastructure
 
         public DbEntities GetContext()
         {
-            return this.dbContext = dbFactory.Init();
+            return this.dbContext = dbFactory.CrearContexto();
         }
     }
 }

@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
-using Teko.Models;
 using Teko.Models.ViewModels;
 using Teko.Extensions;
-using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Teko.Model;
 using Teko.Service;
+using System.Linq;
 
 namespace Teko.Controllers
 {
@@ -32,11 +26,11 @@ namespace Teko.Controllers
         }
         public ActionResult Index()
         {
-            var MiUser = usuarioService.GetById(User.Identity.GetUserId());
+            var MiUser = usuarioService.GetUserById(User.Identity.GetUserId());
             if (MiUser.PerfilCompleto)
             {
                 PerfilViewModel model = AutoMapperGeneric<Usuarios, PerfilViewModel>.ConvertToDBEntity(MiUser);
-                var lastvs = visitaService.ObtenerIntereses(MiUser.Id);
+                var lastvs = visitaService.GetVisitasByUser(MiUser.Id);
                 return View("HomeUsuario",model);
             }
             else
@@ -49,7 +43,7 @@ namespace Teko.Controllers
         [HttpGet]
         public ActionResult LlenarPerfil()
         {
-            Usuarios model = usuarioService.GetById(User.Identity.GetUserId());
+            Usuarios model = usuarioService.GetUserById(User.Identity.GetUserId());
             InfoUsuarioViewModel MappedModel = AutoMapperGeneric<Usuarios, InfoUsuarioViewModel>.ConvertToDBEntity(model);
             MappedModel.dropEscuela = escuelaService.GetAll();
             return View("LlenarPerfil", MappedModel);
@@ -57,17 +51,17 @@ namespace Teko.Controllers
 
         public PartialViewResult GetRecomendaciones()
         {
-            Usuarios IUser = usuarioService.GetById(User.Identity.GetUserId());
+            Usuarios IUser = usuarioService.GetUserById(User.Identity.GetUserId());
             PerfilViewModel model = AutoMapperGeneric<Usuarios,PerfilViewModel>.ConvertToDBEntity(IUser);
-            var lastvs = visitaService.ObtenerIntereses(IUser.Id);
-            model.DictRecomendaciones = contenidoService.ObtenerRecByUser(lastvs);
+            var lastvs = visitaService.GetVisitasByUser(IUser.Id);
+            model.DictRecomendaciones = contenidoService.GetRecomendacionesByVisitas(lastvs);
             return PartialView("_Recommendation", model);
         }
 
         [HttpPost]
          public ActionResult LlenarPerfil(InfoUsuarioViewModel model, HttpPostedFileBase file)
         {
-            var MiUser = usuarioService.GetById(User.Identity.GetUserId());
+            var MiUser = usuarioService.GetUserById(User.Identity.GetUserId());
             file.SaveAs(Server.MapPath("~/Content/ProfilePH/" + file.FileName));
             MiUser.RutaFoto = file.FileName;
             MiUser.Descripcion = model.Descripcion;
@@ -75,7 +69,7 @@ namespace Teko.Controllers
             MiUser.Nombre = model.Nombre;
             MiUser.Apellido = model.Apellido;
             MiUser.PerfilCompleto = true;
-                usuarioService.Modificar(MiUser);
+                usuarioService.UpdateUser(MiUser);
                 usuarioService.SaveUser();
                 return RedirectToAction("Index");
 

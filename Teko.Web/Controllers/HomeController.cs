@@ -37,10 +37,10 @@ namespace Teko.Controllers
             {
                 
             }
-            ViewBag.ListaArticulos = contenidoService.GetByRec().Take(9).ToArray();
-            ViewBag.ListaArticulosPop = contenidoService.GetByPop().Take(9).ToArray();
-            ViewBag.ListaArticulosDes = contenidoService.GetByDes().Take(9).ToArray();
-            ViewBag.ListaArticulosVal = contenidoService.GetByVal().Take(9).ToArray();
+            ViewBag.ListaArticulos = contenidoService.GetContenidosOrderRecent().Take(9).ToArray();
+            ViewBag.ListaArticulosPop = contenidoService.GetContenidosOrderPopular().Take(9).ToArray();
+            ViewBag.ListaArticulosDes = contenidoService.GetContenidosOrderDescargas().Take(9).ToArray();
+            ViewBag.ListaArticulosVal = contenidoService.GetContenidosOrderValoracion().Take(9).ToArray();
             return View();
 
         }

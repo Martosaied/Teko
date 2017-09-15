@@ -16,16 +16,27 @@ namespace Teko.ViewModels
 
     public class BaseContentViewModel
     {
-        protected readonly IMateriaService materiaService;
-        protected readonly INivelEducativoService nivelService;
-        protected readonly ITipoService tipoService;
-        protected readonly IEscuelaService escuelaService;
+        protected IMateriaService materiaService;
+        protected INivelEducativoService nivelService;
+        protected ITipoService tipoService;
+        protected IEscuelaService escuelaService;
         public BaseContentViewModel(IEscuelaService escuelaService, ITipoService tipoService, INivelEducativoService nivelService, IMateriaService materiaService)
         {
             this.escuelaService = escuelaService;
             this.tipoService = tipoService;
             this.materiaService = materiaService;
             this.nivelService = nivelService;
+        }
+        public void SetServices(IEscuelaService escuelaService, ITipoService tipoService, INivelEducativoService nivelService, IMateriaService materiaService)
+        {
+            this.escuelaService = escuelaService;
+            this.tipoService = tipoService;
+            this.materiaService = materiaService;
+            this.nivelService = nivelService;
+        }
+        public BaseContentViewModel()
+        {
+
         }
         public string Nombre { get; set; }
         public string Profesor { get; set; }
@@ -89,6 +100,10 @@ namespace Teko.ViewModels
         public SubirViewModel(IEscuelaService escuelaService, ITipoService tipoService, INivelEducativoService nivelService, IMateriaService materiaService) : base(escuelaService, tipoService, nivelService, materiaService)
         {
         }
+        public SubirViewModel()
+        {
+
+        }
 
         [Required]
         public new string Nombre { get; set; }
@@ -99,15 +114,18 @@ namespace Teko.ViewModels
         new public string Profesor { get; set; }
         [Required]
         new public string Cursada { get; set; }
-        [Required]
         new public string UsuariosId { get; set; }
         [Required]
+        [Display(Name = "Escuela")]
         new public int EscuelasId { get; set; }
         [Required]
+        [Display(Name = "Materia")]
         new public int MateriasId { get; set; }
         [Required]
+        [Display(Name = "Nivel educativo")]
         new public int NivelesEducativosId { get; set; }
         [Required]
+        [Display(Name = "Tipo de contenido")]
         new public int TiposContenidosId { get; set; }
 
         public IEnumerable<HttpPostedFileBase> Files { get; set; }
@@ -119,14 +137,12 @@ namespace Teko.ViewModels
     {
         public MuestraViewModel(IEscuelaService escuelaService, ITipoService tipoService, INivelEducativoService nivelService, IMateriaService materiaService) : base(escuelaService, tipoService, nivelService, materiaService)
         {
+
         }
 
         public int Pagina { get; set; }
         public string Title { get; set; }
         public Contenidos[] ListaAMostrar { get; set; }
-
-        //Con esto llenamos los drop en un objeto y mostrar las listas desde un objeto creado sin la necesidad de utilizar viewbags
-
     }
     public class DetailsViewModel
     {
@@ -141,11 +157,7 @@ namespace Teko.ViewModels
         public int IDes { get; set; }
         public DateTime FechaSubida { get; set; }
         public string Badget { get; set; }
-        public string ValoracionPromedio
-        {
-            get;set;
-        }
-
+        public string ValoracionPromedio {get;set;}
         public virtual Usuarios Usuarios { get; set; }
         public virtual Escuelas Escuelas { get; set; }
         public virtual Materias Materias { get; set; }

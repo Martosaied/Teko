@@ -13,13 +13,19 @@ namespace Teko.Data.Repositories
         public ValoracionRepository(IDbFactory dbFactory)
             : base(dbFactory) { }
 
-        public List<int> GetByCont(int id)
+        public Valoraciones GetValoracionByUserAndContenido(int id, string userId)
+        {
+            return DbContext.Valoraciones.Where(x => x.User_Id == userId && x.IdContenido == id).FirstOrDefault();
+        }
+
+        public List<int> GetValoracionesByContenido(int id)
         {
             return DbContext.Valoraciones.Where(x => x.Contenido.Id == id).Select(x => x.Valoracion).ToList();
         }
     }
     public interface IValoracionRepository : IRepository<Valoraciones>
     {
-        List<int> GetByCont(int id);
+        List<int> GetValoracionesByContenido(int id);
+        Valoraciones GetValoracionByUserAndContenido(int id, string userId);
     }
 }

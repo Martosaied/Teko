@@ -10,6 +10,8 @@
 namespace Teko.Model
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     public partial class Contenidos
     {
         public int Id { get; set; }
@@ -30,6 +32,8 @@ namespace Teko.Model
         public virtual Escuelas Escuelas { get; set; }
         public virtual Materias Materias { get; set; }
         public virtual TiposContenidos TiposContenidos { get; set; }
+
+        public virtual ICollection<Archivos> Archivos { get; set; }
 
 
     }

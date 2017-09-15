@@ -26,7 +26,7 @@ namespace Teko.Data.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-            /*context.NivelesEducativos.AddOrUpdate(
+            context.NivelesEducativos.AddOrUpdate(
                 p => p.Nombre,
                 new Model.NivelesEducativos { Nombre ="Terciario"},
                 new Model.NivelesEducativos { Nombre = "Secundario" },
@@ -49,13 +49,11 @@ namespace Teko.Data.Migrations
                 new Model.Materias { Nombre = "Geografia" },
                 new Model.Materias { Nombre = "Ciencias Sociales" }
                 );
-            context.Escuelas.AddOrUpdate(
-                p => p.Nombre,
-                new Model.Escuelas { Nombre = "Matematica" },
-                new Model.Escuelas { Nombre = "Lengua" },
-                new Model.Escuelas { Nombre = "Geografia" },
-                new Model.Escuelas { Nombre = "Ciencias Sociales" }
-                );*/
+            context.Escuelas.Add(new Model.Escuelas()
+            {
+                Nombre = "ORT",
+                NivEduEscuela_Id = 1
+            });
         }
     }
 }
