@@ -1,0 +1,29 @@
+﻿@using Teko.Models.ViewModels;
+@model PerfilViewModel
+<div id="Recomendation">
+    @{
+        if (Model.DictRecomendaciones != null)
+        {
+            foreach (var item in Model.DictRecomendaciones)
+            {
+                if (item.Value.Length > 0)
+                {
+                    <div style="margin-bottom: 250px;">
+                        <h4>Porque visitaste @item.Key</h4>
+                        <hr />
+                        @for (int i = 0; i <= 2; i++)
+                        {
+                        if (i < Model.DictRecomendaciones[item.Key].Length)
+                        {
+                            @Html.Partial("_ContentCard", Model.DictRecomendaciones[item.Key])
+                        }
+                        }
+                    </div>
+                                                        }
+                                                    }
+                                                }
+    }
+    
+
+
+</div>

@@ -1,0 +1,53 @@
+﻿@model Teko.ViewModels.MuestraViewModel
+@using (Ajax.BeginForm("Filtrar", "Contenidos", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "container"
+}, new { @class = "form-inline" }))
+{
+    <div class="form-group">
+        <h6 class="titfont">Nivel educativo:</h6>
+        <div>
+            @Html.DropDownListFor(model => model.NivelesEducativosId, new SelectList(Model.dropNivelEducativo, "Id", "Nombre"),  new { @class = "btn btn-inverse dropdown-toggle", @onchange = "PopEsc(this.value);" })
+        </div>
+    </div>
+
+            <div class="form-group">
+                <h6 class="titfont">Escuela:</h6>
+                <div>
+
+                    @Html.DropDownListFor(model => model.EscuelasId, Enumerable.Empty<SelectListItem>(), new { @class = "btn btn-inverse dropdown-toggle", id = "ddlesc", name = "ddlesc" })
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <h6 class="titfont">Materia:</h6>
+                <div>
+
+                    @Html.DropDownListFor(model => model.MateriasId, new SelectList(Model.dropMateria, "Id", "Nombre"),  new { @class = "btn btn-inverse dropdown-toggle" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <h6 class="titfont">Tipo contenido:</h6>
+                <div>
+                    @Html.DropDownListFor(model => model.TiposContenidosId, new SelectList(Model.dropTipoContenido, "Id", "Nombre"),  new { @class = "btn btn-inverse dropdown-toggle" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <h6 class="titfont">Profesor:</h6>
+                <div>
+                    @Html.TextBoxFor(model => model.Profesor, new { @class = "btn btn-inverse dropdown-toggle" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-1">
+                    <input type="submit" value="Filtrar!" class="btn btn-primary" />
+                </div>
+            </div>
+}
+
+

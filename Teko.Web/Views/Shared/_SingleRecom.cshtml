@@ -1,0 +1,16 @@
+﻿@model Teko.ViewModels.DetailsViewModel
+@{
+        if (Model.Recomendaciones.Length > 0)
+        {
+            <h4>Parecidos a este articulo</h4>
+            <hr />
+            for (int i = 0; i <= 2; i++)
+            {
+                if (i < Model.Recomendaciones.Length)
+                {
+                    @Html.Partial("_ContentCard", Model.Recomendaciones[i])
+                }
+            }
+        }
+    }
+
