@@ -87,8 +87,8 @@
                 if (Request.IsAuthenticated)
                 {
                     
-                    int Id = Model.Id;
-                    @Html.ActionLink("Descargar!", "Descargar", "Contenidos", new { ContenidoId = Id}, new { @class = "btn btn-embossed btn-primary row" })
+                    int ContenidoId = Model.Id;
+                    @Html.ActionLink("Descargar!", "Descargar", "Contenidos", new { ContenidoId = ContenidoId}, new { @class = "btn btn-embossed btn-primary row" })
                     using (Ajax.BeginForm("Valoration", "Contenidos", new AjaxOptions
                     {
                         InsertionMode = InsertionMode.Replace,

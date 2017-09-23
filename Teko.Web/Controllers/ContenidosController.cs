@@ -179,7 +179,8 @@ namespace Teko.Controllers
             var MappedCont = AutoMapperGeneric<Contenidos, DetailsViewModel>.ConvertToDBEntity(SelectedCont);
             MappedCont.Recomendaciones = contenidoService.GetRecomendacionesByContenido(SelectedCont);
             var ListaArchivos = archivoService.GetArchivosByContenidoId(cont);
-            MappedCont.ValoracionUsuarioActual = GetValoracionContenidoByUser(cont);
+            if(Request.IsAuthenticated)
+                MappedCont.ValoracionUsuarioActual = GetValoracionContenidoByUser(cont);
             MappedCont.Rutas = archivoService.GetURLToShowDocument(ListaArchivos);
             MappedCont.FormComentario = new FormComentario(comentarioService.GetByContenidos(SelectedCont.Id), cont);
             ViewBag.Title = SelectedCont.Nombre;
@@ -189,7 +190,7 @@ namespace Teko.Controllers
         {
             string UserId = User.Identity.GetUserId();
             Valoraciones ValoracionContenidoUsuario = valoracionService.GetValoracionByUserAndContenido(ContenidoId, UserId);
-            return ValoracionContenidoUsuario.Valoracion;
+            return (ValoracionContenidoUsuario == null) ? 0 : ValoracionContenidoUsuario.Valoracion;
         }
         private void UpdateVisitasIfAuthenticated(int IdContenido)
         {
@@ -252,9 +253,8 @@ namespace Teko.Controllers
             _ViewModel.ListaAMostrar = ObtenerContenidosDesdeSession();
              return View("MuestraCont",_ViewModel);
         }
-        public PartialViewResult Valoration(int ContenidoId, int Val,DetailsViewModel star)
+        public PartialViewResult Valoration(int ContenidoId,DetailsViewModel star)
         {
-            if (Val == null) Val = 0;
             var Cont = contenidoService.GetContenidoById(ContenidoId);
             string UserId = User.Identity.GetUserId();
             Valoraciones NuevaValoracion = new Valoraciones(UserId, ContenidoId, star.ValoracionUsuarioActual);
