@@ -15,8 +15,7 @@
             <div class="form-group">
                 <h6 class="titfont">Escuela:</h6>
                 <div>
-
-                    @Html.DropDownListFor(model => model.EscuelasId, Enumerable.Empty<SelectListItem>(), new { @class = "btn btn-inverse dropdown-toggle", id = "ddlesc", name = "ddlesc" })
+                    @Html.DropDownListFor(model => model.EscuelasId, new SelectList(Model.getEscuelas(), "Id","Nombre"), new { @class = "btn btn-inverse dropdown-toggle", id = "ddlesc", name = "ddlesc" })
                 </div>
             </div>
 

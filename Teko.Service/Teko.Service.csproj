@@ -46,6 +46,7 @@
     <Compile Include="ComentarioService.cs" />
     <Compile Include="ContenidoService.cs" />
     <Compile Include="EscuelaService.cs" />
+    <Compile Include="mailService.cs" />
     <Compile Include="MateriaService.cs" />
     <Compile Include="NivelEducativoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

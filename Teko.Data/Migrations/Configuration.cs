@@ -49,11 +49,6 @@ namespace Teko.Data.Migrations
                 new Model.Materias { Nombre = "Geografia" },
                 new Model.Materias { Nombre = "Ciencias Sociales" }
                 );
-            context.Escuelas.Add(new Model.Escuelas()
-            {
-                Nombre = "ORT",
-                NivEduEscuela_Id = 1
-            });
         }
     }
 }

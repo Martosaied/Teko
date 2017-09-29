@@ -48,20 +48,23 @@ namespace Teko.ViewModels
         public int TiposContenidosId { get; set; }
         public int NivelesEducativosId { get; set; }
         public string Badget { get; set; }
-        public List<Escuelas> dropEscuela
-        {
+        public List<Escuelas> dropEscuela {
             get
             {
-                var Lista = escuelaService.GetAll().ToList();
-                Lista.Add(new Escuelas { Id = -1, Nombre = "----------" });
-                Lista.Add(new Escuelas { Id = 0, Nombre = "Otra escuela" });
-                Lista = Lista.OrderBy(x => x.Id).ToList();
-                return Lista;
+                return (dropEscuela == null) ? new List<Escuelas>() : dropEscuela;
             }
             set
             {
-                
+                dropEscuela = value;
             }
+        }
+        public List<Escuelas> getEscuelas()
+        {
+            var Lista = escuelaService.GetAll().ToList();
+            Lista.Add(new Escuelas { Id = -1, Nombre = "----------" });
+            Lista.Add(new Escuelas { Id = 0, Nombre = "Otra escuela" });
+            Lista = Lista.OrderBy(x => x.Id).ToList();
+            return Lista;
         }
         public List<Materias> dropMateria
         {
@@ -160,6 +163,28 @@ namespace Teko.ViewModels
         public int Pagina { get; set; }
         public string Title { get; set; }
         public Contenidos[] ListaAMostrar { get; set; }
+        public new List<Escuelas> dropEscuela{ get; set; }
+
+        public void Preseleccionar(string title, int idFiltro)
+        {
+            switch (title)
+            {
+                case "Escuelas":
+                    var Escuela = escuelaService.GetEscuelaById(idFiltro);
+                    dropEscuela = escuelaService.GetEscuelasByNivel(Escuela.NivEduEscuela_Id);
+                    EscuelasId = idFiltro;
+                    NivelesEducativosId = Escuela.NivEduEscuela_Id;
+                    break;
+                case "Materias":
+                    MateriasId = idFiltro;
+                    break;
+            }
+        }
+
+        public new List<Escuelas> getEscuelas()
+        {
+            return (dropEscuela == null) ? new List<Escuelas>() : dropEscuela;
+        }
     }
     public class DetailsViewModel
     {
