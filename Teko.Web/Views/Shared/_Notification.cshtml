@@ -1,0 +1,49 @@
+﻿@model Teko.Web.ViewModels.NotificationViewModel
+<li id="Notificaciones" class="dropdown">
+    <a class="dropdown-toggle active" data-toggle="dropdown" onclick="OpenCloseNotification();" aria-expanded="false">
+        <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-messages in">
+
+        @{if (Model.ListaComentariosDeNotificaciones.Count > 0)
+            {
+                foreach (var Notificacion in Model.ListaComentariosDeNotificaciones)
+                {
+                <li>
+                    <a href="@Url.Action("VerMas", "Contenidos", new { cont = Notificacion.ContenidoId })" class="active">
+                        <div>
+                            <strong>@Notificacion.Contenido.Nombre</strong>
+                            <span class="pull-right text-muted">
+                                <em>@Notificacion.FechaPublicacion</em>
+                            </span>
+                        </div>
+                        <div>@Notificacion.Usuario.Nombre ha dejado un comentario</div>
+                    </a>
+                </li>
+                <li class="divider"></li>
+
+                }
+            }
+            else
+            {
+                <li>
+                        <strong>No tienes notificaciones</strong>
+                        <i class="fa fa-angle-right"></i>
+                </li>
+            }
+        }
+        <li>
+            <a class="text-center" href="#">
+                <strong>Leer todas las notificaciones</strong>
+                <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+    
+    </ul>
+    <!-- /.dropdown-messages -->
+</li>
+<script>
+    function OpenCloseNotification() {
+        $("#Notificaciones").toggleClass("open");
+    }
+</script>

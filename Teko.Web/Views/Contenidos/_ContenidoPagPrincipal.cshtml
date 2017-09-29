@@ -1,0 +1,18 @@
+﻿@using Teko.ViewModels
+@model MuestraViewModel
+@{
+    if (Model.ListaAMostrar.Length > 0)
+    {
+            for (int i = (int)Session["Page"] * 15; i <= ((int)Session["Page"] * 15) + 14; i++)
+            {
+                if (i < Model.ListaAMostrar.Length)
+                {
+                    @Html.Partial("_ContentCard", Model.ListaAMostrar[i])
+                }
+            }
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert"><h3>¡Vaya!, parece que no hay contenidos de ese tipo</h3></div>
+    }
+}

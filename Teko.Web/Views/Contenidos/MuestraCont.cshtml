@@ -1,0 +1,90 @@
+﻿@using Teko.ViewModels
+@model MuestraViewModel
+    
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='//fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+    <style>
+        .titfont{
+            font-size:18px;
+        }
+        .cont1 {
+            margin-bottom: 30px;
+            box-shadow: 1px 1px 5px #888888;
+        }
+    </style>
+</head>
+<body class="containermio">
+        <h1 class="text-center">@ViewBag.Title</h1>
+        <hr />
+        <div class="jumbotron">
+            @Html.Partial("_FormFiltro")
+        </div>
+        <hr />
+    <div>
+        @using (Ajax.BeginForm("Ordenar", "Contenidos", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "container"
+
+        }, new { style = "margin-bottom:20px;" }))
+        {
+            @Html.DropDownList("Ordenar", new List<SelectListItem>
+
+                 {
+                    new SelectListItem{ Text="Valoracion", Value = "1" },
+                    new SelectListItem{ Text="Popularidad", Value = "2" },
+                    new SelectListItem{ Text="Descargas", Value = "3" },
+                    new SelectListItem{ Text="Recientes", Value = "4" }
+                 }
+             , "Ordenar por", new { onchange = "$(this.form).submit();", @class = "btn btn-inverse dropdown-toggle" })
+        }
+    </div>
+        <div id="container">
+            @Html.Partial("_ContenidoPagPrincipal")
+        </div>
+            <div>
+                <ul class="pagination">
+                    <li class="previous">
+                        <a id="prev" href="@Url.Action("PasarPagina", "Contenidos", new { Pagina = (int)Session["Page"] - 1  ,Title = ViewBag.Title})" class="fui-arrow-left"></a>
+                    </li>
+                    @{ for (int i = 0; i <= Model.ListaAMostrar.Length / 15; i++)
+                        {
+                            <li>
+                                @{ int j = i + 1;}
+                                <a href="@Url.Action("PasarPagina", "Contenidos", new { Pagina = i, Title = ViewBag.Title })">@j</a>
+                            </li>
+                        }
+                    }
+                    <li class="next">
+                        <a id="prev" href="@Url.Action("PasarPagina", "Contenidos", new { Pagina = (int)Session["Page"] + 1, Title = ViewBag.Title })" class="fui-arrow-right"></a>
+                    </li>
+                </ul>
+            </div>
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+    <script>
+        function PopEsc() {
+            var lvlId = $('#NivelesEducativosId').val();
+            $.ajax({
+                url: '/Contenidos/PopuladorEsc',
+                type: "GET",
+                dataType: "JSON",
+                data: { Lvl: lvlId },
+                success: function (Data) {
+                    $("#ddlesc").html("");
+                    $.each(Data, function (i, city) {
+                        $("#ddlesc").append(
+                            $('<option></option>').val(city.Id).html(city.Nombre));
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
