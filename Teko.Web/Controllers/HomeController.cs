@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -51,11 +52,16 @@ namespace Teko.Controllers
         public ActionResult Index()
         {
             Session["Page"] = 0;
-            ViewBag.ListaArticulos = contenidoService.GetContenidosOrderRecent().Take(9).ToArray();
-            ViewBag.ListaArticulosPop = contenidoService.GetContenidosOrderPopular().Take(9).ToArray();
-            ViewBag.ListaArticulosDes = contenidoService.GetContenidosOrderDescargas().Take(9).ToArray();
-            ViewBag.ListaArticulosVal = contenidoService.GetContenidosOrderValoracion().Take(9).ToArray();
-            return View();
+            IndexViewModel _indexViewModel = new IndexViewModel(contenidoService,escuelaService);
+            if (Request.IsAuthenticated)
+            {
+                var UsuarioId = User.Identity.GetUserId();
+                Usuarios UsuarioActual = usuarioService.GetUserById(UsuarioId);
+                int EscuelaId = UsuarioActual.InstitucionActual.Id;
+                _indexViewModel.setListaArticulosEsc(EscuelaId);
+                _indexViewModel.setEscuelaActual(EscuelaId);
+            }
+            return View(_indexViewModel);
 
         }
 

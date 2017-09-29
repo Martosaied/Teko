@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Teko.Web.ViewModels.IndexViewModel
+@{
     ViewBag.Title = "Home Page";
 }
 <style>
@@ -17,12 +18,12 @@
 <hr />
 <div class="row">
         <div class="col-xs-6 col-md-6">
-            <a href="@Url.Action("MateriasPorLetra","Home")" class="thumbnail">
+            <a href="@Url.Action("MateriasPorLetra", "Home")" class="thumbnail">
                 <img src="~/Content/Imagenes/default.png" alt="...">
             </a>
         </div>
         <div class="col-xs-6 col-md-6">
-            <a href="@Url.Action("EscuelasPorLetra","Home")" class="thumbnail">
+            <a href="@Url.Action("EscuelasPorLetra", "Home")" class="thumbnail">
                 <img src="~/Content/Imagenes/default.png" alt="...">
             </a>
         </div>
@@ -30,66 +31,61 @@
 <div>
     <div>
         <h2 class="text-center title">Subidos recientemente</h2>
-        <a href="@Url.Action("VerTodo", "Contenidos",new { Title="Mas recientes"})" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
+        <a href="@Url.Action("VerTodo", "Contenidos", new { Title = "Mas recientes" })" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
         @{
-                    ViewBag.Controles = "MasRec";
+            ViewBag.Controles = "MasRec";
                 }
                 <div class="row" style="margin:1%;">
-                    @Html.Partial("_Carrousel")
+                    @Html.Partial("_Carrousel", Model.ListaArticulosRec)
                 </div>
             </div>
             <hr style="color: #0056b2; margin-top:20px; margin-bottom:20px;" />
             <div>
                 <h2 class="text-center title">Mas populares</h2>
-                <a href="@Url.Action("VerTodo", "Contenidos",new { Title="Mas populares"})" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
-                @{
-                    ViewBag.ListaArticulos = ViewBag.ListaArticulosPop;
+                <a href="@Url.Action("VerTodo", "Contenidos", new { Title = "Mas populares" })" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
+                @{  
                     ViewBag.Controles = "MasPop";
                 }
                 <div class="row" style="margin:1%;">
-                    @Html.Partial("_Carrousel")
+                    @Html.Partial("_Carrousel", Model.ListaArticulosPop)
                 </div>
             </div>
             <hr style="color: #0056b2; margin-top:20px; margin-bottom:20px;" />
             <div>
                 <h2 class="text-center title" >Mas descargados</h2>
-                <a href="@Url.Action("VerTodo", "Contenidos",new { Title="Mas descargados"})" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
+                <a href="@Url.Action("VerTodo", "Contenidos", new { Title = "Mas descargados" })" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
                 @{
-                    ViewBag.ListaArticulos = ViewBag.ListaArticulosDes;
                     ViewBag.Controles = "MasDes";
                 }
                 <div class="row" style="margin:1%;">
-                    @Html.Partial("_Carrousel")
+                    @Html.Partial("_Carrousel", Model.ListaArticulosDes)
                 </div>
             </div>
             <hr style="color: #0056b2; margin-top:20px; margin-bottom:20px;" />
             <div>
                 <h2 class="text-center title">Mas valorados</h2>
-                <a href="@Url.Action("VerTodo", "Contenidos",new { Title="Mas valorados"})" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
+                <a href="@Url.Action("VerTodo", "Contenidos", new { Title = "Mas valorados" })" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
                 @{
-                    ViewBag.ListaArticulos = ViewBag.ListaArticulosVal;
                     ViewBag.Controles = "MasVal";
                 }
                 <div class="row" style="margin:1%;">
-                    @Html.Partial("_Carrousel")
+                    @Html.Partial("_Carrousel", Model.ListaArticulosVal)
                 </div>
             </div>
-            @*@{ if (Request.IsAuthenticated && HelpersExtensions.ObtenerUser(User.Identity.GetUserId()).InstitucionActual != null && ViewBag.ListaArticulosEsc.Length >= 9)
+            @{ if (Model.EscuelaAlumno != null)
                 {
-                    <hr style="color: #0056b2; margin-top:20px; margin-bottom:20px;" />
-                    <div>
-                        <h2 class="text-center title">Contenidos de @HelpersExtensions.ObtenerUser(User.Identity.GetUserId()).InstitucionActual.Nombre</h2>
-                        <a href="@Url.Action("VerTodo", "Contenidos",new { Title="Escuela"})" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
-                        @{
-                            ViewBag.ListaArticulos = ViewBag.ListaArticulosEsc;
-                            ViewBag.Controles = "MasEsc";
-                        }
-                        <div class="row" style="margin:1%;">
-                            @Html.Partial("_Carrousel")
-                        </div>
+                <hr style="color: #0056b2; margin-top:20px; margin-bottom:20px;" />
+                <div>
+                    <h2 class="text-center title">Contenidos de @Model.EscuelaAlumno.Nombre</h2>
+                    <a href="@Url.Action("VerTodo", "Contenidos", new { Title = "Escuela" })" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
+                    @{
+                        ViewBag.Controles = "MasEsc";
+                    }
+                    <div class="row" style="margin:1%;">
+                        @Html.Partial("_Carrousel", Model.ListaArticulosEsc)
                     </div>
-                  }
-               }*@
-
+                </div>
+                            }
+                        }
     </div>
 </div>

@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 
 namespace Teko.Service
 {
-    public interface IEscuelaService 
+    public interface IEscuelaService
     {
         List<Escuelas> GetEscuelasByNivel(int id);
         void CreateEscuela(Escuelas esc);
         void SaveEscuela();
         List<Escuelas> GetAll();
         Dictionary<string, List<Escuelas>> GetAllByLetter();
+        Escuelas GetEscuelaById(int IdEscuela);
     }
     public class EscuelaService : IEscuelaService
     {
@@ -65,6 +66,11 @@ namespace Teko.Service
         public void SaveEscuela()
         {
             unitOfWork.Commit();
+        }
+
+        public Escuelas GetEscuelaById(int IdEscuela)
+        {
+            return escuelaRepo.GetById(IdEscuela);
         }
     }
 }

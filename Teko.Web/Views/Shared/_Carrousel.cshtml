@@ -1,4 +1,5 @@
-﻿@{if (ViewBag.ListaArticulos.Length > 8)
+﻿@model Teko.Model.Contenidos[]
+@{if (Model.Length > 8)
     { 
     <style>
     .carousel-control.left, .carousel-control.right 
@@ -24,40 +25,40 @@
         <div class="item active">
             @{ for (int i = 0; i < 3; i++)
                 {
-                    <div class="caca col-md-4" sonclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = ViewBag.ListaArticulos[i].Id })'">
+                    <div class="caca col-md-4" sonclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model[i].Id })'">
                 <div class="card-flipper effect__hover" data-id="1">
                     <div class="card__front">
                         <div class="card card-01">
                             <div class="card-block text-center">
-                                <span class="badge-box"><i class="@ViewBag.ListaArticulos[i].Badget"></i></span>
-                                <h4 class="card-title">@ViewBag.ListaArticulos[i].Nombre</h4>
-                                <p class="card-text">@ViewBag.ListaArticulos[i].Descripcion</p>
+                                <span class="badge-box"><i class="@Model[i].Badget"></i></span>
+                                <h4 class="card-title">@Model[i].Nombre</h4>
+                                <p class="card-text">@Model[i].Descripcion</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="card__back" onclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = ViewBag.ListaArticulos[i].Id })'">
+                    <div class="card__back" onclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model[i].Id })'">
                         <div class="card card-01">
                             <div class="card-block text-center">
-                                <h4 class="card-title">Subido el @ViewBag.ListaArticulos[i].FechaSubida por @ViewBag.ListaArticulos[i].Usuarios.Nombre</h4>
+                                <h4 class="card-title">Subido el @Model[i].FechaSubida por @Model[i].Usuarios.Nombre</h4>
                                 <span class="social-box">
-                                    <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].Materias.Nombre })">
-                                        <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Materias.Nombre</span>,
+                                    <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].Materias.Nombre })">
+                                        <span class="mitag tag label label-info">@Model[i].Materias.Nombre</span>,
                                         <a />
-                                        <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].Escuelas.Nombre })">
-                                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Escuelas.Nombre</span>,
+                                        <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].Escuelas.Nombre })">
+                                            <span class="mitag tag label label-info">@Model[i].Escuelas.Nombre</span>,
                                         </a>
-                                        <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].Escuelas.NivEduEscuela.Nombre })">
-                                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Escuelas.NivEduEscuela.Nombre</span>,
+                                        <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].Escuelas.NivEduEscuela.Nombre })">
+                                            <span class="mitag tag label label-info">@Model[i].Escuelas.NivEduEscuela.Nombre</span>,
                                         </a>
-                                        <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].Profesor })">
-                                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Profesor</span>,
+                                        <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].Profesor })">
+                                            <span class="mitag tag label label-info">@Model[i].Profesor</span>,
                                         </a>
-                                        <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].TiposContenidos.Nombre })">
-                                            <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].TiposContenidos.Nombre</span>
+                                        <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].TiposContenidos.Nombre })">
+                                            <span class="mitag tag label label-info">@Model[i].TiposContenidos.Nombre</span>
                                         </a>
-                                        <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].Cursada })">
-                                            <span class="mitag tag label label-info">Año @ViewBag.ListaArticulos[i].Cursada</span>
+                                        <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].Cursada })">
+                                            <span class="mitag tag label label-info">Año @Model[i].Cursada</span>
                                         </a>
                                 </span>
 
@@ -72,41 +73,41 @@
         <div class="item">
             @{ for (int i = 3; i < 6; i++)
                 {
-                    <div class="caca col-md-4" sonclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = ViewBag.ListaArticulos[i].Id })'">
+                    <div class="caca col-md-4" sonclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model[i].Id })'">
                         <div class="card-flipper effect__hover" data-id="1">
                             <div class="card__front">
                                 <div class="card card-01">
                                     <div class="card-block text-center">
                            
-                                        <span class="badge-box"><i class="@ViewBag.ListaArticulos[i].Badget"></i></span>
-                                        <h4 class="card-title">@ViewBag.ListaArticulos[i].Nombre</h4>
-                                        <p class="card-text">@ViewBag.ListaArticulos[i].Descripcion</p>
+                                        <span class="badge-box"><i class="@Model[i].Badget"></i></span>
+                                        <h4 class="card-title">@Model[i].Nombre</h4>
+                                        <p class="card-text">@Model[i].Descripcion</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="card__back" onclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = ViewBag.ListaArticulos[i].Id })'">
+                            <div class="card__back" onclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model[i].Id })'">
                                 <div class="card card-01">
                                     <div class="card-block text-center">
-                                        <h4 class="card-title">Subido el @ViewBag.ListaArticulos[i].FechaSubida por @ViewBag.ListaArticulos[i].Usuarios.Nombre</h4>
+                                        <h4 class="card-title">Subido el @Model[i].FechaSubida por @Model[i].Usuarios.Nombre</h4>
                                         <span class="social-box">
-                                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].Materias.Nombre })">
-                                                <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Materias.Nombre</span>,
+                                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].Materias.Nombre })">
+                                                <span class="mitag tag label label-info">@Model[i].Materias.Nombre</span>,
                                                 <a />
-                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].Escuelas.Nombre })">
-                                                    <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Escuelas.Nombre</span>,
+                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].Escuelas.Nombre })">
+                                                    <span class="mitag tag label label-info">@Model[i].Escuelas.Nombre</span>,
                                                 </a>
-                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].Escuelas.NivEduEscuela.Nombre })">
-                                                    <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Escuelas.NivEduEscuela.Nombre</span>,
+                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].Escuelas.NivEduEscuela.Nombre })">
+                                                    <span class="mitag tag label label-info">@Model[i].Escuelas.NivEduEscuela.Nombre</span>,
                                                 </a>
-                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].Profesor })">
-                                                    <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Profesor</span>,
+                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].Profesor })">
+                                                    <span class="mitag tag label label-info">@Model[i].Profesor</span>,
                                                 </a>
-                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].TiposContenidos.Nombre })">
-                                                    <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].TiposContenidos.Nombre</span>
+                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].TiposContenidos.Nombre })">
+                                                    <span class="mitag tag label label-info">@Model[i].TiposContenidos.Nombre</span>
                                                 </a>
-                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].Cursada })">
-                                                    <span class="mitag tag label label-info">Año @ViewBag.ListaArticulos[i].Cursada</span>
+                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].Cursada })">
+                                                    <span class="mitag tag label label-info">Año @Model[i].Cursada</span>
                                                 </a>
                                         </span>
 
@@ -121,41 +122,41 @@
         <div class="item">
             @{ for (int i = 6; i < 9; i++)
                 {
-                    <div class="caca col-md-4" sonclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = ViewBag.ListaArticulos[i].Id })'">
+                    <div class="caca col-md-4" sonclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model[i].Id })'">
                         <div class="card-flipper effect__hover" data-id="1">
                             <div class="card__front">
                                 <div class="card card-01">
                                     <div class="card-block text-center">
                                         
-                                        <span class="badge-box"><i class="@ViewBag.ListaArticulos[i].Badget"></i></span>
-                                        <h4 class="card-title">@ViewBag.ListaArticulos[i].Nombre</h4>
-                                        <p class="card-text">@ViewBag.ListaArticulos[i].Descripcion</p>
+                                        <span class="badge-box"><i class="@Model[i].Badget"></i></span>
+                                        <h4 class="card-title">@Model[i].Nombre</h4>
+                                        <p class="card-text">@Model[i].Descripcion</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="card__back" onclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = ViewBag.ListaArticulos[i].Id })'">
+                            <div class="card__back" onclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model[i].Id })'">
                                 <div class="card card-01">
                                     <div class="card-block text-center">
-                                        <h4 class="card-title">Subido el @ViewBag.ListaArticulos[i].FechaSubida por @ViewBag.ListaArticulos[i].Usuarios.Nombre</h4>
+                                        <h4 class="card-title">Subido el @Model[i].FechaSubida por @Model[i].Usuarios.Nombre</h4>
                                         <span class="social-box">
-                                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].Materias.Nombre })">
-                                                <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Materias.Nombre</span>,
+                                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].Materias.Nombre })">
+                                                <span class="mitag tag label label-info">@Model[i].Materias.Nombre</span>,
                                                 <a />
-                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].Escuelas.Nombre })">
-                                                    <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Escuelas.Nombre</span>,
+                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].Escuelas.Nombre })">
+                                                    <span class="mitag tag label label-info">@Model[i].Escuelas.Nombre</span>,
                                                 </a>
-                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].Escuelas.NivEduEscuela.Nombre })">
-                                                    <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Escuelas.NivEduEscuela.Nombre</span>,
+                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].Escuelas.NivEduEscuela.Nombre })">
+                                                    <span class="mitag tag label label-info">@Model[i].Escuelas.NivEduEscuela.Nombre</span>,
                                                 </a>
-                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].Profesor })">
-                                                    <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].Profesor</span>,
+                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].Profesor })">
+                                                    <span class="mitag tag label label-info">@Model[i].Profesor</span>,
                                                 </a>
-                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].TiposContenidos.Nombre })">
-                                                    <span class="mitag tag label label-info">@ViewBag.ListaArticulos[i].TiposContenidos.Nombre</span>
+                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].TiposContenidos.Nombre })">
+                                                    <span class="mitag tag label label-info">@Model[i].TiposContenidos.Nombre</span>
                                                 </a>
-                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = ViewBag.ListaArticulos[i].Cursada })">
-                                                    <span class="mitag tag label label-info">Año @ViewBag.ListaArticulos[i].Cursada</span>
+                                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model[i].Cursada })">
+                                                    <span class="mitag tag label label-info">Año @Model[i].Cursada</span>
                                                 </a>
                                         </span>
 
