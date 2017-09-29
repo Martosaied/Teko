@@ -235,11 +235,12 @@ namespace Teko.Controllers
             ViewBag.Title = FilterParameters.Title;
             return PartialView("_ContenidoPagPrincipal",FilterParameters);
         }
-        public ActionResult Tag(string Tag)
+        public ActionResult Tag(string Tag, string Title, int IdFiltro)
         {
             Session["Page"] = 0;
             _ViewModel.ListaAMostrar = contenidoService.GetContenidosByTag(Tag);
             GuardarContenidosEnSession(_ViewModel.ListaAMostrar);
+            _ViewModel.Preseleccionar(Title, IdFiltro);
             ViewBag.Title = "Resultados: '" + Tag + "'";
             return View("MuestraCont", _ViewModel);
         }

@@ -61,7 +61,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.InstitucionActualId, htmlAttributes: new { @class = "control-label col-md-6" })
                 <div class="col-md-6">
-                        @Html.DropDownListFor(x => x.InstitucionActualId, new SelectList(Model.dropEscuela, "Id", "Nombre"), new { @class = "btn btn-inverse dropdown-toggle", id = "DDEscuelas" })
+                        @Html.DropDownListFor(x => x.InstitucionActualId, new SelectList(Model.getes(), "Id", "Nombre"), new { @class = "btn btn-inverse dropdown-toggle", id = "DDEscuelas" })
                         @Html.ValidationMessageFor(model => model.InstitucionActualId, "", new { @class = "text-danger" })
                 </div>
 

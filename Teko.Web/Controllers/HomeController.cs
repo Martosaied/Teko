@@ -46,17 +46,17 @@ namespace Teko.Controllers
         {
             Dictionary<string, List<Escuelas>> ListaEscuelasPorLetra = new Dictionary<string, List<Escuelas>>();
             ListaEscuelasPorLetra = escuelaService.GetAllByLetter();
-            ViewBag.Title = "Escuela";
+            ViewBag.Title = "Escuelas";
             return View("CosasPorLetra", ListaEscuelasPorLetra);
         }
         public ActionResult Index()
         {
             Session["Page"] = 0;
             IndexViewModel _indexViewModel = new IndexViewModel(contenidoService,escuelaService);
-            if (Request.IsAuthenticated)
+            var UsuarioId = User.Identity.GetUserId();
+            Usuarios UsuarioActual = usuarioService.GetUserById(UsuarioId);
+            if (Request.IsAuthenticated && UsuarioActual.PerfilCompleto)
             {
-                var UsuarioId = User.Identity.GetUserId();
-                Usuarios UsuarioActual = usuarioService.GetUserById(UsuarioId);
                 int EscuelaId = UsuarioActual.InstitucionActual.Id;
                 _indexViewModel.setListaArticulosEsc(EscuelaId);
                 _indexViewModel.setEscuelaActual(EscuelaId);
