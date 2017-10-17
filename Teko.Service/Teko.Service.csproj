@@ -46,10 +46,11 @@
     <Compile Include="ComentarioService.cs" />
     <Compile Include="ContenidoService.cs" />
     <Compile Include="EscuelaService.cs" />
-    <Compile Include="mailService.cs" />
+    <Compile Include="MailService.cs" />
     <Compile Include="MateriaService.cs" />
     <Compile Include="NivelEducativoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportesService.cs" />
     <Compile Include="TipoService.cs" />
     <Compile Include="UsuarioService.cs" />
     <Compile Include="ValoracionService.cs" />

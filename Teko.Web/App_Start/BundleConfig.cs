@@ -21,9 +21,11 @@ namespace Teko
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+                      "~/Scripts/bootstrap-tooltip.js",
                       "~/Scripts/bootstrap.js",
-                      "~/Content/UI-Flat/js/flat-ui.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/respond.js"
+                      //"~/Content/UI-Flat/js/flat-ui.js"
+                      ));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.min.css",

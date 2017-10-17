@@ -10,7 +10,7 @@
                 foreach (var Notificacion in Model.ListaComentariosDeNotificaciones)
                 {
                 <li>
-                    <a href="@Url.Action("VerMas", "Contenidos", new { cont = Notificacion.ContenidoId })" class="active">
+                    <a href="@Url.Action("Detalles", "Contenidos", new { id = SlugGenerator.GenerateContenidoSlug(Notificacion.Contenido.Id,Notificacion.Contenido.Nombre) })" class="active">
                         <div>
                             <strong>@Notificacion.Contenido.Nombre</strong>
                             <span class="pull-right text-muted">

@@ -34,21 +34,6 @@ namespace Teko.Controllers
         {
 
         }
-
-        public ActionResult MateriasPorLetra()
-        {
-            Dictionary<string, List<Materias>> ListaMateriasPorLetra = new Dictionary<string, List<Materias>>();
-            ListaMateriasPorLetra = materiaService.GetAllByLetter();
-            ViewBag.Title = "Materias";
-            return View("CosasPorLetra", ListaMateriasPorLetra);
-        }
-        public ActionResult EscuelasPorLetra()
-        {
-            Dictionary<string, List<Escuelas>> ListaEscuelasPorLetra = new Dictionary<string, List<Escuelas>>();
-            ListaEscuelasPorLetra = escuelaService.GetAllByLetter();
-            ViewBag.Title = "Escuelas";
-            return View("CosasPorLetra", ListaEscuelasPorLetra);
-        }
         public ActionResult Index()
         {
             Session["Page"] = 0;

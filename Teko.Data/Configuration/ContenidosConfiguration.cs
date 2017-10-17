@@ -10,6 +10,10 @@ namespace Teko.Data
 {
     public class ContenidosConfiguration : EntityTypeConfiguration<Contenidos>
     {
-
+        public ContenidosConfiguration()
+        {
+            this.HasKey(t => t.IsDeleted == false);
+            this.ToTable("Contenidos");
+        }
     }
 }

@@ -104,6 +104,18 @@
     <Compile Include="Migrations\201709291138389_SeedoNLY2.Designer.cs">
       <DependentUpon>201709291138389_SeedoNLY2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710121407436_Reports.cs" />
+    <Compile Include="Migrations\201710121407436_Reports.Designer.cs">
+      <DependentUpon>201710121407436_Reports.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710121513133_BajaLogica.cs" />
+    <Compile Include="Migrations\201710121513133_BajaLogica.Designer.cs">
+      <DependentUpon>201710121513133_BajaLogica.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710160349011_Cacaca.cs" />
+    <Compile Include="Migrations\201710160349011_Cacaca.Designer.cs">
+      <DependentUpon>201710160349011_Cacaca.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ArchivoRepository.cs" />
@@ -112,6 +124,7 @@
     <Compile Include="Repositories\EscuelaRepository.cs" />
     <Compile Include="Repositories\MateriaRepository.cs" />
     <Compile Include="Repositories\NivelEducativoRepository.cs" />
+    <Compile Include="Repositories\ReportesRepository.cs" />
     <Compile Include="Repositories\TiposContenidoRepository.cs" />
     <Compile Include="Repositories\UsuarioRepository.cs" />
     <Compile Include="Repositories\ValoracionRepository.cs" />
@@ -157,6 +170,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709291138389_SeedoNLY2.resx">
       <DependentUpon>201709291138389_SeedoNLY2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710121407436_Reports.resx">
+      <DependentUpon>201710121407436_Reports.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710121513133_BajaLogica.resx">
+      <DependentUpon>201710121513133_BajaLogica.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710160349011_Cacaca.resx">
+      <DependentUpon>201710160349011_Cacaca.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

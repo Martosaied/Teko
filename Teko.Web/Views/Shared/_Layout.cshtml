@@ -23,7 +23,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     @Html.Partial("_LoginPartial")
                 </ul>
-                @using (Html.BeginForm("Buscar", "Contenidos", FormMethod.Get, new { @class = "form-inline navbar-form", role = "search" }))
+                @using (Html.BeginForm("Buscar", "Contenidos", FormMethod.Post, new { @class = "form-inline navbar-form", role = "search" }))
                 {
                     <input type="text" class="form-control" name="Buscador" placeholder="Introduzca solo palabras claves"/>
                     <button class="btn" type="submit">Search</button>
@@ -39,8 +39,14 @@
             <p>&copy; @DateTime.Now.Year - Teko</p>
         </footer>
         @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jqueryval")
         @Scripts.Render("~/bundles/bootstrap")
         @RenderSection("scripts", required: false)
+    <script>
+    $(document).ready(function () {
+        $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+    });
+    </script> 
     </body>
 </html>
 

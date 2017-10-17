@@ -1,11 +1,14 @@
-﻿using Teko.Data.Infrastructure;
+﻿using System.Net;
+using System.Net.Mail;
+using Teko.Data.Infrastructure;
 using Teko.Data.Repositories;
+using Teko.Model;
 
 namespace Teko.Service
 {
     public interface IMailService
     {
-
+        bool SendReportEmail(dynamic reportInfo);
     }
     public class MailService : IMailService
     {
@@ -18,23 +21,16 @@ namespace Teko.Service
             this.unitOfWork = unitOfWork;
         }
 
-        /*public bool SendRegistracionMail(string EmailUser)
+
+        public bool SendReportEmail(dynamic reportInfo)
         {
-            try
-            { 
-                MailMessage mailMessage = new MailMessage();
-                mailMessage.To.Add(EmailUser);
-                mailMessage.From = new MailAddress("teko@tekopeola.com");
-                mailMessage.Subject = "ASP.NET e-mail test";
-                mailMessage.Body = "Hello world,\n\nThis is an ASP.NET test e-mail!";
-                SmtpClient smtpClient = new SmtpClient("smtp.your-isp.com");
-                smtpClient.Send(mailMessage);
-                Response.Write("E-mail sent!");
-            }
-            catch (Exception ex)
+            var client = new SmtpClient("smtp.gmail.com", 587)
             {
-                Response.Write("Could not send the e-mail - error: " + ex.Message);
-            }
-        }*/
+                Credentials = new NetworkCredential("tteko357@gmail.com", "Teko2017"),
+                EnableSsl = true
+            };
+            client.Send(reportInfo.reportedUser.Email, "tteko357@gmail.com", reportInfo.reportedUser.UserName + " - " + reportInfo.reportedContenido.Nombre + " - "+ reportInfo.Titulo, reportInfo.Texto + " - " + reportInfo.reportedUser.Email + " - " + reportInfo.URL);
+            return true;
+        }
     }
 }

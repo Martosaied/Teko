@@ -6,6 +6,8 @@ using System.ComponentModel.DataAnnotations;
 using Teko.Models;
 using Teko.Model;
 using Teko.Service;
+using Teko.Web.Extensions;
+using Teko.Web.ViewModels;
 
 namespace Teko.ViewModels
 { 
@@ -185,9 +187,19 @@ namespace Teko.ViewModels
         {
             return (dropEscuela == null) ? new List<Escuelas>() : dropEscuela;
         }
+        
     }
     public class DetailsViewModel
     {
+        public IReportesService reportService;
+        public DetailsViewModel(IReportesService reportService)
+        {
+            this.reportService = reportService;
+        }
+        public DetailsViewModel()
+        {
+
+        }
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
@@ -208,6 +220,7 @@ namespace Teko.ViewModels
 
         public Contenidos[] Recomendaciones { get; set; }
         public FormComentario FormComentario { get; set; }
+
     }
     public class FormComentario
     {

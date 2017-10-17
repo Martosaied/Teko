@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Comentarios.cs" />
+    <Compile Include="Reportes.cs" />
     <Compile Include="Usuarios.cs" />
     <Compile Include="Archivos.cs" />
     <Compile Include="BasePropDeContenido.cs" />

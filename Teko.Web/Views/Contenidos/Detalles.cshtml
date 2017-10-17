@@ -1,9 +1,12 @@
-﻿@model Teko.ViewModels.DetailsViewModel
+﻿@using Teko.Web.ViewModels
+@using Microsoft.AspNet.Identity;
+@model Teko.ViewModels.DetailsViewModel
 <!DOCTYPE html>
 
 <html>
 <head>
     <title>@ViewBag.Title</title>
+
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="~/Content/Site.css" type="text/css" />
     <style>
@@ -86,14 +89,14 @@
             @{
                 if (Request.IsAuthenticated)
                 {
-                    
+
                     int ContenidoId = Model.Id;
-                    @Html.ActionLink("Descargar!", "Descargar", "Contenidos", new { ContenidoId = ContenidoId}, new { @class = "btn btn-embossed btn-primary row" })
+                    @Html.ActionLink("Descargar!", "Descargar", "Contenidos", new { ContenidoId = ContenidoId }, new { @class = "btn btn-embossed btn-primary row" })
                     using (Ajax.BeginForm("Valoration", "Contenidos", new AjaxOptions
                     {
                         InsertionMode = InsertionMode.Replace,
                         UpdateTargetId = "Valoration"
-                    }, new {@class="inline-formr" }))
+                    }, new { @class = "inline-formr" }))
                     {
                         <div class="stars" id="stars">
                             <input type="hidden" value="@Model.Id" name="ContenidoId" />
@@ -106,7 +109,7 @@
                             <label class="star star-3" for="star-3"></label>
                             @Html.RadioButtonFor(x => x.ValoracionUsuarioActual, "2", new { @class = "star star-2", id = "star-2" })
                             <label class="star star-2" for="star-2"></label>
-                            @Html.RadioButtonFor(x => x.ValoracionUsuarioActual, "1", new { @class="star star-1" ,id="star-1" })
+                            @Html.RadioButtonFor(x => x.ValoracionUsuarioActual, "1", new { @class = "star star-1", id = "star-1" })
                             <label class="star star-1" for="star-1"></label>
                         </div>
                         <button type="submit" class="btn btn-success btn-xs">Valorar</button>
@@ -116,7 +119,7 @@
                 else
                 {
                     <div class="row form-inline">
-                        @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class= "btn btn-embossed btn-primary"})
+                        @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-embossed btn-primary" })
                         <p>Necesita estar logueado para poder descargar el contenido</p>
                     </div>
                 }
@@ -124,7 +127,12 @@
             }
 
         </div>
+        <div class="row">
+            <div class="addthis_inline_share_toolbox"></div>
+            @Html.Partial("_ReportView", new ReportViewModel(Model, User.Identity.GetUserId()))
+        </div>
         @Html.Partial("_Comentarios", Model.FormComentario)
     </div>
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-59ce562c9982bb60"></script>
 </body>
 </html>

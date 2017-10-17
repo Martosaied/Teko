@@ -13,6 +13,7 @@ using System.IO;
 using Teko.Service;
 using Teko.Model;
 using Teko.Web.ViewModels;
+using Teko.Web.Extensions;
 
 namespace Teko.Controllers
 {
@@ -27,10 +28,12 @@ namespace Teko.Controllers
         private readonly IMateriaService materiaService;
         private readonly INivelEducativoService nivelService;
         private readonly IComentarioService comentarioService;
+        private readonly IMailService mailService;
+        private readonly IReportesService reportService;
         private MuestraViewModel _ViewModel;
         SubirViewModel SVM;
         private readonly ITipoService tipoService;
-        public ContenidosController(IComentarioService comentarioService,IMateriaService materiaService, INivelEducativoService nivelService, ITipoService tipoService, IValoracionService valoracionService, IContenidoService contenidoService, IArchivoService archivoService, IEscuelaService escuelaService, IVisitaService visitaService, IUsuarioService usuarioService)
+        public ContenidosController(IReportesService reportService,IMailService mailService,   IComentarioService comentarioService,IMateriaService materiaService, INivelEducativoService nivelService, ITipoService tipoService, IValoracionService valoracionService, IContenidoService contenidoService, IArchivoService archivoService, IEscuelaService escuelaService, IVisitaService visitaService, IUsuarioService usuarioService)
         {
             this.usuarioService = usuarioService;
             this.contenidoService = contenidoService;
@@ -41,9 +44,43 @@ namespace Teko.Controllers
             this.tipoService = tipoService;
             this.nivelService = nivelService;
             this.materiaService = materiaService;
+            this.mailService = mailService;
             this.comentarioService = comentarioService;
+            this.reportService = reportService;
             _ViewModel = new MuestraViewModel(escuelaService, tipoService, nivelService, materiaService);
             SVM = new SubirViewModel(escuelaService, tipoService, nivelService, materiaService);
+        }
+        public void Reportar(ReportViewModel viewModel)
+        {
+            var UserId = User.Identity.GetUserId();
+            var IUser = usuarioService.GetUserById(UserId);
+            var ReportedContenido = contenidoService.GetContenidoById(viewModel.IdContenido);
+
+            viewModel.reportedContenido = ReportedContenido;
+            viewModel.reportedUser = IUser;
+
+            bool work = mailService.SendReportEmail(viewModel);
+
+            viewModel.IdUsuario = viewModel.reportedUser.Id;
+            GuardarReport(viewModel);
+            VerificarContenido(ReportedContenido);
+        }
+
+        private void VerificarContenido(Contenidos ReportedContenido)
+        {
+            int CantidadReportes = reportService.GetNumberReportsPerContent(ReportedContenido.Id);
+            if(CantidadReportes > 5)
+            {
+                contenidoService.BajaLogica(ReportedContenido.Id);
+                contenidoService.SaveContenido();
+            }
+        }
+
+        private void GuardarReport(ReportViewModel viewModel)
+        {
+            var MappedReport = AutoMapperGeneric<ReportViewModel, Reportes>.ConvertToDBEntity(viewModel);
+            reportService.AddReport(MappedReport);
+            reportService.SaveReport();
         }
         public PartialViewResult Notificaciones()
         {
@@ -91,7 +128,7 @@ namespace Teko.Controllers
                 Contenidos selected = contenidoService.GetContenidoById(ContenidoId);
                 var Mapper = AutoMapperGeneric<Contenidos, DetailsViewModel>.ConvertToDBEntity(selected);
                 ViewBag.Error = "Necesita estar logueado para descargar documentos";
-                return View("VerMas",selected);
+                return View("Detalles",selected);
             }
         }
 
@@ -171,18 +208,19 @@ namespace Teko.Controllers
         }
         #endregion
         [HttpGet]
-        public ActionResult VerMas(int cont)
+        public ActionResult Detalles(int id)
         {
-            Contenidos SelectedCont = contenidoService.GetContenidoById(cont);
-            contenidoService.UpdateContenidoPopularidad(cont);
+            Contenidos SelectedCont = contenidoService.GetContenidoById(id);
+            contenidoService.UpdateContenidoPopularidad(id);
             UpdateVisitasIfAuthenticated(SelectedCont.Id);
             var MappedCont = AutoMapperGeneric<Contenidos, DetailsViewModel>.ConvertToDBEntity(SelectedCont);
+            MappedCont.reportService = reportService;
             MappedCont.Recomendaciones = contenidoService.GetRecomendacionesByContenido(SelectedCont);
-            var ListaArchivos = archivoService.GetArchivosByContenidoId(cont);
+            var ListaArchivos = archivoService.GetArchivosByContenidoId(id);
             if(Request.IsAuthenticated)
-                MappedCont.ValoracionUsuarioActual = GetValoracionContenidoByUser(cont);
+                MappedCont.ValoracionUsuarioActual = GetValoracionContenidoByUser(id);
             MappedCont.Rutas = archivoService.GetURLToShowDocument(ListaArchivos);
-            MappedCont.FormComentario = new FormComentario(comentarioService.GetByContenidos(SelectedCont.Id), cont);
+            MappedCont.FormComentario = new FormComentario(comentarioService.GetByContenidos(SelectedCont.Id), id);
             ViewBag.Title = SelectedCont.Nombre;
             return View(MappedCont);
         }
@@ -207,9 +245,9 @@ namespace Teko.Controllers
             MappedComent.FechaPublicacion = DateTime.UtcNow;
             comentarioService.AddComentario(MappedComent);
             comentarioService.SaveComentario();
-            return RedirectToAction("VerMas",new { cont =  model.ContenidoId });
+            Contenidos ContenidoARedirigir = contenidoService.GetContenidoById(model.ContenidoId);
+            return RedirectToAction("Detalles", new { id = SlugGenerator.GenerateContenidoSlug(ContenidoARedirigir.Id, ContenidoARedirigir.Nombre) });
         }
-        [HttpGet]
         public ActionResult Buscar(string Buscador)
         {
             try

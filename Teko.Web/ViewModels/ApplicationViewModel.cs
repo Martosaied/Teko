@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Teko.Extensions;
 using Teko.Model;
 using Teko.Service;
+using Teko.ViewModels;
 
 namespace Teko.Web.ViewModels
 {
@@ -58,5 +60,31 @@ namespace Teko.Web.ViewModels
         public Contenidos[] ListaArticulosEsc { get; set; }
         public Escuelas EscuelaAlumno { get; set; }
 
+    }
+
+    public class ReportViewModel
+    {
+        IReportesService reportService;
+        public ReportViewModel()
+        {
+
+        }
+        public ReportViewModel(DetailsViewModel DetailsContenido, string ActualIdUser)
+        {
+            var ContenidoMapped = AutoMapperGeneric<DetailsViewModel, Contenidos>.ConvertToDBEntity(DetailsContenido);
+            reportedContenido = ContenidoMapped;
+            IdContenido = reportedContenido.Id;
+            this.reportService = DetailsContenido.reportService;
+            ActualIdUser = (ActualIdUser == null) ? "" : ActualIdUser;
+            Prevoiusreport = reportService.VerifyPrevousReports(DetailsContenido.Id, ActualIdUser);
+        }
+        public string Titulo { get; set; }
+        public string Texto { get; set; }
+        public string URL { get; set; }
+        public string IdUsuario { get; set; }
+        public int IdContenido { get; set; }
+        public Contenidos reportedContenido { get; set; }
+        public Usuarios reportedUser { get; set; }
+        public bool Prevoiusreport { get; set; }
     }
 }

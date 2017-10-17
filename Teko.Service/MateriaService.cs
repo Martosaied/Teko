@@ -33,7 +33,7 @@ namespace Teko.Service
         public Dictionary<string, List<Materias>> GetAllByLetter()
         {
             Dictionary<string, List<Materias>> DiccionarioADevolver = new Dictionary<string, List<Materias>>(); 
-            var ListaMaterias = materiaRepo.GetAll();
+            var ListaMaterias = materiaRepo.GetAll().OrderBy(x => x.Nombre);
             foreach (var materia  in ListaMaterias)
             {
                 string LetraInicio = materia.Nombre.Substring(0, 1);

@@ -29,7 +29,9 @@ namespace Teko.Service
         Contenidos[] GetContenidosOrderPopular();
         Contenidos[] GetContenidosOrderDescargas();
         Contenidos[] GetContenidosByEscuela(int id);
-        
+        void BajaLogica(int ContenidoId);
+
+
     }
 
     public class ContenidoService : IContenidoService
@@ -64,6 +66,13 @@ namespace Teko.Service
                .Where(s => s.Profesor.ToLower().Contains(Parameters.Profesor.ToLower()) || Parameters.Profesor == "")
                .ToArray();
             return Lista;
+        }
+
+        public void BajaLogica(int  ContenidoId)
+        {
+            Contenidos Contenido = contenidoRepo.GetById(ContenidoId);
+            Contenido.IsDeleted = true;
+            contenidoRepo.Update(Contenido);
         }
 
         public Contenidos[] GetContsByTitle(string Title)

@@ -46,7 +46,7 @@ namespace Teko.Service
         public Dictionary<string, List<Escuelas>> GetAllByLetter()
         {
             Dictionary<string, List<Escuelas>> DiccionarioADevolver = new Dictionary<string, List<Escuelas>>();
-            var ListaEscuelas = escuelaRepo.GetAll();
+            var ListaEscuelas = escuelaRepo.GetAll().OrderBy(x => x.Nombre);
             foreach (var Escuela in ListaEscuelas)
             {
                 string LetraInicio = Escuela.Nombre.Substring(0, 1);

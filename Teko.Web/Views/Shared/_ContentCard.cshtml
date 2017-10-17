@@ -1,12 +1,14 @@
-﻿@model Teko.Model.Contenidos
+﻿@using Teko.Web.Extensions
+@model Teko.Model.Contenidos
 <link href='~/Content/FlipperCard.css' rel='stylesheet' type='text/css'>
-<div class="caca col-md-4" sonclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model.Id })'">
-    <div class="card-flipper effect__hover" data-id="1">
+<div class="caca col-md-4" onclick="location.href='@Url.Action("Detalles", "Contenidos", new { id = SlugGenerator.GenerateContenidoSlug(Model.Id,Model.Nombre) })'">
+    <div class="card-flipper" data-id="1">
         <div class="card__front">
             <div class="card card-01">
                 <div class="card-block text-center">
                     <span class="badge-box"><i class="@Model.Badget"></i></span>
                     <h4 class="card-title">@Model.Nombre</h4>
+                   
                     @{ 
                         if (@Model.Descripcion.Length > 110)
                         {
@@ -17,34 +19,29 @@
                             <p class="card-text">@Model.Descripcion</p>
                         }
                     }
-                    <span class="social-box">
-                        <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Materias.Nombre })">
-                            <span class="mitag tag label label-info">@Model.Materias.Nombre</span>,
-                            <a />
-                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Escuelas.Nombre })">
-                                <span class="mitag tag label label-info">@Model.Escuelas.Nombre</span>,
-                            </a>
-                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Escuelas.NivEduEscuela.Nombre })">
-                                <span class="mitag tag label label-info">@Model.Escuelas.NivEduEscuela.Nombre</span>,
-                            </a>
-                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Profesor })">
-                                <span class="mitag tag label label-info">@Model.Profesor</span>,
-                            </a>
-                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.TiposContenidos.Nombre })">
-                                <span class="mitag tag label label-info">@Model.TiposContenidos.Nombre</span>
-                            </a>
-                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Cursada })">
-                                <span class="mitag tag label label-info">Año @Model.Cursada</span>
-                            </a>
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card__back" onclick="location.href='@Url.Action("VerMas", "Contenidos", new { cont = Model.Id })'">
-            <div class="card card-01">
-                <div class="card-block text-center">
-                    <h4 class="card-title">Subido el @Model.FechaSubida por @Model.Usuarios.UserName</h4>
+                    <div style="height: 60px; overflow: hidden;" data-toggle="tooltip" data-placement="top" title="@Model.Materias.Nombre, @Model.Escuelas.Nombre, @Model.Escuelas.NivEduEscuela.Nombre, @Model.Profesor, @Model.TiposContenidos.Nombre, @Model.Cursada">
+                        <span class="social-box">
+                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Materias.Nombre })">
+                                <span class="mitag tag label label-info">@Model.Materias.Nombre</span>,
+                                <a />
+                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Escuelas.Nombre })">
+                                    <span class="mitag tag label label-info">@Model.Escuelas.Nombre</span>,
+                                </a>
+                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Escuelas.NivEduEscuela.Nombre })">
+                                    <span class="mitag tag label label-info">@Model.Escuelas.NivEduEscuela.Nombre</span>,
+                                </a>
+                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Profesor })">
+                                    <span class="mitag tag label label-info">@Model.Profesor</span>,
+                                </a>
+                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.TiposContenidos.Nombre })">
+                                    <span class="mitag tag label label-info">@Model.TiposContenidos.Nombre</span>
+                                </a>
+                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Cursada })">
+                                    <span class="mitag tag label label-info">Año @Model.Cursada</span>
+                                </a>
+                        </span>
+                    </div>
+                    <small class="card-title">Subido el @Model.FechaSubida por @Model.Usuarios.UserName</small>
                 </div>
             </div>
         </div>

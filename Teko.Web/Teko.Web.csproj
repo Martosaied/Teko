@@ -279,6 +279,7 @@
     <Content Include="fonts\lato\lato-light.svg" />
     <Content Include="fonts\lato\lato-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap-tooltip.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\TekoTeko.pubxml" />
@@ -312,13 +313,17 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Config\SeoFriendlyRoute.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ContenidosController.cs" />
+    <Compile Include="Controllers\EscuelasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MateriasController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
     <Compile Include="Extensions\AutoMapperGeneric.cs" />
-    <Compile Include="Extensions\GlobalEnums.cs" />
+    <Compile Include="Extensions\SlugGenerator.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -444,7 +449,7 @@
     <Content Include="Views\Account\VerifyCode.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Contenidos\MuestraCont.cshtml" />
-    <Content Include="Views\Contenidos\VerMas.cshtml" />
+    <Content Include="Views\Contenidos\Detalles.cshtml" />
     <Content Include="Views\Contenidos\_Valoration.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
@@ -473,7 +478,8 @@
     <Content Include="Views\Shared\_ContentCard.cshtml" />
     <Content Include="Views\Contenidos\_ContenidoPagPrincipal.cshtml" />
     <Content Include="Views\Contenidos\_FormFiltro.cshtml" />
-    <Content Include="Views\Home\CosasPorLetra.cshtml" />
+    <Content Include="Views\Shared\CosasPorLetra.cshtml" />
+    <Content Include="Views\Contenidos\_ReportView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -483,6 +489,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Escuelas\" />
+    <Folder Include="Views\Materias\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Teko.Data\Teko.Data.csproj">
