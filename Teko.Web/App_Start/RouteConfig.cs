@@ -22,6 +22,14 @@ namespace Teko.Web
             new RouteValueDictionary(new { controller = "Contenidos", action = "Buscar" }),
             new MvcRouteHandler()));
 
+            routes.Add("ContenidoVerTodo", new SeoFriendlyRouteVerTodo("contenidos/vertodo/{Title}",
+            new RouteValueDictionary(new { controller = "Contenidos", action = "VerTodo" }),
+            new MvcRouteHandler()));
+
+            routes.Add("ContenidoTag", new SeoFriendlyRouteTag("contenidos/tag/{Tag}",
+            new RouteValueDictionary(new { controller = "Contenidos", action = "Tag" }),
+            new MvcRouteHandler()));
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

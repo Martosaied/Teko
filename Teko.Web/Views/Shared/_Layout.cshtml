@@ -23,11 +23,10 @@
                 <ul class="nav navbar-nav navbar-right">
                     @Html.Partial("_LoginPartial")
                 </ul>
-                @using (Html.BeginForm("Buscar", "Contenidos", FormMethod.Post, new { @class = "form-inline navbar-form", role = "search" }))
-                {
-                    <input type="text" class="form-control" name="Buscador" placeholder="Introduzca solo palabras claves"/>
-                    <button class="btn" type="submit">Search</button>
-                }
+                <form class = "form-inline navbar-form" role = "search">                  
+                    <input type="text" required class="form-control" name="Buscador" id="Buscador" placeholder="Introduzca solo palabras claves" />
+                    <button class="btn" type="button" onclick="SendSearchByGet();">Search</button>
+                </form>
             </div><!-- /.navbar-collapse -->
         </nav>
         <div class="container body-content">
@@ -43,9 +42,16 @@
         @Scripts.Render("~/bundles/bootstrap")
         @RenderSection("scripts", required: false)
     <script>
-    $(document).ready(function () {
-        $("body").tooltip({ selector: '[data-toggle=tooltip]' });
-    });
+        function SendSearchByGet() {
+            let buscador = document.getElementById("Buscador").value;
+            if(buscador == ""){
+                buscador = "todo";
+            }
+            window.location.href = "/Contenidos/Buscar/" + buscador;
+        }
+        $(document).ready(function () {
+            $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+        });
     </script> 
     </body>
 </html>

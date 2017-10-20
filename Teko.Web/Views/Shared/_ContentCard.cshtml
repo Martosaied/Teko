@@ -21,22 +21,22 @@
                     }
                     <div style="height: 60px; overflow: hidden;" data-toggle="tooltip" data-placement="top" title="@Model.Materias.Nombre, @Model.Escuelas.Nombre, @Model.Escuelas.NivEduEscuela.Nombre, @Model.Profesor, @Model.TiposContenidos.Nombre, @Model.Cursada">
                         <span class="social-box">
-                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Materias.Nombre })">
+                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = SlugGenerator.GenerateContenidoSlug(Model.Materias.Nombre) })">
                                 <span class="mitag tag label label-info">@Model.Materias.Nombre</span>,
                                 <a />
-                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Escuelas.Nombre })">
+                                <a href="@Url.Action("Tag", "Contenidos", new {Tag = SlugGenerator.GenerateContenidoSlug(Model.Escuelas.Nombre) })">
                                     <span class="mitag tag label label-info">@Model.Escuelas.Nombre</span>,
                                 </a>
-                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Escuelas.NivEduEscuela.Nombre })">
+                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = SlugGenerator.GenerateContenidoSlug(Model.Escuelas.NivEduEscuela.Nombre) })">
                                     <span class="mitag tag label label-info">@Model.Escuelas.NivEduEscuela.Nombre</span>,
                                 </a>
-                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Profesor })">
+                                <a href="@Url.Action("Tag", "Contenidos", new {Tag= SlugGenerator.GenerateContenidoSlug(Model.Profesor)})">
                                     <span class="mitag tag label label-info">@Model.Profesor</span>,
                                 </a>
-                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.TiposContenidos.Nombre })">
+                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = SlugGenerator.GenerateContenidoSlug(Model.TiposContenidos.Nombre) })">
                                     <span class="mitag tag label label-info">@Model.TiposContenidos.Nombre</span>
                                 </a>
-                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = Model.Cursada })">
+                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = SlugGenerator.GenerateContenidoSlug(Model.Cursada.ToString()) })">
                                     <span class="mitag tag label label-info">Año @Model.Cursada</span>
                                 </a>
                         </span>

@@ -32,7 +32,7 @@
 <div>
     <div>
         <h2 class="text-center title">Subidos recientemente</h2>
-        <a href="@Url.Action("VerTodo", "Contenidos", new { Title = "Mas recientes" })" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
+        <a href="@Url.Action("Recientes", "Contenidos")" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
         @{
             ViewBag.Controles = "MasRec";
                 }
@@ -43,7 +43,7 @@
             <hr style="color: #0056b2; margin-top:20px; margin-bottom:20px;" />
             <div>
                 <h2 class="text-center title">Mas populares</h2>
-                <a href="@Url.Action("VerTodo", "Contenidos", new { Title = "Mas populares" })" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
+                <a href="@Url.Action("Populares", "Contenidos")" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
                 @{  
                     ViewBag.Controles = "MasPop";
                 }
@@ -54,7 +54,7 @@
             <hr style="color: #0056b2; margin-top:20px; margin-bottom:20px;" />
             <div>
                 <h2 class="text-center title" >Mas descargados</h2>
-                <a href="@Url.Action("VerTodo", "Contenidos", new { Title = "Mas descargados" })" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
+                <a href="@Url.Action("Descargados", "Contenidos")" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
                 @{
                     ViewBag.Controles = "MasDes";
                 }
@@ -65,7 +65,7 @@
             <hr style="color: #0056b2; margin-top:20px; margin-bottom:20px;" />
             <div>
                 <h2 class="text-center title">Mas valorados</h2>
-                <a href="@Url.Action("VerTodo", "Contenidos", new { Title = "Mas valorados" })" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
+                <a href="@Url.Action("Valorados", "Contenidos")" type="button" class="btnmio btn btn-default" id="tarj">Ver todo</a>
                 @{
                     ViewBag.Controles = "MasVal";
                 }

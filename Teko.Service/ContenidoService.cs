@@ -134,7 +134,7 @@ namespace Teko.Service
 
         public Contenidos[] GetContenidosByKeywords(string Buscador)
         {
-            if (Buscador == "")
+            if (Buscador == "todo")
             {
                 return contenidoRepo.GetContenidosOrderRecent();
             }

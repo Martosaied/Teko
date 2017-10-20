@@ -9,7 +9,7 @@
             <ul class="list-unstyled">
                 @foreach (var materia in item.Value)
                 {
-                    <li><a href="@Url.Action("Tag","Contenidos",new { Tag = materia.Nombre, Title = ViewBag.Title, IdFiltro = materia.Id})">@materia.Nombre</a><span class="badge text-right">@materia.Contenidos.Count</span></li>
+                    <li><a href="@Url.Action("MateriaOEscuela","Contenidos",new { Tag = materia.Nombre, Title = ViewBag.Title, IdFiltro = materia.Id})">@materia.Nombre</a><span class="badge text-right">@materia.Contenidos.Count</span></li>
                 }
             </ul>
         </div>

@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@ViewBag.Title</title>
+    <title>@Model.Title</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='//fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
@@ -19,7 +19,7 @@
     </style>
 </head>
 <body class="containermio">
-        <h1 class="text-center">@ViewBag.Title</h1>
+        <h1 class="text-center">@Model.Title</h1>
         <hr />
         <div class="jumbotron">
             @Html.Partial("_FormFiltro")

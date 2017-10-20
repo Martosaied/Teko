@@ -83,4 +83,35 @@ namespace Teko.Web.Config
             return title;
         }
     }
+    public class SeoFriendlyRouteTag : Route
+    {
+        public SeoFriendlyRouteTag(string url, RouteValueDictionary defaults, IRouteHandler routeHandler) : base(url, defaults, routeHandler)
+        {
+        }
+
+        public override RouteData GetRouteData(HttpContextBase httpContext)
+        {
+            var routeData = base.GetRouteData(httpContext);
+
+            if (routeData != null)
+            {
+                if (routeData.Values.ContainsKey("Tag"))
+                    routeData.Values["Tag"] = GetIdValue(routeData.Values["Tag"]);
+            }
+
+            return routeData;
+        }
+
+        private object GetIdValue(object Tag)
+        {
+            if (Tag != null)
+            {
+                string tag = Tag.ToString();
+                tag = tag.Replace("-", " ");
+                return tag;
+            }
+
+            return Tag;
+        }
+    }
 }

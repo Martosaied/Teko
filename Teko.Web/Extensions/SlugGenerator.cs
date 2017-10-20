@@ -22,6 +22,20 @@ namespace Teko.Web.Extensions
             str = Regex.Replace(str, @"\s", "-"); // hyphens   
             return str;
         }
+        public static string GenerateContenidoSlug(int Id, string Title, string Tag)
+        {
+            string phrase = string.Format("{0}-{1}-{2}", Title, Id, Tag);
+
+            string str = RemoveAccent(phrase).ToLower();
+            // invalid chars           
+            str = Regex.Replace(str, @"[^a-z0-9\s-]", "");
+            // convert multiple spaces into one space   
+            str = Regex.Replace(str, @"\s+", " ").Trim();
+            // cut and trim 
+            str = str.Substring(0, str.Length <= 45 ? str.Length : 45).Trim();
+            str = Regex.Replace(str, @"\s", "-"); // hyphens   
+            return str;
+        }
         public static string GenerateContenidoSlug(string Nombre)
         {
             string phrase = string.Format("{0}", Nombre);
