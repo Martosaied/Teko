@@ -87,4 +87,10 @@ namespace Teko.Web.ViewModels
         public Usuarios reportedUser { get; set; }
         public bool Prevoiusreport { get; set; }
     }
+
+    public class CosasPorLetraViewModel
+    {
+        //Dictionary<string, List<var>> ListaMateriasPorLetra { get;set; }
+        bool EsEscuela { get; set; }
+    }
 }

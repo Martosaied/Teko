@@ -35,7 +35,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <IntermediateOutputPath>C:\Users\marti\AppData\Local\Temp\vs951D.tmp\Debug\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\marti\AppData\Local\Temp\vs9C69.tmp\Debug\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,7 +45,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <IntermediateOutputPath>C:\Users\marti\AppData\Local\Temp\vs951D.tmp\Release\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Users\marti\AppData\Local\Temp\vs9C69.tmp\Release\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
@@ -448,7 +448,7 @@
     <Content Include="Views\Account\SendCode.cshtml" />
     <Content Include="Views\Account\VerifyCode.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Contenidos\MuestraCont.cshtml" />
+    <Content Include="Views\Shared\MuestraCont.cshtml" />
     <Content Include="Views\Contenidos\Detalles.cshtml" />
     <Content Include="Views\Contenidos\_Valoration.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
@@ -476,8 +476,8 @@
     <Content Include="Views\Contenidos\Subir.cshtml" />
     <Content Include="Views\Home\ErrorPage.cshtml" />
     <Content Include="Views\Shared\_ContentCard.cshtml" />
-    <Content Include="Views\Contenidos\_ContenidoPagPrincipal.cshtml" />
-    <Content Include="Views\Contenidos\_FormFiltro.cshtml" />
+    <Content Include="Views\Shared\_ContenidoPagPrincipal.cshtml" />
+    <Content Include="Views\Shared\_FormFiltro.cshtml" />
     <Content Include="Views\Shared\CosasPorLetra.cshtml" />
     <Content Include="Views\Contenidos\_ReportView.cshtml" />
     <None Include="Web.Debug.config">

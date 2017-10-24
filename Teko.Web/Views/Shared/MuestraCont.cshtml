@@ -41,30 +41,15 @@
                     new SelectListItem{ Text="Descargas", Value = "3" },
                     new SelectListItem{ Text="Recientes", Value = "4" }
                  }
-             , "Ordenar por", new { onchange = "$(this.form).submit();", @class = "btn btn-inverse dropdown-toggle" })
+, "Ordenar por", new { onchange = "$(this.form).submit();", @class = "btn btn-inverse dropdown-toggle" })
         }
     </div>
-        <div id="container">
+    <div class="row">
+        <div class="col-md-12-10" id="container">
             @Html.Partial("_ContenidoPagPrincipal")
         </div>
-            <div>
-                <ul class="pagination">
-                    <li class="previous">
-                        <a id="prev" href="@Url.Action("PasarPagina", "Contenidos", new { Pagina = (int)Session["Page"] - 1  ,Title = ViewBag.Title})" class="fui-arrow-left"></a>
-                    </li>
-                    @{ for (int i = 0; i <= Model.ListaAMostrar.Length / 15; i++)
-                        {
-                            <li>
-                                @{ int j = i + 1;}
-                                <a href="@Url.Action("PasarPagina", "Contenidos", new { Pagina = i, Title = ViewBag.Title })">@j</a>
-                            </li>
-                        }
-                    }
-                    <li class="next">
-                        <a id="prev" href="@Url.Action("PasarPagina", "Contenidos", new { Pagina = (int)Session["Page"] + 1, Title = ViewBag.Title })" class="fui-arrow-right"></a>
-                    </li>
-                </ul>
-            </div>
+        @Html.Partial("_Paginador")
+    </div>
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryval")
     }
@@ -72,7 +57,7 @@
         function PopEsc() {
             var lvlId = $('#NivelesEducativosId').val();
             $.ajax({
-                url: '/Contenidos/PopuladorEsc',
+                url: '/Contenidos/PopuladorEscFiltro',
                 type: "GET",
                 dataType: "JSON",
                 data: { Lvl: lvlId },

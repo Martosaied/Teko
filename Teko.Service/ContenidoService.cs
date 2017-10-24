@@ -59,9 +59,9 @@ namespace Teko.Service
         {
             if (Parameters.Profesor == null) Parameters.Profesor = "";
             var Lista = Array
-               .Where(s => s.EscuelasId == Parameters.EscuelasId || Parameters.EscuelasId == 0)
-               .Where(s => s.MateriasId == Parameters.MateriasId || Parameters.MateriasId == 0)
-               .Where(s => s.TiposContenidosId == Parameters.TiposContenidosId || Parameters.TiposContenidosId == 0)
+               .Where(s => s.EscuelasId == Parameters.EscuelasId || Parameters.EscuelasId == -1)
+               .Where(s => s.MateriasId == Parameters.MateriasId || Parameters.MateriasId == -1)
+               .Where(s => s.TiposContenidosId == Parameters.TiposContenidosId || Parameters.TiposContenidosId == -1)
                //.Where(s => s.Escuelas.NivEduEscuela.Id == Parameters.Escuelas.NivEduEscuela.Id || Parameters.Escuelas.NivEduEscuela.Id == 0)
                .Where(s => s.Profesor.ToLower().Contains(Parameters.Profesor.ToLower()) || Parameters.Profesor == "")
                .ToArray();
@@ -70,9 +70,7 @@ namespace Teko.Service
 
         public void BajaLogica(int  ContenidoId)
         {
-            Contenidos Contenido = contenidoRepo.GetById(ContenidoId);
-            Contenido.IsDeleted = true;
-            contenidoRepo.Update(Contenido);
+            contenidoRepo.BajaLogicaRawQuery(ContenidoId);
         }
 
         public Contenidos[] GetContsByTitle(string Title)

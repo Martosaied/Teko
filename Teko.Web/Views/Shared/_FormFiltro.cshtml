@@ -1,7 +1,8 @@
 ﻿@model Teko.ViewModels.MuestraViewModel
-@using (Ajax.BeginForm("Filtrar", "Contenidos", new AjaxOptions
+@using (Ajax.BeginForm("","",new AjaxOptions()
 {
     InsertionMode = InsertionMode.Replace,
+    Url = Url.Action("Filtrar", "Contenidos"),
     UpdateTargetId = "container"
 }, new { @class = "form-inline" }))
 {

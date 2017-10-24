@@ -1,1 +1,42 @@
-﻿
+﻿<div class="row col-md-12">
+    <ul class="col-md-12 pagination">
+        <li class="previous">
+            @Ajax.ActionLink("Anterior",
+                                         "Contenido",
+                                             new AjaxOptions
+                                             {
+                                                 HttpMethod = "POST",
+                                                 Url = Url.Action("PasarPagina", "Contenidos", new { Pagina = (int)Session["Page"] - 1 }),
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 UpdateTargetId = "container",
+                                             })
+        </li>
+        @{ for (int i = 0; i <= Model.ListaAMostrar.Length / 15; i++)
+            {
+                <li>
+                    @{ int j = i + 1;}
+                    @Ajax.ActionLink(j.ToString(),
+                                         "Contenido",
+                                             new AjaxOptions
+                                             {
+                                                 HttpMethod = "POST",
+                                                 Url = Url.Action("PasarPagina", "Contenidos", new { Pagina = i }),
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 UpdateTargetId = "container",
+                                             })
+                </li>
+                        }
+        }
+        <li class="next">
+            @Ajax.ActionLink("Proxima",
+                                         "Contenido",
+                                             new AjaxOptions
+                                             {
+                                                 HttpMethod = "POST",
+                                                 Url = Url.Action("PasarPagina", "Contenidos", new { Pagina = (int)Session["Page"] + 1 }),
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 UpdateTargetId = "container",
+                                             })
+        </li>
+    </ul>
+</div>

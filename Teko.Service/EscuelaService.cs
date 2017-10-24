@@ -17,6 +17,7 @@ namespace Teko.Service
         List<Escuelas> GetAll();
         Dictionary<string, List<Escuelas>> GetAllByLetter();
         Escuelas GetEscuelaById(int IdEscuela);
+        Escuelas GetEscuelasByName(string Name);
     }
     public class EscuelaService : IEscuelaService
     {
@@ -29,6 +30,11 @@ namespace Teko.Service
             this.unitOfWork = unitOfWork;
         }
 
+        public Escuelas GetEscuelasByName(string Name)
+        {
+            var Lista = escuelaRepo.Get(parent => parent.Nombre == Name);
+            return Lista;
+        }
         public void CreateEscuela(Escuelas esc)
         {
             escuelaRepo.Add(esc);

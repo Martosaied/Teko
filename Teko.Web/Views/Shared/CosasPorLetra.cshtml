@@ -1,15 +1,25 @@
-﻿@using Teko.ViewModels
+﻿@using Teko.Web.ViewModels
+@model dynamic
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 @{
-    foreach (var item in Model)
+    foreach (var item in Model.Lista)
     {
         <div class="col-md-3">
             <h5 style="background-color: gainsboro">@item.Key</h5>
             <ul class="list-unstyled">
                 @foreach (var materia in item.Value)
                 {
-                    <li><a href="@Url.Action("MateriaOEscuela","Contenidos",new { Tag = materia.Nombre, Title = ViewBag.Title, IdFiltro = materia.Id})">@materia.Nombre</a><span class="badge text-right">@materia.Contenidos.Count</span></li>
+                    if (Model.EsEscuela)
+                    {
+                        <li><a href="@Url.Action("Contenidos","Escuelas",new { Tag = SlugGenerator.GenerateContenidoSlug(materia.Nombre)})">@materia.Nombre</a><span class="badge text-right">@materia.Contenidos.Count</span></li>
+                    }
+                    else
+                    {
+                        <li><a href="@Url.Action("Contenidos","Materias",new { Tag = SlugGenerator.GenerateContenidoSlug(materia.Nombre)})">@materia.Nombre</a><span class="badge text-right">@materia.Contenidos.Count</span></li>
+
+                    }
+
                 }
             </ul>
         </div>

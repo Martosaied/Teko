@@ -62,11 +62,20 @@ namespace Teko.ViewModels
         }
         public List<Escuelas> getEscuelas()
         {
-            var Lista = escuelaService.GetAll().ToList();
-            Lista.Add(new Escuelas { Id = -1, Nombre = "----------" });
-            Lista.Add(new Escuelas { Id = 0, Nombre = "Otra escuela" });
-            Lista = Lista.OrderBy(x => x.Id).ToList();
-            return Lista;
+            try
+            {
+                var Lista = escuelaService.GetAll().ToList();
+                Lista.Add(new Escuelas { Id = -1, Nombre = "----------" });
+                Lista.Add(new Escuelas { Id = 0, Nombre = "Otra escuela" });
+                Lista = Lista.OrderBy(x => x.Id).ToList();
+                return Lista;
+            }
+            catch
+            {
+                var Lista = new List<Escuelas>();
+                Lista.Add(new Escuelas { Id = -1, Nombre = "----------" });
+                return Lista;
+            }
         }
         public List<Materias> dropMateria
         {
@@ -151,6 +160,8 @@ namespace Teko.ViewModels
         public int NivNuevaEsc { get; set; }
         public string NuevaEsc { get; set; }
 
+
+
     }
     public class MuestraViewModel : BaseContentViewModel
     {
@@ -167,27 +178,30 @@ namespace Teko.ViewModels
         public Contenidos[] ListaAMostrar { get; set; }
         public new List<Escuelas> dropEscuela{ get; set; }
 
-        public void Preseleccionar(string title, int idFiltro)
+        public void Preseleccionar(string title, string nombre)
         {
             switch (title)
             {
                 case "Escuelas":
-                    var Escuela = escuelaService.GetEscuelaById(idFiltro);
+                    var Escuela = escuelaService.GetEscuelasByName(nombre);
                     dropEscuela = escuelaService.GetEscuelasByNivel(Escuela.NivEduEscuela_Id);
-                    EscuelasId = idFiltro;
+                    EscuelasId = Escuela.Id;
                     NivelesEducativosId = Escuela.NivEduEscuela_Id;
                     break;
                 case "Materias":
-                    MateriasId = idFiltro;
+                    var Materia = materiaService.GetMateriaByName(nombre);
+                    MateriasId = Materia.Id;
                     break;
             }
         }
 
         public new List<Escuelas> getEscuelas()
         {
-            return (dropEscuela == null) ? new List<Escuelas>() : dropEscuela;
+            var Lista = new List<Escuelas>();
+            Lista.Add(new Escuelas { Id = -1, Nombre = "----------" });
+            return Lista;
         }
-        
+
     }
     public class DetailsViewModel
     {

@@ -12,6 +12,7 @@ namespace Teko.Service
     public interface IMateriaService
     {
         List<Materias> GetAll();
+        Materias GetMateriaByName(string Name);
         Dictionary<string, List<Materias>> GetAllByLetter();
     }
     public class MateriaService : IMateriaService
@@ -48,6 +49,11 @@ namespace Teko.Service
                 }
             }
             return DiccionarioADevolver;
+        }
+
+        public Materias GetMateriaByName(string Name)
+        {
+            return materiaRepo.Get(x => x.Nombre == Name);
         }
     }
 }

@@ -50,6 +50,7 @@ namespace Teko.Controllers
             _ViewModel = new MuestraViewModel(escuelaService, tipoService, nivelService, materiaService);
             SVM = new SubirViewModel(escuelaService, tipoService, nivelService, materiaService);
         }
+
         public void Reportar(ReportViewModel viewModel)
         {
             var UserId = User.Identity.GetUserId();
@@ -88,18 +89,18 @@ namespace Teko.Controllers
             NotificationViewModel viewModel = new NotificationViewModel(ListaNotificaciones);
             return PartialView("_Notification", viewModel);
         }
-        // GET: Contenidos
-        public ActionResult VerTodo(string Title)
-        {
-            SwitchTitle(Title, _ViewModel);
-            GuardarContenidosEnSession(_ViewModel.ListaAMostrar);
-            return View("MuestraCont",_ViewModel);
-        }
         public JsonResult PopuladorEsc(int Lvl)
         {
             var Esc = escuelaService.GetEscuelasByNivel(Lvl).Select(c => new { Id = c.Id, Nombre = c.Nombre }).ToList();
             Esc.Add(new { Id = -1, Nombre = "----------" });
             Esc.Add(new { Id = 0, Nombre = "Otra escuela" });
+            Esc = Esc.OrderBy(x => x.Id).ToList();
+            return Json(Esc, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult PopuladorEscFiltro(int Lvl)
+        {
+            var Esc = escuelaService.GetEscuelasByNivel(Lvl).Select(c => new { Id = c.Id, Nombre = c.Nombre }).ToList();
+            Esc.Add(new { Id = -1, Nombre = "----------" });
             Esc = Esc.OrderBy(x => x.Id).ToList();
             return Json(Esc, JsonRequestBehavior.AllowGet);
         }
@@ -139,28 +140,33 @@ namespace Teko.Controllers
         [ValidateInput(false)]
         public ActionResult Subir(SubirViewModel Cont, string Contenido)
         {
-            try
+            Cont.SetServices(escuelaService, tipoService, nivelService, materiaService);
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                if (Cont.Files != null)
                 {
-                    if (Cont.Files != null)
-                    {
-                        Contenidos ContMapeado = AutoMapperGeneric<SubirViewModel, Contenidos>.ConvertToDBEntity(Cont);
-                        PrepareContenidoForUpload(Cont, ContMapeado);
-                        contenidoService.CreateContenido(ContMapeado);
-                        contenidoService.SaveContenido();
+                    Contenidos ContMapeado = ContenidoMapper.ConvertVMtoContenido(Cont);
+                    PrepareContenidoForUpload(Cont, ContMapeado);
+                    contenidoService.CreateContenido(ContMapeado);
+                    contenidoService.SaveContenido();
 
-                        UploadFilesDB(Cont.Files);
-                        return RedirectToAction("Index", "Home");
-                    }
+                    UploadFilesDB(Cont.Files);
+                    return RedirectToAction("Index", "Home");
                 }
+                else
+                {
+                    Cont.SetServices(escuelaService, tipoService, nivelService, materiaService);
+                    return View("Subir", Cont);
+                }
+            }
+            else
+            {
                 Cont.SetServices(escuelaService, tipoService, nivelService, materiaService);
                 return View("Subir", Cont);
             }
-            catch (Exception e)
-            {
-                return View("ErrorPage");
-            }
+
+
+
         }
         private Contenidos PrepareContenidoForUpload(SubirViewModel Cont, Contenidos ContMapeado)
         {
@@ -265,19 +271,10 @@ namespace Teko.Controllers
         {
             Session["Page"] = 0;
             var Lista = ObtenerContenidosDesdeSession();
-            var Contenido = AutoMapperGeneric<MuestraViewModel, Contenidos>.ConvertToDBEntity(FilterParameters);
+            var Contenido = ContenidoMapper.ConvertVMtoContenido(FilterParameters);
             FilterParameters.ListaAMostrar = contenidoService.FiltrarContenidos(Contenido, Lista);
             _ViewModel.Title = FilterParameters.Title;
             return PartialView("_ContenidoPagPrincipal",FilterParameters);
-        }
-        public ActionResult MateriaOEscuela(string Tag, string Title, int IdFiltro)
-        {
-            Session["Page"] = 0;
-            _ViewModel.ListaAMostrar = contenidoService.GetContenidosByTag(Tag);
-            GuardarContenidosEnSession(_ViewModel.ListaAMostrar);
-            _ViewModel.Preseleccionar(Title, IdFiltro);
-            _ViewModel.Title = "Resultados: '" + Tag + "'";
-            return View("MuestraCont", _ViewModel);
         }
         public ActionResult Tag(string Tag)
         {
@@ -287,7 +284,7 @@ namespace Teko.Controllers
             _ViewModel.Title = "Resultados: '" + Tag + "'";
             return View("MuestraCont", _ViewModel);
         }
-        public ActionResult PasarPagina(int Pagina, string Title)
+        public PartialViewResult PasarPagina(int Pagina)
         {
             if (Pagina == -1)
             {
@@ -295,7 +292,7 @@ namespace Teko.Controllers
             }
             Session["Page"] = Pagina;
             _ViewModel.ListaAMostrar = ObtenerContenidosDesdeSession();
-             return View("MuestraCont",_ViewModel);
+             return PartialView("_ContenidoPagPrincipal",_ViewModel);
         }
         public PartialViewResult Valoration(int ContenidoId,DetailsViewModel star)
         {
@@ -407,49 +404,11 @@ namespace Teko.Controllers
                  FileDownloadName = Files[0].Ruta,
              };
         }
-        protected MuestraViewModel SwitchTitle(string Title, MuestraViewModel Parameters)
-        {
-            
-            switch (Title)
-            {
-                case "mas-recientes":
-                    _ViewModel.ListaAMostrar = contenidoService.GetContenidosOrderRecent();
-                    _ViewModel.Title = "Mas recientes";
-                    return _ViewModel;
-                case "mas-populares":
-                    _ViewModel.ListaAMostrar = contenidoService.GetContenidosOrderPopular();
-                    _ViewModel.Title = "Mas populares";
-                    return _ViewModel;
-                case "mas-descargados":
-                    _ViewModel.ListaAMostrar = contenidoService.GetContenidosOrderDescargas();
-                    _ViewModel.Title = "Mas descargados";
-                    return _ViewModel;
-                case "mas-valorados":
-                    _ViewModel.ListaAMostrar = contenidoService.GetContenidosOrderValoracion();
-                    _ViewModel.Title = "Mas valorados";
-                    return _ViewModel;
-                case "Escuela":
-                    int id = usuarioService.GetUserById(User.Identity.GetUserId()).InstitucionActual.Id;
-                    _ViewModel.ListaAMostrar = contenidoService.GetContenidosByEscuela(id);
-                    _ViewModel.Title = Title;
-                    return _ViewModel;
-                case "mis-subidas":
-                    _ViewModel.ListaAMostrar = usuarioService.GetUserById(User.Identity.GetUserId()).Contenidos.ToArray();
-                    _ViewModel.Title = "Mis subidas";
-                    return _ViewModel;
-                default:
-                    Parameters.ListaAMostrar = contenidoService.GetContenidosByKeywords((string)Session["KeyWords"]);
-                    var Filtro = AutoMapperGeneric<MuestraViewModel, Contenidos>.ConvertToDBEntity((MuestraViewModel)Session["Filters"]);
-                    Parameters.ListaAMostrar = contenidoService.FiltrarContenidos(Filtro, Parameters.ListaAMostrar);
-                    _ViewModel.Title = Title;
-                    return Parameters;
-            }
-        }
-        protected void GuardarContenidosEnSession(Contenidos[] Ids)
+        public void GuardarContenidosEnSession(Contenidos[] Ids)
         {
             Session["ListIds"] = Ids;
         }
-        protected Contenidos[] ObtenerContenidosDesdeSession()
+        public Contenidos[] ObtenerContenidosDesdeSession()
         {
             Contenidos[] ListaLlena = (Contenidos[])Session["ListIds"];
             return ListaLlena;

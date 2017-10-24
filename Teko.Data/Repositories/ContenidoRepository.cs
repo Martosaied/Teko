@@ -132,10 +132,16 @@ namespace Teko.Data.Repositories
         {
             return DbContext.Contenidos.OrderByDescending(p => p.Id).Select(x => x.Id).FirstOrDefault();
         }
+
+        public void BajaLogicaRawQuery(int idContenido)
+        {
+            DbContext.Database.ExecuteSqlCommand("UPDATE Contenidos SET IsDeleted = 'True' WHERE Id = "+ idContenido);
+        }
     }
 
     public interface IContenidoRepository : IRepository<Contenidos>
     {
+        void BajaLogicaRawQuery(int idContenido);
         Dictionary<string, Contenidos[]> GetRecomendacionesByVisitas(List<Visitas> Visitas);
         Contenidos[] GetRecomendacionesByContenido(Contenidos cont);
         Contenidos[] GetContenidosByTag(string Tag);

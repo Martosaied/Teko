@@ -12,9 +12,14 @@ namespace Teko.Data.Repositories
     {
         public MateriaRepository(IDbFactory dbFactory)
             : base(dbFactory) { }
+
+        public Materias GetMateriaByName(string name)
+        {
+            return DbContext.Materias.Where(x => x.Nombre == name).FirstOrDefault();
+        }
     }
     public interface IMateriaRepository : IRepository<Materias>
     {
-
+        Materias GetMateriaByName(string name);
     }
 }
