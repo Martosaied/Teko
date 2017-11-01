@@ -26,9 +26,10 @@
         </div>
         <hr />
     <div>
-        @using (Ajax.BeginForm("Ordenar", "Contenidos", new AjaxOptions
+        @using (Ajax.BeginForm("", "", new AjaxOptions
         {
             InsertionMode = InsertionMode.Replace,
+            Url = Url.Action("Ordenar", "Contenidos"),
             UpdateTargetId = "container"
 
         }, new { style = "margin-bottom:20px;" }))
@@ -41,7 +42,7 @@
                     new SelectListItem{ Text="Descargas", Value = "3" },
                     new SelectListItem{ Text="Recientes", Value = "4" }
                  }
-, "Ordenar por", new { onchange = "$(this.form).submit();", @class = "btn btn-inverse dropdown-toggle" })
+            , "Ordenar por", new { onchange = "$(this.form).submit();", @class = "btn btn-inverse dropdown-toggle" })
         }
     </div>
     <div class="row">
