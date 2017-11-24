@@ -1,5 +1,5 @@
 ﻿@model Teko.Web.ViewModels.NotificationViewModel
-<li id="Notificaciones" class="dropdown">
+<li id="Notificaciones"  onclick="OpenCloseNotification();" class="dropdown">
     <a class="dropdown-toggle active" data-toggle="dropdown" onclick="OpenCloseNotification();" aria-expanded="false">
         <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
     </a>
@@ -13,9 +13,6 @@
                     <a href="@Url.Action("Detalles", "Contenidos", new { id = SlugGenerator.GenerateContenidoSlug(Notificacion.Contenido.Id,Notificacion.Contenido.Nombre) })" class="active">
                         <div>
                             <strong>@Notificacion.Contenido.Nombre</strong>
-                            <span class="pull-right text-muted">
-                                <em>@Notificacion.FechaPublicacion</em>
-                            </span>
                         </div>
                         <div>@Notificacion.Usuario.Nombre ha dejado un comentario</div>
                     </a>
@@ -34,7 +31,7 @@
         }
         <li>
             <a class="text-center" href="#">
-                <strong>Leer todas las notificaciones</strong>
+                <strong>Ver tus subidas</strong>
                 <i class="fa fa-angle-right"></i>
             </a>
         </li>

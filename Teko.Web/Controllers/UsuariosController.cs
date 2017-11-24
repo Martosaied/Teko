@@ -71,8 +71,7 @@ namespace Teko.Controllers
             MiUser.PerfilCompleto = true;
                 usuarioService.UpdateUser(MiUser);
                 usuarioService.SaveUser();
-                return RedirectToAction("Index");
-
+                return RedirectToAction("Index");      
         }
 
     }

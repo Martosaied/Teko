@@ -1,50 +1,52 @@
 ﻿@using Teko.Web.Extensions
 @model Teko.Model.Contenidos
 <link href='~/Content/FlipperCard.css' rel='stylesheet' type='text/css'>
-<div class="caca col-md-4" onclick="location.href='@Url.Action("Detalles", "Contenidos", new { id = SlugGenerator.GenerateContenidoSlug(Model.Id,Model.Nombre) })'">
-    <div class="card-flipper" data-id="1">
-        <div class="card__front">
-            <div class="card card-01">
-                <div class="card-block text-center">
-                    <span class="badge-box"><i class="@Model.Badget"></i></span>
-                    <h4 class="card-title">@Model.Nombre</h4>
-                   
-                    @{ 
-                        if (@Model.Descripcion.Length > 110)
-                        {
-                            <p class="card-text">@Model.Descripcion.Substring(0, 110)...</p>
+<a href='@Url.Action("Detalles", "Contenidos", new { id = SlugGenerator.GenerateContenidoSlug(Model.Id,Model.Nombre) })'>
+    <div class="caca col-md-4">
+        <div class="card-flipper" data-id="1">
+            <div class="card__front">
+                <div class="card card-01">
+                    <div class="card-block text-center">
+                        <span class="badge-box"><i class="@Model.Badget"></i></span>
+                        <h4 class="card-title">@Model.Nombre</h4>
+
+                        @{
+                            if (@Model.Descripcion.Length > 110)
+                            {
+                                <p class="card-text">@Model.Descripcion.Substring(0, 110)...</p>
+                            }
+                            else
+                            {
+                                <p class="card-text">@Model.Descripcion</p>
+                            }
                         }
-                        else
-                        {
-                            <p class="card-text">@Model.Descripcion</p>
-                        }
-                    }
-                    <div style="height: 60px; overflow: hidden;" data-toggle="tooltip" data-placement="top" title="@Model.Materias.Nombre, @Model.Escuelas.Nombre, @Model.Escuelas.NivEduEscuela.Nombre, @Model.Profesor, @Model.TiposContenidos.Nombre, @Model.Cursada">
-                        <span class="social-box">
-                            <a href="@Url.Action("Tag", "Contenidos", new { Tag = SlugGenerator.GenerateContenidoSlug(Model.Materias.Nombre) })">
-                                <span class="mitag tag label label-info">@Model.Materias.Nombre</span>,
-                                <a />
-                                <a href="@Url.Action("Tag", "Contenidos", new {Tag = SlugGenerator.GenerateContenidoSlug(Model.Escuelas.Nombre) })">
-                                    <span class="mitag tag label label-info">@Model.Escuelas.Nombre</span>,
-                                </a>
-                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = SlugGenerator.GenerateContenidoSlug(Model.Escuelas.NivEduEscuela.Nombre) })">
-                                    <span class="mitag tag label label-info">@Model.Escuelas.NivEduEscuela.Nombre</span>,
-                                </a>
-                                <a href="@Url.Action("Tag", "Contenidos", new {Tag= SlugGenerator.GenerateContenidoSlug(Model.Profesor)})">
-                                    <span class="mitag tag label label-info">@Model.Profesor</span>,
-                                </a>
-                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = SlugGenerator.GenerateContenidoSlug(Model.TiposContenidos.Nombre) })">
-                                    <span class="mitag tag label label-info">@Model.TiposContenidos.Nombre</span>
-                                </a>
-                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = SlugGenerator.GenerateContenidoSlug(Model.Cursada.ToString()) })">
-                                    <span class="mitag tag label label-info">Año @Model.Cursada</span>
-                                </a>
-                        </span>
+                        <div style="height: 60px; overflow: hidden;" data-toggle="tooltip" data-placement="top" title="@Model.Materias.Nombre, @Model.Escuelas.Nombre, @Model.Escuelas.NivEduEscuela.Nombre, @Model.Profesor, @Model.TiposContenidos.Nombre, @Model.Cursada">
+                            <span class="social-box">
+                                <a href="@Url.Action("Tag", "Contenidos", new { Tag = SlugGenerator.GenerateContenidoSlug(Model.Materias.Nombre) })">
+                                    <span class="mitag tag label label-info">@Model.Materias.Nombre</span>,
+                                    <a />
+                                    <a href="@Url.Action("Tag", "Contenidos", new {Tag = SlugGenerator.GenerateContenidoSlug(Model.Escuelas.Nombre) })">
+                                        <span class="mitag tag label label-info">@Model.Escuelas.Nombre</span>,
+                                    </a>
+                                    <a href="@Url.Action("Tag", "Contenidos", new { Tag = SlugGenerator.GenerateContenidoSlug(Model.Escuelas.NivEduEscuela.Nombre) })">
+                                        <span class="mitag tag label label-info">@Model.Escuelas.NivEduEscuela.Nombre</span>,
+                                    </a>
+                                    <a href="@Url.Action("Tag", "Contenidos", new {Tag= SlugGenerator.GenerateContenidoSlug(Model.Profesor)})">
+                                        <span class="mitag tag label label-info">@Model.Profesor</span>,
+                                    </a>
+                                    <a href="@Url.Action("Tag", "Contenidos", new { Tag = SlugGenerator.GenerateContenidoSlug(Model.TiposContenidos.Nombre) })">
+                                        <span class="mitag tag label label-info">@Model.TiposContenidos.Nombre</span>
+                                    </a>
+                                    <a href="@Url.Action("Tag", "Contenidos", new { Tag = SlugGenerator.GenerateContenidoSlug(Model.Cursada.ToString()) })">
+                                        <span class="mitag tag label label-info">Año @Model.Cursada</span>
+                                    </a>
+                            </span>
+                        </div>
+                        <small class="card-title">Subido el @Model.FechaSubida por @Model.Usuarios.UserName</small>
                     </div>
-                    <small class="card-title">Subido el @Model.FechaSubida por @Model.Usuarios.UserName</small>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</a>
 
